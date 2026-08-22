@@ -4,7 +4,7 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-  <title>Fars Fire Impact</title>
+  <title>سامانه پایش و ارزیابی اثر حریق‌های استان فارس</title>
 
   <link
     rel="stylesheet"
@@ -12,77 +12,919 @@
   >
 
   <style>
-    html, body {
+    * {
+      box-sizing: border-box;
+    }
+
+    html,
+    body {
       margin: 0;
       padding: 0;
       width: 100%;
       height: 100%;
+      font-family: Tahoma, Arial, sans-serif;
+      background: #f4f4f4;
     }
 
-    #map {
+    body.dark {
+      background: #111;
+      color: #eee;
+    }
+
+    #app {
       width: 100%;
       height: 100%;
+      display: flex;
+      flex-direction: column;
+    }
+
+    /* =========================
+       HEADER
+    ========================== */
+
+    #header {
+      height: 72px;
+      flex-shrink: 0;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 0 18px;
+      color: white;
+
+      background:
+        linear-gradient(
+          180deg,
+          #ff4b4b 0%,
+          #e50000 45%,
+          #a90000 100%
+        );
+
+      box-shadow:
+        0 2px 12px rgba(0, 0, 0, 0.35),
+        inset 0 1px 0 rgba(255, 255, 255, 0.45);
+
+      position: relative;
+      z-index: 1000;
+    }
+
+    #header::after {
+      content: "";
+      position: absolute;
+      left: 0;
+      right: 0;
+      top: 0;
+      height: 2px;
+      background: rgba(255, 255, 255, 0.75);
+    }
+
+    .header-title {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+
+    .fire-icon {
+      width: 42px;
+      height: 42px;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 24px;
+
+      background: rgba(255,255,255,0.16);
+      border: 1px solid rgba(255,255,255,0.35);
+      box-shadow: inset 0 1px 4px rgba(255,255,255,0.25);
+    }
+
+    .title-main {
+      font-size: 18px;
+      font-weight: bold;
+      line-height: 1.5;
+    }
+
+    .title-sub {
+      font-size: 11px;
+      opacity: 0.9;
+      direction: ltr;
+      text-align: right;
+    }
+
+    .header-buttons {
+      display: flex;
+      align-items: center;
+      gap: 7px;
+    }
+
+    .header-btn {
+      border: 1px solid rgba(255,255,255,0.35);
+      background: rgba(0,0,0,0.16);
+      color: white;
+      border-radius: 8px;
+      padding: 8px 11px;
+      cursor: pointer;
+      font-family: inherit;
+      font-size: 13px;
+      transition: 0.2s;
+    }
+
+    .header-btn:hover {
+      background: rgba(255,255,255,0.18);
+    }
+
+    /* =========================
+       MAP
+    ========================== */
+
+    #map {
+      flex: 1;
+      width: 100%;
+      min-height: 0;
+    }
+
+    .leaflet-control-layers,
+    .leaflet-control-zoom {
+      font-family: Tahoma, Arial, sans-serif;
+    }
+
+    .leaflet-control-layers {
+      border-radius: 10px !important;
+      box-shadow: 0 2px 12px rgba(0,0,0,0.2) !important;
+    }
+
+    /* =========================
+       SIDE PANEL
+    ========================== */
+
+    .panel {
+      position: fixed;
+      top: 82px;
+      left: 18px;
+      width: 330px;
+      max-width: calc(100vw - 36px);
+      max-height: calc(100vh - 100px);
+      overflow-y: auto;
+
+      background: rgba(255,255,255,0.97);
+      border-radius: 14px;
+      box-shadow: 0 8px 30px rgba(0,0,0,0.25);
+
+      z-index: 1500;
+      display: none;
+    }
+
+    .panel.active {
+      display: block;
+    }
+
+    body.dark .panel {
+      background: rgba(30,30,30,0.98);
+      color: #eee;
+    }
+
+    .panel-header {
+      padding: 14px 16px;
+      background:
+        linear-gradient(
+          180deg,
+          #f22 0%,
+          #c40000 100%
+        );
+      color: white;
+      font-weight: bold;
+      border-radius: 14px 14px 0 0;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+
+    .close-panel {
+      border: 0;
+      background: transparent;
+      color: white;
+      font-size: 20px;
+      cursor: pointer;
+    }
+
+    .panel-body {
+      padding: 16px;
+      line-height: 1.9;
+      font-size: 13px;
+    }
+
+    .panel-body h3 {
+      margin-top: 8px;
+      color: #d00000;
+      font-size: 15px;
+    }
+
+    body.dark .panel-body h3 {
+      color: #ff5555;
+    }
+
+    .panel-body p {
+      margin: 8px 0;
+    }
+
+    .panel-body ul {
+      margin: 5px 0;
+      padding-right: 20px;
+    }
+
+    /* =========================
+       REPORT PANEL
+    ========================== */
+
+    .report-box {
+      background: #fafafa;
+      border: 1px solid #ddd;
+      border-radius: 10px;
+      padding: 12px;
+      margin-bottom: 12px;
+    }
+
+    body.dark .report-box {
+      background: #222;
+      border-color: #444;
+    }
+
+    .report-title {
+      font-weight: bold;
+      margin-bottom: 8px;
+      color: #c00000;
+    }
+
+    body.dark .report-title {
+      color: #ff5555;
+    }
+
+    .export-btn {
+      width: 100%;
+      padding: 11px;
+      border: 0;
+      border-radius: 9px;
+      cursor: pointer;
+      color: white;
+      font-family: inherit;
+      font-weight: bold;
+      background: linear-gradient(#20a94b, #087d2d);
+      box-shadow: 0 3px 8px rgba(0,0,0,0.18);
+    }
+
+    .export-btn:hover {
+      opacity: 0.9;
+    }
+
+    /* =========================
+       DARK MAP FILTER
+    ========================== */
+
+    body.dark .leaflet-control-layers {
+      background: #222;
+      color: white;
+      border-color: #444;
+    }
+
+    body.dark .leaflet-bar a {
+      background: #222;
+      color: white;
+      border-bottom-color: #444;
+    }
+
+    body.dark .leaflet-bar a:hover {
+      background: #333;
+    }
+
+    /* =========================
+       MOBILE
+    ========================== */
+
+    @media (max-width: 700px) {
+
+      #header {
+        height: 64px;
+        padding: 0 10px;
+      }
+
+      .fire-icon {
+        width: 36px;
+        height: 36px;
+        font-size: 20px;
+      }
+
+      .title-main {
+        font-size: 14px;
+      }
+
+      .title-sub {
+        font-size: 9px;
+      }
+
+      .header-buttons {
+        gap: 4px;
+      }
+
+      .header-btn {
+        padding: 7px 8px;
+        font-size: 11px;
+      }
+
+      .panel {
+        top: 74px;
+        left: 10px;
+        width: calc(100vw - 20px);
+      }
     }
   </style>
 </head>
 
 <body>
 
-<div id="map"></div>
+<div id="app">
+
+  <!-- =========================
+       HEADER
+  ========================== -->
+
+  <header id="header">
+
+    <div class="header-title">
+
+      <div class="fire-icon">
+        🔥
+      </div>
+
+      <div>
+        <div class="title-main">
+          سامانه پایش و ارزیابی اثر حریق‌های استان فارس
+        </div>
+
+        <div class="title-sub">
+          FARS FIRE IMPACT MONITORING
+        </div>
+      </div>
+
+    </div>
+
+    <div class="header-buttons">
+
+      <button
+        class="header-btn"
+        onclick="togglePanel('guidePanel')"
+      >
+        ❓ راهنما
+      </button>
+
+      <button
+        class="header-btn"
+        onclick="togglePanel('aboutPanel')"
+      >
+        ℹ معرفی سامانه
+      </button>
+
+      <button
+        class="header-btn"
+        onclick="toggleDarkMode()"
+        id="darkModeButton"
+      >
+        🌙 حالت شب
+      </button>
+
+      <button
+        class="header-btn"
+        onclick="openReportPanel()"
+      >
+        📊 گزارش
+      </button>
+
+    </div>
+
+  </header>
+
+
+  <!-- =========================
+       MAP
+  ========================== -->
+
+  <div id="map"></div>
+
+
+  <!-- =========================
+       GUIDE
+  ========================== -->
+
+  <div
+    id="guidePanel"
+    class="panel"
+  >
+
+    <div class="panel-header">
+
+      <span>راهنمای سامانه</span>
+
+      <button
+        class="close-panel"
+        onclick="closePanels()"
+      >
+        ×
+      </button>
+
+    </div>
+
+    <div class="panel-body">
+
+      <h3>فیلترهای مکانی</h3>
+
+      <p>
+        از کنترل لایه‌های روی نقشه می‌توانید لایه‌های مکانی
+        موردنظر خود را روشن یا خاموش کنید.
+      </p>
+
+      <ul>
+        <li>مرز استان فارس</li>
+        <li>مناطق چهارگانه محیط‌زیست</li>
+        <li>مناطق شکار ممنوع</li>
+      </ul>
+
+      <h3>هدف سامانه</h3>
+
+      <p>
+        سامانه برای شناسایی حریق‌های استان فارس و برآورد
+        میزان تأثیر آن‌ها بر عرصه‌های مختلف طراحی شده است.
+      </p>
+
+      <h3>مساحت حریق</h3>
+
+      <p>
+        در مرحله عملیاتی، محدوده سوخته استخراج شده و
+        مساحت آن به هکتار محاسبه خواهد شد.
+      </p>
+
+      <p>
+        با فعال کردن یک فیلتر مکانی، مقدار حریق داخل
+        همان محدوده نیز محاسبه و گزارش می‌شود.
+      </p>
+
+    </div>
+
+  </div>
+
+
+  <!-- =========================
+       ABOUT
+  ========================== -->
+
+  <div
+    id="aboutPanel"
+    class="panel"
+  >
+
+    <div class="panel-header">
+
+      <span>معرفی سامانه</span>
+
+      <button
+        class="close-panel"
+        onclick="closePanels()"
+      >
+        ×
+      </button>
+
+    </div>
+
+    <div class="panel-body">
+
+      <h3>سامانه پایش و ارزیابی اثر حریق‌های استان فارس</h3>
+
+      <p>
+        این سامانه با هدف پایش ماهواره‌ای حریق‌های استان فارس
+        و ارزیابی میزان تأثیر آن‌ها بر عرصه‌های طبیعی ایجاد شده است.
+      </p>
+
+      <h3>اجزای اصلی</h3>
+
+      <ul>
+        <li>داده‌های ماهواره‌ای حریق</li>
+        <li>محدوده استان فارس</li>
+        <li>مناطق چهارگانه محیط‌زیست</li>
+        <li>مناطق شکار ممنوع</li>
+        <li>محاسبه سطح سوخته به هکتار</li>
+        <li>گزارش‌گیری و خروجی داده</li>
+      </ul>
+
+      <h3>هدف نهایی</h3>
+
+      <p>
+        هدف نهایی، ارائه یک تصویر ساده و قابل فهم از محل حریق،
+        میزان سطح سوخته و میزان تأثیر حریق در محدوده‌های
+        حفاظتی استان فارس است.
+      </p>
+
+    </div>
+
+  </div>
+
+
+  <!-- =========================
+       REPORT
+  ========================== -->
+
+  <div
+    id="reportPanel"
+    class="panel"
+  >
+
+    <div class="panel-header">
+
+      <span>گزارش حریق</span>
+
+      <button
+        class="close-panel"
+        onclick="closePanels()"
+      >
+        ×
+      </button>
+
+    </div>
+
+    <div class="panel-body">
+
+      <div class="report-box">
+
+        <div class="report-title">
+          وضعیت گزارش
+        </div>
+
+        <p>
+          این بخش در مرحله بعد با داده واقعی حریق
+          و مساحت سوخته تکمیل خواهد شد.
+        </p>
+
+      </div>
+
+      <div class="report-box">
+
+        <div class="report-title">
+          محدوده گزارش
+        </div>
+
+        <p>
+          استان فارس
+        </p>
+
+        <p>
+          مناطق چهارگانه محیط‌زیست
+        </p>
+
+        <p>
+          مناطق شکار ممنوع
+        </p>
+
+      </div>
+
+      <button
+        class="export-btn"
+        onclick="exportExcel()"
+      >
+        📥 دریافت گزارش Excel
+      </button>
+
+    </div>
+
+  </div>
+
+</div>
+
+
+<!-- =========================
+     LEAFLET
+========================== -->
 
 <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
 
+<!-- Excel library -->
+
+<script src="https://cdn.sheetjs.com/xlsx-0.20.3/package/dist/xlsx.full.min.js"></script>
+
+
 <script>
-  const map = L.map("map").setView([29.6, 53.0], 7);
+
+  /* =========================
+     MAP
+  ========================== */
+
+  const map = L.map("map").setView(
+    [29.6, 53.0],
+    7
+  );
 
   L.tileLayer(
     "https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png",
     {
-      attribution: "&copy; OpenStreetMap contributors"
+      attribution:
+        "&copy; OpenStreetMap contributors"
     }
   ).addTo(map);
+
 
   let farsLayer;
   let protectedLayer;
   let huntingLayer;
 
+  const overlayLayers = {};
+
+  let layerControl;
+
+
+  /* =========================
+     FARS
+  ========================== */
+
   fetch("fars.geojson")
     .then(response => response.json())
     .then(data => {
-      farsLayer = L.geoJSON(data, {
-        style: {
-          color: "#ff6600",
-          weight: 2,
-          fillOpacity: 0.05
-        }
-      }).addTo(map);
 
-      map.fitBounds(farsLayer.getBounds());
+      farsLayer = L.geoJSON(
+        data,
+        {
+          style: {
+            color: "#ff6600",
+            weight: 2,
+            fillOpacity: 0.05
+          }
+        }
+      ).addTo(map);
+
+      overlayLayers["مرز استان فارس"] =
+        farsLayer;
+
+      map.fitBounds(
+        farsLayer.getBounds()
+      );
+
+      updateLayerControl();
+
+    })
+    .catch(error => {
+
+      console.error(
+        "خطا در بارگذاری fars.geojson:",
+        error
+      );
+
     });
+
+
+  /* =========================
+     PROTECTED AREAS
+  ========================== */
 
   fetch("protected_areas.geojson")
     .then(response => response.json())
     .then(data => {
-      protectedLayer = L.geoJSON(data, {
-        style: {
-          color: "#008000",
-          weight: 1.5,
-          fillOpacity: 0.15
+
+      protectedLayer = L.geoJSON(
+        data,
+        {
+          style: {
+            color: "#008000",
+            weight: 1.5,
+            fillOpacity: 0.15
+          }
         }
-      }).addTo(map);
+      ).addTo(map);
+
+      overlayLayers[
+        "مناطق چهارگانه محیط‌زیست"
+      ] = protectedLayer;
+
+      updateLayerControl();
+
+    })
+    .catch(error => {
+
+      console.error(
+        "خطا در بارگذاری protected_areas.geojson:",
+        error
+      );
+
     });
+
+
+  /* =========================
+     HUNTING BANNED
+  ========================== */
 
   fetch("hunting_banned.geojson")
     .then(response => response.json())
     .then(data => {
-      huntingLayer = L.geoJSON(data, {
-        style: {
-          color: "#800080",
-          weight: 1.5,
-          fillOpacity: 0.15
+
+      huntingLayer = L.geoJSON(
+        data,
+        {
+          style: {
+            color: "#800080",
+            weight: 1.5,
+            fillOpacity: 0.15
+          }
         }
-      }).addTo(map);
+      ).addTo(map);
+
+      overlayLayers[
+        "مناطق شکار ممنوع"
+      ] = huntingLayer;
+
+      updateLayerControl();
+
+    })
+    .catch(error => {
+
+      console.error(
+        "خطا در بارگذاری hunting_banned.geojson:",
+        error
+      );
+
     });
+
+
+  /* =========================
+     LAYER CONTROL
+  ========================== */
+
+  function updateLayerControl() {
+
+    if (layerControl) {
+      map.removeControl(layerControl);
+    }
+
+    layerControl =
+      L.control.layers(
+        null,
+        overlayLayers,
+        {
+          collapsed: false
+        }
+      ).addTo(map);
+  }
+
+
+  /* =========================
+     PANELS
+  ========================== */
+
+  function closePanels() {
+
+    document
+      .querySelectorAll(".panel")
+      .forEach(panel => {
+
+        panel.classList.remove("active");
+
+      });
+
+  }
+
+
+  function togglePanel(panelId) {
+
+    const panel =
+      document.getElementById(panelId);
+
+    const isActive =
+      panel.classList.contains("active");
+
+    closePanels();
+
+    if (!isActive) {
+      panel.classList.add("active");
+    }
+
+  }
+
+
+  function openReportPanel() {
+
+    togglePanel("reportPanel");
+
+  }
+
+
+  /* =========================
+     DARK MODE
+  ========================== */
+
+  function toggleDarkMode() {
+
+    document.body.classList.toggle("dark");
+
+    const isDark =
+      document.body.classList.contains("dark");
+
+    const button =
+      document.getElementById("darkModeButton");
+
+    if (isDark) {
+
+      button.innerHTML =
+        "☀️ حالت روز";
+
+      localStorage.setItem(
+        "farsFireDarkMode",
+        "1"
+      );
+
+    } else {
+
+      button.innerHTML =
+        "🌙 حالت شب";
+
+      localStorage.setItem(
+        "farsFireDarkMode",
+        "0"
+      );
+
+    }
+
+  }
+
+
+  /* =========================
+     REMEMBER DARK MODE
+  ========================== */
+
+  const savedDarkMode =
+    localStorage.getItem(
+      "farsFireDarkMode"
+    );
+
+  if (savedDarkMode === "1") {
+
+    document.body.classList.add("dark");
+
+    document.getElementById(
+      "darkModeButton"
+    ).innerHTML =
+      "☀️ حالت روز";
+
+  }
+
+
+  /* =========================
+     EXCEL REPORT
+  ========================== */
+
+  function exportExcel() {
+
+    const reportData = [
+
+      {
+        "عنوان": "سامانه پایش و ارزیابی اثر حریق‌های استان فارس",
+        "محدوده": "استان فارس",
+        "مساحت حریق (هکتار)": "",
+        "وضعیت": "در انتظار اتصال داده حریق"
+      },
+
+      {
+        "عنوان": "مناطق چهارگانه محیط‌زیست",
+        "محدوده": "مناطق چهارگانه",
+        "مساحت حریق (هکتار)": "",
+        "وضعیت": "در انتظار محاسبه"
+      },
+
+      {
+        "عنوان": "مناطق شکار ممنوع",
+        "محدوده": "مناطق شکار ممنوع",
+        "مساحت حریق (هکتار)": "",
+        "وضعیت": "در انتظار محاسبه"
+      }
+
+    ];
+
+
+    const worksheet =
+      XLSX.utils.json_to_sheet(
+        reportData
+      );
+
+
+    const workbook =
+      XLSX.utils.book_new();
+
+
+    XLSX.utils.book_append_sheet(
+      workbook,
+      worksheet,
+      "گزارش حریق"
+    );
+
+
+    XLSX.writeFile(
+      workbook,
+      "fars_fire_impact_report.xlsx"
+    );
+
+  }
+
 </script>
 
 </body>
