@@ -2,9 +2,15 @@ import json
 import os
 
 import geopandas as gpd
+import numpy as np
 import rasterio
-from rasterio.mask import mask
-from shapely.geometry import shape
+
+from rasterio.features import geometry_mask
+from rasterio.warp import (
+    calculate_default_transform,
+    reproject,
+    Resampling
+)
 
 
 # ============================================================
@@ -19,17 +25,28 @@ HUNTING_FILE = "hunting_banned.geojson"
 
 RESULT_FILE = "fire_filters_result.json"
 
+# برای منطقه مورد آزمایش:
+# 50.64 E , 30.03 N
+# UTM Zone 39N
+TARGET_EPSG = "EPSG:32639"
+
+TARGET_RESOLUTION_M = 20.0
+
 
 # ============================================================
-# CHECK BURN MASK
+# CHECK MASK
 # ============================================================
 
-if not os.path.exists(MASK_FILE):
+if not os.path.exists(
+    MASK_FILE
+):
 
     result = {
-        "status": "WAITING_FOR_BURNED_AREA_MASK",
+        "status":
+            "WAITING_FOR_BURNED_AREA_MASK",
+
         "message":
-            "هنوز burned_area_mask.tif تولید نشده است."
+            "burned_area_mask.tif هنوز وجود ندارد."
     }
 
     with open(
@@ -46,53 +63,145 @@ if not os.path.exists(MASK_FILE):
         )
 
     print(
-        "burned_area_mask.tif هنوز موجود نیست."
+        "burned_area_mask.tif وجود ندارد."
     )
 
     raise SystemExit(0)
 
 
 # ============================================================
-# READ RASTER
+# OPEN SOURCE RASTER
 # ============================================================
 
 with rasterio.open(
     MASK_FILE
 ) as src:
 
-    raster_crs = src.crs
-
-    transform = src.transform
-
-    pixel_width = abs(
-        transform.a
+    source_data = src.read(
+        1
     )
 
-    pixel_height = abs(
-        transform.e
-    )
+    source_transform = src.transform
 
-    pixel_area_m2 = (
-        pixel_width
-        *
-        pixel_height
-    )
+    source_crs = src.crs
 
-    pixel_area_ha = (
-        pixel_area_m2
-        /
-        10000.0
-    )
+    source_width = src.width
 
-    raster_data = src.read(1)
+    source_height = src.height
+
+
+print("")
+print(
+    "=========================================="
+)
+
+print(
+    "اطلاعات رستر سوختگی"
+)
+
+print(
+    f"CRS اولیه: {source_crs}"
+)
+
+print(
+    f"ابعاد: "
+    f"{source_width} x {source_height}"
+)
+
+print(
+    "=========================================="
+)
+
+
+# ============================================================
+# REPROJECT BURN MASK TO METRIC CRS
+# ============================================================
+
+transform, width, height = (
+    calculate_default_transform(
+
+        source_crs,
+
+        TARGET_EPSG,
+
+        source_width,
+
+        source_height,
+
+        *rasterio.transform.array_bounds(
+            source_height,
+            source_width,
+            source_transform
+        ),
+
+        resolution=TARGET_RESOLUTION_M
+
+    )
+)
+
+
+projected_mask = np.zeros(
+    (
+        height,
+        width
+    ),
+    dtype=np.uint8
+)
+
+
+reproject(
+
+    source=
+        source_data,
+
+    destination=
+        projected_mask,
+
+    src_transform=
+        source_transform,
+
+    src_crs=
+        source_crs,
+
+    dst_transform=
+        transform,
+
+    dst_crs=
+        TARGET_EPSG,
+
+    resampling=
+        Resampling.nearest
+
+)
+
+
+# ============================================================
+# PIXEL AREA
+# ============================================================
+
+pixel_area_m2 = (
+    TARGET_RESOLUTION_M
+    *
+    TARGET_RESOLUTION_M
+)
+
+pixel_area_ha = (
+    pixel_area_m2
+    /
+    10000.0
+)
 
 
 # ============================================================
 # TOTAL BURNED AREA
 # ============================================================
 
+burned_mask = (
+    projected_mask == 1
+)
+
 total_burned_pixels = int(
-    (raster_data == 1).sum()
+    burned_mask.sum()
 )
 
 total_burned_ha = (
@@ -102,93 +211,23 @@ total_burned_ha = (
 )
 
 
-# ============================================================
-# CALCULATE AREA INSIDE GEOJSON
-# ============================================================
-
-def calculate_area(
-    geojson_file
-):
-
-    layer = gpd.read_file(
-        geojson_file
-    )
-
-    if layer.empty:
-        return 0.0
-
-    # تبدیل لایه به CRS رستر
-    if layer.crs != raster_crs:
-
-        layer = layer.to_crs(
-            raster_crs
-        )
-
-    geometries = []
-
-    for geometry in layer.geometry:
-
-        if geometry is None:
-            continue
-
-        if geometry.is_empty:
-            continue
-
-        geometries.append(
-            geometry
-        )
-
-    if not geometries:
-        return 0.0
-
-    # --------------------------------------------------------
-    # Mask فقط برای محدوده موردنظر
-    # --------------------------------------------------------
-
-    with rasterio.open(
-        MASK_FILE
-    ) as src:
-
-        clipped, _ = mask(
-            src,
-            geometries,
-            crop=False,
-            filled=False
-        )
-
-    burned_inside = (
-        clipped[0] == 1
-    )
-
-    burned_pixels = int(
-        burned_inside.sum()
-    )
-
-    area_ha = (
-        burned_pixels
-        *
-        pixel_area_ha
-    )
-
-    return area_ha
-
-
-# ============================================================
-# CALCULATIONS
-# ============================================================
-
 print("")
 print(
     "=========================================="
 )
 
 print(
-    "محاسبه فیلترهای مکانی"
+    "محاسبه کل سوختگی"
 )
 
 print(
     f"مساحت هر پیکسل: "
-    f"{pixel_area_ha:.6f} هکتار"
+    f"{pixel_area_ha:.4f} هکتار"
+)
+
+print(
+    f"پیکسل‌های سوخته: "
+    f"{total_burned_pixels}"
 )
 
 print(
@@ -200,6 +239,116 @@ print(
     "=========================================="
 )
 
+
+# ============================================================
+# CALCULATE AREA INSIDE GEOJSON
+# ============================================================
+
+def calculate_area(
+    geojson_file
+):
+
+    if not os.path.exists(
+        geojson_file
+    ):
+
+        print(
+            f"فایل پیدا نشد: "
+            f"{geojson_file}"
+        )
+
+        return 0.0
+
+
+    layer = gpd.read_file(
+        geojson_file
+    )
+
+
+    if layer.empty:
+
+        return 0.0
+
+
+    # --------------------------------------------------------
+    # تبدیل GeoJSON به CRS متری
+    # --------------------------------------------------------
+
+    layer = layer.to_crs(
+        TARGET_EPSG
+    )
+
+
+    geometries = []
+
+    for geometry in layer.geometry:
+
+        if geometry is None:
+
+            continue
+
+
+        if geometry.is_empty:
+
+            continue
+
+
+        geometries.append(
+            geometry
+        )
+
+
+    if not geometries:
+
+        return 0.0
+
+
+    # --------------------------------------------------------
+    # ماسک فضایی
+    # --------------------------------------------------------
+
+    inside_mask = geometry_mask(
+
+        geometries,
+
+        out_shape=(
+            height,
+            width
+        ),
+
+        transform=
+            transform,
+
+        invert=True
+
+    )
+
+
+    burned_inside = (
+        burned_mask
+        &
+        inside_mask
+    )
+
+
+    burned_pixels = int(
+        burned_inside.sum()
+    )
+
+
+    area_ha = (
+        burned_pixels
+        *
+        pixel_area_ha
+    )
+
+
+    return area_ha
+
+
+# ============================================================
+# CALCULATE FILTERS
+# ============================================================
 
 fars_area = calculate_area(
     FARS_FILE
@@ -253,19 +402,32 @@ result = {
 
     "pixel": {
 
-        "width_m":
-            pixel_width,
-
-        "height_m":
-            pixel_height,
+        "resolution_m":
+            TARGET_RESOLUTION_M,
 
         "area_ha":
             pixel_area_ha
+
+    },
+
+    "projection": {
+
+        "source_crs":
+            str(
+                source_crs
+            ),
+
+        "target_crs":
+            TARGET_EPSG
 
     }
 
 }
 
+
+# ============================================================
+# SAVE
+# ============================================================
 
 with open(
     RESULT_FILE,
@@ -282,7 +444,7 @@ with open(
 
 
 # ============================================================
-# PRINT
+# FINAL
 # ============================================================
 
 print("")
@@ -291,12 +453,16 @@ print(
 )
 
 print(
-    f"کل حریق: "
+    "نتیجه فیلترهای مکانی"
+)
+
+print(
+    f"کل سوختگی: "
     f"{total_burned_ha:.3f} هکتار"
 )
 
 print(
-    f"داخل استان فارس: "
+    f"داخل فارس: "
     f"{fars_area:.3f} هکتار"
 )
 
@@ -312,8 +478,4 @@ print(
 
 print(
     "=========================================="
-)
-
-print(
-    f"نتیجه در {RESULT_FILE} ذخیره شد."
 )
