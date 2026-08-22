@@ -1,0 +1,42 @@
+name: Select First Ready Fire
+
+on:
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  select-fire:
+
+    runs-on: ubuntu-latest
+
+    steps:
+
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Setup Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+
+      - name: Select first READY fire
+        run: |
+          python select_first_ready_fire.py
+
+      - name: Save selected fire
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+
+          git add selected_fire_2026.json
+
+          if git diff --cached --quiet; then
+            echo "No changes."
+            exit 0
+          fi
+
+          git commit -m "Select first ready fire"
+          git pull --rebase origin main
+          git push origin main
