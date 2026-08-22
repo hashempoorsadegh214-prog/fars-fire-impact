@@ -1,8 +1,8 @@
 {
   "status": "SUCCESS",
   "burned_area": {
-    "total_ha": 3.64,
-    "inside_fars_ha": 0.0,
+    "total_ha": 0.6,
+    "inside_fars_ha": 0.6,
     "inside_protected_areas_ha": 0.0,
     "inside_hunting_banned_ha": 0.0
   },
