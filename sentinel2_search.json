@@ -28,8 +28,9 @@
     }
   },
   "before": {
-    "count": 2,
-    "products": [
+    "selected_acquisition": "2026-08-21T07:06:21",
+    "tile_count": 2,
+    "tiles": [
       {
         "@odata.mediaContentType": "application/octet-stream",
         "Id": "17cf0794-e20a-453b-88cd-21fefb0a10dc",
@@ -115,47 +116,6 @@
     ]
   },
   "after": {
-    "count": 0,
-    "products": []
-  },
-  "selected": {
-    "before": {
-      "@odata.mediaContentType": "application/octet-stream",
-      "Id": "17cf0794-e20a-453b-88cd-21fefb0a10dc",
-      "Name": "S2C_MSIL2A_20260821T070621_N0512_R106_T39RWM_20260821T120110.SAFE",
-      "S3Path": "/eodata/Sentinel-2/MSI/L2A/2026/08/21/S2C_MSIL2A_20260821T070621_N0512_R106_T39RWM_20260821T120110.SAFE",
-      "ContentDate": {
-        "Start": "2026-08-21T07:06:21.025000Z",
-        "End": "2026-08-21T07:06:21.025000Z"
-      },
-      "GeoFootprint": {
-        "type": "Polygon",
-        "coordinates": [
-          [
-            [
-              50.999794802530204,
-              28.928282733604448
-            ],
-            [
-              50.999796705640954,
-              27.937148320800727
-            ],
-            [
-              52.11579643140298,
-              27.932627675178736
-            ],
-            [
-              52.126239120515784,
-              28.923572308703427
-            ],
-            [
-              50.999794802530204,
-              28.928282733604448
-            ]
-          ]
-        ]
-      }
-    },
-    "after": null
+    "selected": null
   }
 }
