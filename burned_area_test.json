@@ -1,0 +1,11 @@
+{
+  "latest_fire": {
+    "latitude": 28.68074,
+    "longitude": 52.09113,
+    "date": "2026-08-22",
+    "time_utc": "848"
+  },
+  "burnt_area_product": "Copernicus Burnt Area v4 daily 300m",
+  "required_layer": "burned_fraction",
+  "status": "READY_FOR_BURNT_AREA_DOWNLOAD"
+}
