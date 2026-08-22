@@ -76,7 +76,9 @@ def point_in_ring(
 
     j = len(ring) - 1
 
-    for i in range(len(ring)):
+    for i in range(
+        len(ring)
+    ):
 
         xi, yi = ring[i]
         xj, yj = ring[j]
@@ -89,7 +91,8 @@ def point_in_ring(
                 <
                 (
                     (xj - xi)
-                    * (lat - yi)
+                    *
+                    (lat - yi)
                     /
                     ((yj - yi) or 1e-15)
                     + xi
@@ -119,7 +122,6 @@ def point_in_polygon(
         return False
 
 
-    # حلقه بیرونی
     if not point_in_ring(
         lon,
         lat,
@@ -129,7 +131,7 @@ def point_in_polygon(
         return False
 
 
-    # حفره‌ها
+    # بررسی حفره‌ها
     for hole in polygon[1:]:
 
         if point_in_ring(
@@ -204,11 +206,6 @@ s2_products = []
 
 for product in products:
 
-    name = product.get(
-        "Name",
-        ""
-    )
-
     acquisition = (
         product
         .get(
@@ -221,12 +218,18 @@ for product in products:
         )
     )
 
+
     footprint = product.get(
         "GeoFootprint"
     )
 
 
     if not acquisition:
+
+        continue
+
+
+    if not footprint:
 
         continue
 
@@ -240,13 +243,7 @@ for product in products:
             )
         )
 
-
     except Exception:
-
-        continue
-
-
-    if not footprint:
 
         continue
 
@@ -261,7 +258,10 @@ for product in products:
                 ),
 
             "name":
-                name,
+                product.get(
+                    "Name",
+                    ""
+                ),
 
             "s3_path":
                 product.get(
@@ -272,18 +272,18 @@ for product in products:
             "datetime":
                 acquisition_dt,
 
+            # متن برای ذخیره در JSON
             "acquisition":
                 acquisition,
 
             "footprint":
                 footprint
-
         }
     )
 
 
 # ============================================================
-# GROUP SENTINEL-2 PRODUCTS BY DATE
+# GROUP BY DATE
 # ============================================================
 
 products_by_date = {}
@@ -291,9 +291,9 @@ products_by_date = {}
 
 for product in s2_products:
 
-    date_key = product[
-        "datetime"
-    ].date()
+    date_key = (
+        product["datetime"].date()
+    )
 
 
     products_by_date.setdefault(
@@ -305,7 +305,7 @@ for product in s2_products:
 
 
 # ============================================================
-# GET TILES COVERING FIRE POINT
+# GET TILES COVERING FIRE
 # ============================================================
 
 def get_covering_tiles(
@@ -329,7 +329,20 @@ def get_covering_tiles(
         ):
 
             result.append(
-                product
+                {
+
+                    "id":
+                        product["id"],
+
+                    "name":
+                        product["name"],
+
+                    "s3_path":
+                        product["s3_path"],
+
+                    "acquisition":
+                        product["acquisition"]
+                }
             )
 
 
@@ -337,7 +350,7 @@ def get_covering_tiles(
 
 
 # ============================================================
-# FIND BEST BEFORE / AFTER
+# FIND BEFORE / AFTER
 # ============================================================
 
 def find_before_after(
@@ -346,9 +359,14 @@ def find_before_after(
     lat
 ):
 
-    before = []
-    after = []
+    before = None
+    after = None
 
+
+    # --------------------------------------------------------
+    # BEFORE
+    # نزدیک‌ترین تصویر در بازه 5 روز قبل
+    # --------------------------------------------------------
 
     for offset in range(
         1,
@@ -372,26 +390,30 @@ def find_before_after(
 
         if tiles:
 
-            before.append(
-                {
+            before = {
 
-                    "date":
-                        candidate_date.strftime(
-                            "%Y-%m-%d"
-                        ),
+                "date":
+                    candidate_date.strftime(
+                        "%Y-%m-%d"
+                    ),
 
-                    "days_from_fire":
-                        offset,
+                "days_from_fire":
+                    offset,
 
-                    "tile_count":
-                        len(tiles),
+                "tile_count":
+                    len(tiles),
 
-                    "tiles":
-                        tiles
+                "tiles":
+                    tiles
+            }
 
-                }
-            )
+            break
 
+
+    # --------------------------------------------------------
+    # AFTER
+    # نزدیک‌ترین تصویر در بازه 5 روز بعد
+    # --------------------------------------------------------
 
     for offset in range(
         1,
@@ -415,43 +437,29 @@ def find_before_after(
 
         if tiles:
 
-            after.append(
-                {
+            after = {
 
-                    "date":
-                        candidate_date.strftime(
-                            "%Y-%m-%d"
-                        ),
+                "date":
+                    candidate_date.strftime(
+                        "%Y-%m-%d"
+                    ),
 
-                    "days_from_fire":
-                        offset,
+                "days_from_fire":
+                    offset,
 
-                    "tile_count":
-                        len(tiles),
+                "tile_count":
+                    len(tiles),
 
-                    "tiles":
-                        tiles
+                "tiles":
+                    tiles
+            }
 
-                }
-            )
-
-
-    best_before = (
-        before[0]
-        if before
-        else None
-    )
-
-    best_after = (
-        after[0]
-        if after
-        else None
-    )
+            break
 
 
     return (
-        best_before,
-        best_after
+        before,
+        after
     )
 
 
@@ -466,6 +474,11 @@ waiting = 0
 no_before = 0
 
 
+total_fires = len(
+    fires
+)
+
+
 for index, fire in enumerate(
     fires,
     start=1
@@ -474,13 +487,14 @@ for index, fire in enumerate(
     if index % 500 == 0:
 
         print(
-            f"بررسی {index}/{len(fires)}"
+            f"بررسی {index}/{total_fires}"
         )
 
 
     date_text = fire.get(
         "acq_date"
     )
+
 
     if not date_text:
 
@@ -493,7 +507,6 @@ for index, fire in enumerate(
             date_text,
             "%Y-%m-%d"
         ).date()
-
 
     except Exception:
 
@@ -509,7 +522,6 @@ for index, fire in enumerate(
         lat = float(
             fire["latitude"]
         )
-
 
     except Exception:
 
@@ -529,11 +541,15 @@ for index, fire in enumerate(
 
         ready += 1
 
+
     elif before:
 
-        status = "WAITING_FOR_AFTER_IMAGE"
+        status = (
+            "WAITING_FOR_AFTER_IMAGE"
+        )
 
         waiting += 1
+
 
     else:
 
@@ -562,7 +578,7 @@ for index, fire in enumerate(
 
 
 # ============================================================
-# SAVE
+# SAVE SUMMARY
 # ============================================================
 
 result = {
@@ -571,8 +587,8 @@ result = {
         "SUCCESS",
 
     "rules":
-
         {
+
             "before_days":
                 BEFORE_DAYS,
 
@@ -581,8 +597,8 @@ result = {
         },
 
     "summary":
-
         {
+
             "total_fires":
                 len(results),
 
@@ -600,6 +616,10 @@ result = {
         results
 }
 
+
+# ============================================================
+# SAVE JSON
+# ============================================================
 
 with open(
     OUTPUT_FILE,
