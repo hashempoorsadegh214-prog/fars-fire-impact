@@ -2,13 +2,13 @@
   "status": "SELECTED",
   "reason": "اولین حریق READY در آرشیو 2026",
   "fire": {
-    "latitude": 30.03576,
-    "longitude": 50.64047,
+    "latitude": 29.94073,
+    "longitude": 50.84156,
     "acq_date": "2026-01-02",
-    "acq_time": "848",
-    "satellite": "N20",
-    "source": "VIIRS_NOAA20_SP",
-    "frp": "8.41"
+    "acq_time": "1008",
+    "satellite": "N",
+    "source": "VIIRS_SNPP_SP",
+    "frp": "2.79"
   },
   "before": {
     "date": "2026-01-01",
