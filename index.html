@@ -266,7 +266,8 @@
 
     .leaflet-control,
     .leaflet-container,
-    .leaflet-control-layers {
+    .leaflet-control-layers,
+    .leaflet-popup-content {
       font-family:
         "B Nazanin",
         "BNazanin",
@@ -300,6 +301,110 @@
 
     body.dark .leaflet-control-zoom a:hover {
       background: #333;
+    }
+
+
+    /* =====================================================
+       FIRE POPUP
+    ====================================================== */
+
+    .fire-popup {
+      min-width: 230px;
+
+      font-family:
+        "B Nazanin",
+        "BNazanin",
+        Tahoma,
+        Arial,
+        sans-serif;
+
+      line-height: 1.9;
+    }
+
+    .fire-popup-title {
+      color: #d00000;
+      font-size: 17px;
+      font-weight: bold;
+      margin-bottom: 6px;
+    }
+
+    .fire-popup-row {
+      border-bottom: 1px solid #e5e5e5;
+      padding: 3px 0;
+    }
+
+    .fire-popup-row:last-child {
+      border-bottom: 0;
+    }
+
+    body.dark .fire-popup {
+      color: #eee;
+    }
+
+    body.dark .fire-popup-row {
+      border-bottom-color: #444;
+    }
+
+    body.dark .fire-popup-title {
+      color: #ff5555;
+    }
+
+
+    /* =====================================================
+       LATEST FIRE PANEL
+    ====================================================== */
+
+    #latestFireBadge {
+      position: fixed;
+
+      bottom: 18px;
+      right: 18px;
+
+      z-index: 1800;
+
+      min-width: 220px;
+
+      background:
+        rgba(255,255,255,0.97);
+
+      border-radius: 12px;
+
+      box-shadow:
+        0 5px 20px rgba(0,0,0,0.22);
+
+      padding: 12px 15px;
+
+      border-right:
+        5px solid #e00000;
+
+      display: none;
+    }
+
+    #latestFireBadge.active {
+      display: block;
+    }
+
+    body.dark #latestFireBadge {
+      background:
+        rgba(30,30,30,0.97);
+
+      color: #eee;
+    }
+
+    .latest-title {
+      color: #d00000;
+      font-size: 15px;
+      font-weight: bold;
+      margin-bottom: 4px;
+    }
+
+    body.dark .latest-title {
+      color: #ff5555;
+    }
+
+    .latest-value {
+      font-size: 13px;
+      line-height: 1.8;
     }
 
 
@@ -568,6 +673,12 @@
         width:
           calc(100vw - 20px);
       }
+
+      #latestFireBadge {
+        right: 10px;
+        bottom: 10px;
+        min-width: 200px;
+      }
     }
 
 
@@ -600,6 +711,7 @@
 
         padding: 6px;
       }
+
     }
 
   </style>
@@ -683,6 +795,28 @@
 
 
   <!-- =====================================================
+       LATEST FIRE BADGE
+  ====================================================== -->
+
+  <div
+    id="latestFireBadge"
+  >
+
+    <div class="latest-title">
+      🔥 آخرین حریق شناسایی‌شده
+    </div>
+
+    <div
+      id="latestFireContent"
+      class="latest-value"
+    >
+      در حال دریافت اطلاعات...
+    </div>
+
+  </div>
+
+
+  <!-- =====================================================
        GUIDE
   ====================================================== -->
 
@@ -722,16 +856,20 @@
         <li>مرز استان فارس</li>
         <li>مناطق چهارگانه محیط‌زیست</li>
         <li>مناطق شکار ممنوع</li>
+        <li>حریق‌های ماهواره‌ای</li>
       </ul>
 
       <h3>
-        نحوه استفاده
+        حریق‌ها
       </h3>
 
       <p>
-        محدوده موردنظر را روی نقشه انتخاب کنید.
-        سامانه میزان حریق واقع‌شده در آن محدوده
-        را محاسبه و به هکتار نمایش خواهد داد.
+        نقاط حریق دریافت‌شده از داده‌های ماهواره‌ای
+        روی نقشه نمایش داده می‌شوند.
+      </p>
+
+      <p>
+        آخرین حریق با علامت بزرگ‌تر مشخص می‌شود.
       </p>
 
       <h3>
@@ -739,8 +877,8 @@
       </h3>
 
       <p>
-        نتیجه محاسبات امکان دریافت به صورت
-        Excel و تصویر نقشه را خواهد داشت.
+        در بخش گزارش، خروجی Excel و تصویر
+        نمای فعلی نقشه در دسترس خواهد بود.
       </p>
 
     </div>
@@ -841,11 +979,11 @@
       <div class="report-box">
 
         <div class="report-title">
-          وضعیت گزارش
+          وضعیت حریق
         </div>
 
-        <p>
-          سامانه آماده دریافت داده حریق است.
+        <p id="reportFireCount">
+          در حال دریافت اطلاعات...
         </p>
 
       </div>
@@ -937,6 +1075,8 @@
   let protectedLayer;
 
   let huntingLayer;
+
+  let fireLayer;
 
   const overlayLayers = {};
 
@@ -1087,6 +1227,408 @@
 
 
   /* =====================================================
+     FIRE DATA
+  ====================================================== */
+
+  fetch("fires.json")
+    .then(
+      response => {
+
+        if (!response.ok) {
+
+          throw new Error(
+            "fires.json در دسترس نیست."
+          );
+
+        }
+
+        return response.json();
+
+      }
+    )
+    .then(
+      data => {
+
+        loadFireData(
+          data
+        );
+
+      }
+    )
+    .catch(
+      error => {
+
+        console.error(
+          "خطا در دریافت fires.json:",
+          error
+        );
+
+        document.getElementById(
+          "latestFireContent"
+        ).innerHTML =
+          "داده حریق در دسترس نیست.";
+
+      }
+    );
+
+
+  /* =====================================================
+     LOAD FIRE DATA
+  ====================================================== */
+
+  function loadFireData(
+    data
+  ) {
+
+    const fires =
+      Array.isArray(data.fires)
+        ? data.fires
+        : [];
+
+
+    document.getElementById(
+      "reportFireCount"
+    ).innerHTML =
+      "تعداد حریق‌های دریافت‌شده: " +
+      "<strong>" +
+      fires.length +
+      "</strong> مورد";
+
+
+    if (!fires.length) {
+
+      document.getElementById(
+        "latestFireContent"
+      ).innerHTML =
+        "در حال حاضر حریقی ثبت نشده است.";
+
+      return;
+    }
+
+
+    fireLayer =
+      L.layerGroup().addTo(map);
+
+
+    overlayLayers[
+      "🔥 حریق‌های ماهواره‌ای"
+    ] =
+      fireLayer;
+
+
+    /*
+     * داده‌ها در update_fires.py
+     * بر اساس جدیدترین زمان مرتب شده‌اند.
+     */
+
+    fires.forEach(
+      (fire, index) => {
+
+        createFireMarker(
+          fire,
+          index === 0
+        );
+
+      }
+    );
+
+
+    updateLayerControl();
+
+
+    showLatestFire(
+      fires[0]
+    );
+
+  }
+
+
+  /* =====================================================
+     CREATE FIRE MARKER
+  ====================================================== */
+
+  function createFireMarker(
+    fire,
+    isLatest
+  ) {
+
+    const lat =
+      Number(
+        fire.latitude
+      );
+
+    const lon =
+      Number(
+        fire.longitude
+      );
+
+
+    if (
+      !Number.isFinite(lat) ||
+      !Number.isFinite(lon)
+    ) {
+      return;
+    }
+
+
+    let marker;
+
+
+    if (isLatest) {
+
+      marker =
+        L.circleMarker(
+          [lat, lon],
+          {
+            radius: 11,
+
+            color: "#8b0000",
+
+            weight: 3,
+
+            fillColor: "#ff0000",
+
+            fillOpacity: 0.90
+          }
+        );
+
+    } else {
+
+      marker =
+        L.circleMarker(
+          [lat, lon],
+          {
+            radius: 7,
+
+            color: "#8b0000",
+
+            weight: 2,
+
+            fillColor: "#ff4500",
+
+            fillOpacity: 0.85
+          }
+        );
+
+    }
+
+
+    marker.bindPopup(
+      createFirePopup(
+        fire,
+        isLatest
+      )
+    );
+
+
+    marker.addTo(
+      fireLayer
+    );
+
+  }
+
+
+  /* =====================================================
+     FIRE POPUP
+  ====================================================== */
+
+  function createFirePopup(
+    fire,
+    isLatest
+  ) {
+
+    const title =
+      isLatest
+        ? "🔥 آخرین حریق"
+        : "🔥 حریق ماهواره‌ای";
+
+
+    const iranTime =
+      convertToIranTime(
+        fire.acquisition_utc
+      );
+
+
+    const dayNight =
+      fire.daynight === "D"
+        ? "روز"
+        : fire.daynight === "N"
+          ? "شب"
+          : "نامشخص";
+
+
+    return `
+      <div class="fire-popup">
+
+        <div class="fire-popup-title">
+          ${title}
+        </div>
+
+        <div class="fire-popup-row">
+          <strong>تاریخ:</strong>
+          ${fire.acq_date || "-"}
+        </div>
+
+        <div class="fire-popup-row">
+          <strong>زمان ایران:</strong>
+          ${iranTime}
+        </div>
+
+        <div class="fire-popup-row">
+          <strong>ماهواره:</strong>
+          ${fire.satellite || "-"}
+        </div>
+
+        <div class="fire-popup-row">
+          <strong>روز / شب:</strong>
+          ${dayNight}
+        </div>
+
+        <div class="fire-popup-row">
+          <strong>اطمینان:</strong>
+          ${fire.confidence || "-"}
+        </div>
+
+        <div class="fire-popup-row">
+          <strong>FRP:</strong>
+          ${fire.frp || "-"}
+        </div>
+
+        <div class="fire-popup-row">
+          <strong>عرض جغرافیایی:</strong>
+          ${Number(fire.latitude).toFixed(5)}
+        </div>
+
+        <div class="fire-popup-row">
+          <strong>طول جغرافیایی:</strong>
+          ${Number(fire.longitude).toFixed(5)}
+        </div>
+
+      </div>
+    `;
+
+  }
+
+
+  /* =====================================================
+     CONVERT UTC TO IRAN TIME
+  ====================================================== */
+
+  function convertToIranTime(
+    utcString
+  ) {
+
+    if (!utcString) {
+      return "-";
+    }
+
+
+    const date =
+      new Date(
+        utcString.replace(
+          " ",
+          "T"
+        ) + "Z"
+      );
+
+
+    if (
+      Number.isNaN(
+        date.getTime()
+      )
+    ) {
+      return utcString;
+    }
+
+
+    return new Intl.DateTimeFormat(
+      "fa-IR",
+      {
+        timeZone:
+          "Asia/Tehran",
+
+        year: "numeric",
+        month: "2-digit",
+        day: "2-digit",
+
+        hour: "2-digit",
+        minute: "2-digit",
+
+        hour12: false
+      }
+    ).format(
+      date
+    );
+
+  }
+
+
+  /* =====================================================
+     SHOW LATEST FIRE
+  ====================================================== */
+
+  function showLatestFire(
+    fire
+  ) {
+
+    const badge =
+      document.getElementById(
+        "latestFireBadge"
+      );
+
+
+    const content =
+      document.getElementById(
+        "latestFireContent"
+      );
+
+
+    const iranTime =
+      convertToIranTime(
+        fire.acquisition_utc
+      );
+
+
+    const dayNight =
+      fire.daynight === "D"
+        ? "روز"
+        : fire.daynight === "N"
+          ? "شب"
+          : "نامشخص";
+
+
+    content.innerHTML = `
+      <div>
+        <strong>زمان:</strong>
+        ${iranTime}
+      </div>
+
+      <div>
+        <strong>ماهواره:</strong>
+        ${fire.satellite || "-"}
+      </div>
+
+      <div>
+        <strong>روز / شب:</strong>
+        ${dayNight}
+      </div>
+
+      <div>
+        <strong>مختصات:</strong>
+        ${Number(fire.latitude).toFixed(4)},
+        ${Number(fire.longitude).toFixed(4)}
+      </div>
+    `;
+
+
+    badge.classList.add(
+      "active"
+    );
+
+  }
+
+
+  /* =====================================================
      LAYER CONTROL
   ====================================================== */
 
@@ -1134,7 +1676,9 @@
   }
 
 
-  function togglePanel(panelId) {
+  function togglePanel(
+    panelId
+  ) {
 
     const panel =
       document.getElementById(
@@ -1232,7 +1776,9 @@
     );
 
 
-  if (savedDarkMode === "1") {
+  if (
+    savedDarkMode === "1"
+  ) {
 
     document.body.classList.add(
       "dark"
@@ -1258,6 +1804,18 @@
 
   function exportExcel() {
 
+    const countElement =
+      document.getElementById(
+        "reportFireCount"
+      );
+
+
+    const fireCount =
+      countElement
+        ? countElement.innerText
+        : "";
+
+
     const reportData = [
 
       {
@@ -1267,11 +1825,14 @@
         "محدوده":
           "استان فارس",
 
+        "تعداد حریق":
+          fireCount,
+
         "مساحت حریق (هکتار)":
           "",
 
         "وضعیت":
-          "در انتظار اتصال داده حریق"
+          "محاسبه مساحت در مرحله بعد"
       },
 
 
@@ -1282,11 +1843,14 @@
         "محدوده":
           "مناطق چهارگانه",
 
+        "تعداد حریق":
+          "",
+
         "مساحت حریق (هکتار)":
           "",
 
         "وضعیت":
-          "در انتظار محاسبه"
+          "محاسبه در مرحله بعد"
       },
 
 
@@ -1297,11 +1861,14 @@
         "محدوده":
           "مناطق شکار ممنوع",
 
+        "تعداد حریق":
+          "",
+
         "مساحت حریق (هکتار)":
           "",
 
         "وضعیت":
-          "در انتظار محاسبه"
+          "محاسبه در مرحله بعد"
       }
 
     ];
@@ -1360,14 +1927,12 @@
       closePanels();
 
 
-      /*
-       * کمی صبر می‌کنیم تا پنل بسته شود
-       * و نقشه کاملاً آماده عکس‌برداری شود.
-       */
-
       await new Promise(
         resolve =>
-          setTimeout(resolve, 500)
+          setTimeout(
+            resolve,
+            500
+          )
       );
 
 
