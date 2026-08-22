@@ -1,0 +1,15 @@
+{
+  "status": "SUCCESS",
+  "dataset": "Sentinel-2 L2A",
+  "product_type": "S2MSI2A",
+  "period": {
+    "start": "2026-01-01",
+    "end": "2026-08-22"
+  },
+  "area": "Fars Province",
+  "max_cloud_percent": 30.0,
+  "product_count": 0,
+  "acquisition_count": 0,
+  "products": [],
+  "acquisitions": []
+}
