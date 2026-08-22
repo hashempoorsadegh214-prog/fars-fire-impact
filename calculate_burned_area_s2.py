@@ -1,8 +1,9 @@
 import json
 import os
-from datetime import datetime, timedelta, timezone
+from datetime import datetime, timedelta
 
 import numpy as np
+import rasterio
 import requests
 from rasterio.io import MemoryFile
 
@@ -11,12 +12,17 @@ from rasterio.io import MemoryFile
 # SETTINGS
 # ============================================================
 
-FIRES_FILE = "fires.json"
-SEARCH_FILE = "sentinel2_search.json"
+SELECTED_FIRE_FILE = (
+    "selected_fire_2026.json"
+)
 
-RESULT_FILE = "burned_area_result.json"
-RASTER_FILE = "burned_area_mask.tif"
-GEOJSON_FILE = "burned_area.geojson"
+RESULT_FILE = (
+    "burned_area_result.json"
+)
+
+RASTER_FILE = (
+    "burned_area_mask.tif"
+)
 
 CLIENT_ID = os.environ.get(
     "CDSE_CLIENT_ID"
@@ -28,7 +34,8 @@ CLIENT_SECRET = os.environ.get(
 
 TOKEN_URL = (
     "https://identity.dataspace.copernicus.eu/"
-    "auth/realms/CDSE/protocol/openid-connect/token"
+    "auth/realms/CDSE/"
+    "protocol/openid-connect/token"
 )
 
 PROCESS_URL = (
@@ -36,11 +43,10 @@ PROCESS_URL = (
     "process/v1"
 )
 
-# محدوده اولیه بررسی اطراف مرکز حریق
+# محدوده بررسی اطراف نقطه حریق
 AOI_RADIUS_KM = 5
 
-# تفکیک خروجی
-# B8A و B12 هر دو در 20 متر استفاده می‌شوند
+# خروجی 20 متری
 RESOLUTION_M = 20
 
 # آستانه اولیه dNBR
@@ -48,235 +54,119 @@ BURN_THRESHOLD = 0.27
 
 
 # ============================================================
-# HELPER
-# ============================================================
-
-def save_json(path, data):
-
-    with open(
-        path,
-        "w",
-        encoding="utf-8"
-    ) as file:
-
-        json.dump(
-            data,
-            file,
-            ensure_ascii=False,
-            indent=2
-        )
-
-
-# ============================================================
-# LOAD FIRE DATA
+# LOAD SELECTED FIRE
 # ============================================================
 
 with open(
-    FIRES_FILE,
+    SELECTED_FIRE_FILE,
     "r",
     encoding="utf-8"
 ) as file:
 
-    fires_data = json.load(file)
-
-
-fires = fires_data.get(
-    "fires",
-    []
-)
-
-
-if not fires:
-
-    raise RuntimeError(
-        "هیچ حریقی در fires.json وجود ندارد."
+    selected_data = json.load(
+        file
     )
 
 
-latest_fire = fires[0]
+fire = selected_data.get(
+    "fire"
+)
+
+before_data = selected_data.get(
+    "before"
+)
+
+after_data = selected_data.get(
+    "after"
+)
 
 
-fire_date = latest_fire.get(
+if not fire:
+    raise RuntimeError(
+        "fire در selected_fire_2026.json پیدا نشد."
+    )
+
+
+if not before_data:
+    raise RuntimeError(
+        "تصویر قبل پیدا نشد."
+    )
+
+
+if not after_data:
+    raise RuntimeError(
+        "تصویر بعد پیدا نشد."
+    )
+
+
+# ============================================================
+# FIRE INFORMATION
+# ============================================================
+
+fire_date = fire.get(
     "acq_date"
 )
 
 fire_lat = float(
-    latest_fire["latitude"]
+    fire["latitude"]
 )
 
 fire_lon = float(
-    latest_fire["longitude"]
+    fire["longitude"]
 )
 
 
-# ============================================================
-# LOAD SENTINEL-2 SEARCH RESULT
-# ============================================================
-
-with open(
-    SEARCH_FILE,
-    "r",
-    encoding="utf-8"
-) as file:
-
-    search_data = json.load(file)
-
-
-before_data = search_data.get(
-    "before",
-    {}
+before_date = before_data.get(
+    "date"
 )
 
-after_data = search_data.get(
-    "after",
-    {}
+after_date = after_data.get(
+    "date"
 )
 
 
-before_tiles = before_data.get(
-    "tiles",
-    []
+print("")
+print(
+    "=========================================="
 )
 
-after_product = after_data.get(
-    "selected"
+print(
+    "حریق انتخاب‌شده"
 )
 
+print(
+    f"تاریخ حریق: {fire_date}"
+)
 
-# ============================================================
-# WAITING FOR AFTER IMAGE
-# ============================================================
+print(
+    f"Latitude: {fire_lat}"
+)
 
-if not before_tiles:
+print(
+    f"Longitude: {fire_lon}"
+)
 
-    result = {
+print(
+    f"تصویر قبل: {before_date}"
+)
 
-        "status":
-            "NO_BEFORE_IMAGE",
+print(
+    f"Tile قبل: "
+    f"{before_data.get('tile_count', 0)}"
+)
 
-        "fire": {
+print(
+    f"تصویر بعد: {after_date}"
+)
 
-            "date":
-                fire_date,
+print(
+    f"Tile بعد: "
+    f"{after_data.get('tile_count', 0)}"
+)
 
-            "latitude":
-                fire_lat,
-
-            "longitude":
-                fire_lon
-
-        }
-
-    }
-
-    save_json(
-        RESULT_FILE,
-        result
-    )
-
-    print(
-        "تصویر قبل از حریق پیدا نشد."
-    )
-
-    raise SystemExit(0)
-
-
-if not after_product:
-
-    result = {
-
-        "status":
-            "WAITING_FOR_AFTER_IMAGE",
-
-        "message":
-            "تصویر Sentinel-2 بعد از حریق هنوز موجود نیست.",
-
-        "fire": {
-
-            "date":
-                fire_date,
-
-            "latitude":
-                fire_lat,
-
-            "longitude":
-                fire_lon
-
-        },
-
-        "before": {
-
-            "date":
-                before_data.get(
-                    "selected_acquisition"
-                ),
-
-            "tile_count":
-                len(
-                    before_tiles
-                )
-
-        },
-
-        "after_search": {
-
-            "start":
-                (
-                    datetime.strptime(
-                        fire_date,
-                        "%Y-%m-%d"
-                    )
-                    + timedelta(days=1)
-                ).strftime(
-                    "%Y-%m-%d"
-                ),
-
-            "end":
-                (
-                    datetime.strptime(
-                        fire_date,
-                        "%Y-%m-%d"
-                    )
-                    + timedelta(days=5)
-                ).strftime(
-                    "%Y-%m-%d"
-                )
-
-        }
-
-    }
-
-    save_json(
-        RESULT_FILE,
-        result
-    )
-
-    print("")
-    print(
-        "=========================================="
-    )
-
-    print(
-        "تصویر قبل موجود است."
-    )
-
-    print(
-        f"تعداد Tile قبل: {len(before_tiles)}"
-    )
-
-    print(
-        "تصویر بعد هنوز موجود نیست."
-    )
-
-    print(
-        "وضعیت: WAITING_FOR_AFTER_IMAGE"
-    )
-
-    print(
-        "=========================================="
-    )
-
-    raise SystemExit(0)
+print(
+    "=========================================="
+)
 
 
 # ============================================================
@@ -286,14 +176,14 @@ if not after_product:
 if not CLIENT_ID:
 
     raise RuntimeError(
-        "CDSE_CLIENT_ID تنظیم نشده است."
+        "CDSE_CLIENT_ID در GitHub Secrets تنظیم نشده است."
     )
 
 
 if not CLIENT_SECRET:
 
     raise RuntimeError(
-        "CDSE_CLIENT_SECRET تنظیم نشده است."
+        "CDSE_CLIENT_SECRET در GitHub Secrets تنظیم نشده است."
     )
 
 
@@ -321,11 +211,9 @@ token_response = requests.post(
 
         "client_secret":
             CLIENT_SECRET
-
     },
 
     timeout=60
-
 )
 
 
@@ -372,19 +260,19 @@ lon_delta = (
     )
 )
 
-
 min_lon = fire_lon - lon_delta
 max_lon = fire_lon + lon_delta
 
 min_lat = fire_lat - lat_delta
 max_lat = fire_lat + lat_delta
 
-
 bbox = [
+
     min_lon,
     min_lat,
     max_lon,
     max_lat
+
 ]
 
 
@@ -397,14 +285,17 @@ width = max(
     int(
         (
             (max_lon - min_lon)
-            * 111000
-            * np.cos(
+            *
+            111000
+            *
+            np.cos(
                 np.radians(
                     fire_lat
                 )
             )
         )
-        / RESOLUTION_M
+        /
+        RESOLUTION_M
     )
 )
 
@@ -413,69 +304,24 @@ height = max(
     int(
         (
             (max_lat - min_lat)
-            * 111000
+            *
+            111000
         )
-        / RESOLUTION_M
+        /
+        RESOLUTION_M
     )
 )
 
 
 print("")
 print(
-    f"AOI: {AOI_RADIUS_KM} km"
+    f"AOI radius: "
+    f"{AOI_RADIUS_KM} km"
 )
 
 print(
-    f"اندازه خروجی: "
-    f"{width} × {height}"
-)
-
-
-# ============================================================
-# GET DATE FROM PRODUCTS
-# ============================================================
-
-before_start = (
-    before_data.get(
-        "selected_acquisition"
-    )
-)
-
-
-if not before_start:
-
-    raise RuntimeError(
-        "تاریخ تصویر قبل مشخص نیست."
-    )
-
-
-before_date = (
-    before_start[:10]
-)
-
-
-after_start = (
-    after_product
-    .get(
-        "ContentDate",
-        {}
-    )
-    .get(
-        "Start",
-        ""
-    )
-)
-
-
-if not after_start:
-
-    raise RuntimeError(
-        "تاریخ تصویر بعد مشخص نیست."
-    )
-
-
-after_date = (
-    after_start[:10]
+    f"Output size: "
+    f"{width} x {height}"
 )
 
 
@@ -495,7 +341,6 @@ function setup() {
                 "B8A",
                 "B12"
             ],
-
             units: "REFLECTANCE"
         }],
 
@@ -505,9 +350,7 @@ function setup() {
 
             sampleType: "FLOAT32"
 
-        },
-
-        mosaicking: "SIMPLE"
+        }
 
     };
 
@@ -541,17 +384,21 @@ function evaluatePixel(sample) {
 
 
 # ============================================================
-# PROCESS REQUEST
+# GET NBR
 # ============================================================
 
-def get_nbr(date_string):
+def get_nbr(
+    date_string
+):
 
-    next_day = (
+    next_date = (
         datetime.strptime(
             date_string,
             "%Y-%m-%d"
         )
-        + timedelta(days=1)
+        + timedelta(
+            days=1
+        )
     ).strftime(
         "%Y-%m-%d"
     )
@@ -569,7 +416,8 @@ def get_nbr(date_string):
                 "properties": {
 
                     "crs":
-                        "http://www.opengis.net/def/crs/OGC/1.3/CRS84"
+                        "http://www.opengis.net/"
+                        "def/crs/OGC/1.3/CRS84"
 
                 }
 
@@ -590,7 +438,7 @@ def get_nbr(date_string):
                                 f"{date_string}T00:00:00Z",
 
                             "to":
-                                f"{next_day}T00:00:00Z"
+                                f"{next_date}T00:00:00Z"
 
                         },
 
@@ -656,14 +504,13 @@ def get_nbr(date_string):
         json=request_body,
 
         timeout=180
-
     )
 
 
     if response.status_code != 200:
 
         raise RuntimeError(
-            "خطا در Process API:\n"
+            "خطا در Sentinel Hub Process API:\n"
             f"HTTP {response.status_code}\n"
             f"{response.text}"
         )
@@ -682,44 +529,76 @@ def get_nbr(date_string):
             crs = src.crs
 
             raster_width = src.width
+
             raster_height = src.height
 
 
     return (
+
         array,
+
         transform,
+
         crs,
+
         raster_width,
+
         raster_height
+
     )
 
 
 # ============================================================
-# GET BEFORE / AFTER NBR
+# BEFORE NBR
 # ============================================================
 
 print("")
 print(
-    f"NBR قبل: {before_date}"
+    f"در حال دریافت NBR قبل: "
+    f"{before_date}"
 )
 
 
-nbr_before, transform, crs, raster_width, raster_height = (
-    get_nbr(
-        before_date
-    )
+(
+    nbr_before,
+    transform,
+    crs,
+    raster_width,
+    raster_height
+) = get_nbr(
+    before_date
 )
 
 
 print(
-    f"NBR بعد: {after_date}"
+    "NBR قبل دریافت شد."
 )
 
 
-nbr_after, _, _, _, _ = (
-    get_nbr(
-        after_date
-    )
+# ============================================================
+# AFTER NBR
+# ============================================================
+
+print("")
+print(
+    f"در حال دریافت NBR بعد: "
+    f"{after_date}"
+)
+
+
+(
+    nbr_after,
+    _,
+    _,
+    _,
+    _
+) = get_nbr(
+    after_date
+)
+
+
+print(
+    "NBR بعد دریافت شد."
 )
 
 
@@ -769,10 +648,18 @@ dnbr = (
 )
 
 
+# ============================================================
+# BURN MASK
+# ============================================================
+
 burned_mask = (
+
     valid
+
     &
+
     (dnbr >= BURN_THRESHOLD)
+
 )
 
 
@@ -786,18 +673,15 @@ pixel_area_m2 = (
     RESOLUTION_M
 )
 
-
 pixel_area_ha = (
     pixel_area_m2
     /
     10000.0
 )
 
-
 burned_pixels = int(
     burned_mask.sum()
 )
-
 
 burned_area_ha = (
     burned_pixels
@@ -807,11 +691,8 @@ burned_area_ha = (
 
 
 # ============================================================
-# SAVE BURN MASK RASTER
+# SAVE RASTER
 # ============================================================
-
-import rasterio
-
 
 with rasterio.open(
 
@@ -846,7 +727,7 @@ with rasterio.open(
 
 
 # ============================================================
-# SAVE RESULT
+# RESULT
 # ============================================================
 
 result = {
@@ -876,12 +757,15 @@ result = {
             after_date,
 
         "before_tile_count":
-            len(before_tiles),
+            before_data.get(
+                "tile_count",
+                0
+            ),
 
-        "after_product":
-            after_product.get(
-                "Name",
-                ""
+        "after_tile_count":
+            after_data.get(
+                "tile_count",
+                0
             )
 
     },
@@ -890,6 +774,9 @@ result = {
 
         "index":
             "NBR",
+
+        "formula":
+            "NBR = (B8A - B12) / (B8A + B12)",
 
         "difference":
             "dNBR = NBR_before - NBR_after",
@@ -916,29 +803,31 @@ result = {
                 3
             )
 
-    },
-
-    "files": {
-
-        "mask":
-            RASTER_FILE,
-
-        "geojson":
-            GEOJSON_FILE
-
     }
 
 }
 
 
-save_json(
+# ============================================================
+# SAVE RESULT JSON
+# ============================================================
+
+with open(
     RESULT_FILE,
-    result
-)
+    "w",
+    encoding="utf-8"
+) as file:
+
+    json.dump(
+        result,
+        file,
+        ensure_ascii=False,
+        indent=2
+    )
 
 
 # ============================================================
-# PRINT RESULT
+# FINAL REPORT
 # ============================================================
 
 print("")
@@ -947,7 +836,24 @@ print(
 )
 
 print(
-    "نتیجه محاسبه سوختگی"
+    "نتیجه اولین محاسبه سوختگی"
+)
+
+print(
+    f"حریق: {fire_date}"
+)
+
+print(
+    f"تصویر قبل: {before_date}"
+)
+
+print(
+    f"تصویر بعد: {after_date}"
+)
+
+print(
+    f"آستانه dNBR: "
+    f"{BURN_THRESHOLD}"
 )
 
 print(
@@ -958,11 +864,6 @@ print(
 print(
     f"مساحت سوخته: "
     f"{burned_area_ha:.3f} هکتار"
-)
-
-print(
-    f"آستانه dNBR: "
-    f"{BURN_THRESHOLD}"
 )
 
 print(
