@@ -3,6 +3,9 @@ name: Find Sentinel-2 Images
 on:
   workflow_dispatch:
 
+  schedule:
+    - cron: "0 6 * * *"
+
 permissions:
   contents: write
 
@@ -45,6 +48,6 @@ jobs:
             exit 0
           fi
 
-          git commit -m "Find Sentinel-2 images"
+          git commit -m "Update Sentinel-2 search result"
 
           git push
