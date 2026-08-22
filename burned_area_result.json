@@ -2,8 +2,8 @@
   "status": "SUCCESS",
   "fire": {
     "date": "2026-01-02",
-    "latitude": 30.03576,
-    "longitude": 50.64047
+    "latitude": 29.94073,
+    "longitude": 50.84156
   },
   "sentinel2": {
     "before_date": "2026-01-01",
@@ -19,8 +19,8 @@
     "resolution_m": 20
   },
   "burned_area": {
-    "pixels": 91,
+    "pixels": 15,
     "pixel_area_ha": 0.04,
-    "hectares": 3.64
+    "hectares": 0.6
   }
 }
