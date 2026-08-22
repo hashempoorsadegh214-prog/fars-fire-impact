@@ -1,26 +1,30 @@
 {
   "status": "SUCCESS",
   "fire": {
-    "date": "2026-01-02",
-    "latitude": 29.94073,
-    "longitude": 50.84156
+    "date": "2026-01-04",
+    "time": "2155",
+    "latitude": 28.68215,
+    "longitude": 52.08998,
+    "inside_protected_areas": true,
+    "inside_hunting_banned": false
   },
   "sentinel2": {
-    "before_date": "2026-01-01",
-    "after_date": "2026-01-03",
-    "before_tile_count": 1,
-    "after_tile_count": 1
+    "before_date": "2026-01-03",
+    "after_date": "2026-01-08",
+    "before_tile_count": 2,
+    "after_tile_count": 2
   },
   "method": {
     "index": "NBR",
     "formula": "NBR = (B8A - B12) / (B8A + B12)",
     "difference": "dNBR = NBR_before - NBR_after",
     "threshold": 0.27,
-    "resolution_m": 20
+    "resolution_m": 20,
+    "aoi_radius_km": 5
   },
   "burned_area": {
-    "pixels": 15,
+    "pixels": 18,
     "pixel_area_ha": 0.04,
-    "hectares": 0.6
+    "hectares": 0.72
   }
 }
