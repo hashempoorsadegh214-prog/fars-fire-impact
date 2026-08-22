@@ -14,8 +14,10 @@ CATALOGUE_URL = (
     "odata/v1/Products"
 )
 
-# حداکثر درصد ابر
 MAX_CLOUD = 30.0
+
+# بازه جستجوی تصویر بعد از حریق
+AFTER_DAYS = 5
 
 
 # ============================================================
@@ -38,7 +40,6 @@ fires = data.get(
 
 
 if not fires:
-
     raise RuntimeError(
         "هیچ حریقی در fires.json پیدا نشد."
     )
@@ -61,7 +62,6 @@ fire_lon = float(
 
 
 if not fire_date_text:
-
     raise RuntimeError(
         "تاریخ آخرین حریق مشخص نیست."
     )
@@ -76,29 +76,12 @@ fire_date = datetime.strptime(
 
 
 print("")
-print(
-    "=========================================="
-)
-
-print(
-    "آخرین حریق"
-)
-
-print(
-    f"تاریخ: {fire_date_text}"
-)
-
-print(
-    f"عرض: {fire_lat}"
-)
-
-print(
-    f"طول: {fire_lon}"
-)
-
-print(
-    "=========================================="
-)
+print("==========================================")
+print("آخرین حریق")
+print(f"تاریخ: {fire_date_text}")
+print(f"عرض: {fire_lat}")
+print(f"طول: {fire_lon}")
+print("==========================================")
 
 
 # ============================================================
@@ -122,7 +105,6 @@ def search_sentinel2(
         )
     )
 
-
     # --------------------------------------------------------
     # نقطه حریق
     # --------------------------------------------------------
@@ -131,9 +113,8 @@ def search_sentinel2(
         f"POINT({fire_lon} {fire_lat})"
     )
 
-
     # --------------------------------------------------------
-    # فیلتر مکانی رسمی CDSE
+    # فیلتر مکانی
     # --------------------------------------------------------
 
     spatial_filter = (
@@ -142,7 +123,6 @@ def search_sentinel2(
         f"{point_wkt}"
         "')"
     )
-
 
     # --------------------------------------------------------
     # Sentinel-2 L2A
@@ -161,7 +141,6 @@ def search_sentinel2(
         ")"
     )
 
-
     # --------------------------------------------------------
     # Cloud cover
     # --------------------------------------------------------
@@ -179,7 +158,6 @@ def search_sentinel2(
         ")"
     )
 
-
     # --------------------------------------------------------
     # Collection
     # --------------------------------------------------------
@@ -187,7 +165,6 @@ def search_sentinel2(
     collection_filter = (
         "Collection/Name eq 'SENTINEL-2'"
     )
-
 
     # --------------------------------------------------------
     # Date
@@ -200,7 +177,6 @@ def search_sentinel2(
         "ContentDate/Start lt "
         f"{end_iso}"
     )
-
 
     # --------------------------------------------------------
     # Final filter
@@ -218,11 +194,8 @@ def search_sentinel2(
         + date_filter
     )
 
-
     params = {
-
-        "$filter":
-            query_filter,
+        "$filter": query_filter,
 
         "$orderby":
             "ContentDate/Start desc",
@@ -232,32 +205,13 @@ def search_sentinel2(
 
         "$select":
             "Id,Name,S3Path,ContentDate,GeoFootprint"
-
     }
 
-
-    print("")
-    print(
-        "در حال جستجوی Sentinel-2 ..."
-    )
-
-    print(
-        f"بازه: "
-        f"{start_date.strftime('%Y-%m-%d')}"
-        " تا "
-        f"{end_date.strftime('%Y-%m-%d')}"
-    )
-
-
     response = requests.get(
-
         CATALOGUE_URL,
-
         params=params,
-
         timeout=90
     )
-
 
     if response.status_code != 200:
 
@@ -266,7 +220,6 @@ def search_sentinel2(
             f"HTTP {response.status_code}\n"
             f"{response.text}"
         )
-
 
     result = response.json()
 
@@ -277,90 +230,108 @@ def search_sentinel2(
 
 
 # ============================================================
-# 3-DAY WINDOW
+# 3-DAY BEFORE
 # ============================================================
 
-three_day_start = (
-    fire_date
-    - timedelta(days=3)
+three_day_before_start = (
+    fire_date - timedelta(days=3)
 )
 
-
-three_day_end = (
-    fire_date
-    + timedelta(days=1)
+three_day_before_end = (
+    fire_date + timedelta(days=1)
 )
 
 
 print("")
+print("==========================================")
+print("جستجوی تصویر قبل - بازه ۳ روزه")
 print(
-    "=========================================="
-)
-
-print(
-    "بازه ۳ روزه"
-)
-
-print(
-    f"{three_day_start.strftime('%Y-%m-%d')}"
+    f"{three_day_before_start.strftime('%Y-%m-%d')}"
     " تا "
     f"{fire_date.strftime('%Y-%m-%d')}"
 )
 
 
-three_day_products = search_sentinel2(
-    three_day_start,
-    three_day_end
+three_day_before_products = search_sentinel2(
+    three_day_before_start,
+    three_day_before_end
 )
 
 
 print(
     f"تعداد تصاویر: "
-    f"{len(three_day_products)}"
+    f"{len(three_day_before_products)}"
 )
 
 
 # ============================================================
-# 5-DAY WINDOW
+# 5-DAY BEFORE
 # ============================================================
 
-five_day_start = (
-    fire_date
-    - timedelta(days=5)
+five_day_before_start = (
+    fire_date - timedelta(days=5)
 )
 
-
-five_day_end = (
-    fire_date
-    + timedelta(days=1)
+five_day_before_end = (
+    fire_date + timedelta(days=1)
 )
 
 
 print("")
+print("==========================================")
+print("جستجوی تصویر قبل - بازه ۵ روزه")
 print(
-    "=========================================="
-)
-
-print(
-    "بازه ۵ روزه"
-)
-
-print(
-    f"{five_day_start.strftime('%Y-%m-%d')}"
+    f"{five_day_before_start.strftime('%Y-%m-%d')}"
     " تا "
     f"{fire_date.strftime('%Y-%m-%d')}"
 )
 
 
-five_day_products = search_sentinel2(
-    five_day_start,
-    five_day_end
+five_day_before_products = search_sentinel2(
+    five_day_before_start,
+    five_day_before_end
 )
 
 
 print(
     f"تعداد تصاویر: "
-    f"{len(five_day_products)}"
+    f"{len(five_day_before_products)}"
+)
+
+
+# ============================================================
+# AFTER FIRE
+# 1 تا 5 روز بعد از حریق
+# ============================================================
+
+after_start = (
+    fire_date + timedelta(days=1)
+)
+
+after_end = (
+    fire_date + timedelta(days=AFTER_DAYS + 1)
+)
+
+
+print("")
+print("==========================================")
+print("جستجوی تصویر بعد از حریق")
+print(
+    f"{after_start.strftime('%Y-%m-%d')}"
+    " تا "
+    f"{after_end.strftime('%Y-%m-%d')}"
+)
+
+
+after_products = search_sentinel2(
+    after_start,
+    after_end
+)
+
+
+print(
+    f"تعداد تصاویر: "
+    f"{len(after_products)}"
 )
 
 
@@ -368,37 +339,47 @@ print(
 # REMOVE DUPLICATES
 # ============================================================
 
-all_products = []
+def unique_products(products):
 
-seen = set()
+    output = []
+
+    seen = set()
+
+    for product in products:
+
+        product_id = product.get(
+            "Id"
+        )
+
+        if not product_id:
+            continue
+
+        if product_id in seen:
+            continue
+
+        seen.add(
+            product_id
+        )
+
+        output.append(
+            product
+        )
+
+    return output
 
 
-for product in (
-    three_day_products
-    + five_day_products
-):
+before_products = unique_products(
+    three_day_before_products
+    + five_day_before_products
+)
 
-    product_id = product.get(
-        "Id"
-    )
-
-    if not product_id:
-        continue
-
-    if product_id in seen:
-        continue
-
-    seen.add(
-        product_id
-    )
-
-    all_products.append(
-        product
-    )
+after_products = unique_products(
+    after_products
+)
 
 
 # ============================================================
-# SORT BY DATE
+# SORT
 # ============================================================
 
 def get_start_date(product):
@@ -414,39 +395,35 @@ def get_start_date(product):
     )
 
 
-all_products.sort(
+# جدیدترین قبل
+before_products.sort(
     key=get_start_date,
     reverse=True
 )
 
+# قدیمی‌ترین بعد
+after_products.sort(
+    key=get_start_date
+)
+
 
 # ============================================================
-# PRINT RESULTS
+# PRINT BEFORE
 # ============================================================
 
 print("")
-print(
-    "=========================================="
-)
-
-print(
-    "تصاویر واقعی مرتبط با نقطه حریق"
-)
-
-print(
-    "=========================================="
-)
+print("==========================================")
+print("تصاویر قبل از حریق")
+print("==========================================")
 
 
 for index, product in enumerate(
-    all_products,
+    before_products,
     start=1
 ):
 
     print("")
-    print(
-        f"#{index}"
-    )
+    print(f"#{index}")
 
     print(
         f"Name: "
@@ -463,10 +440,56 @@ for index, product in enumerate(
         f"{product.get('Id', '-')}"
     )
 
+
+# ============================================================
+# PRINT AFTER
+# ============================================================
+
+print("")
+print("==========================================")
+print("تصاویر بعد از حریق")
+print("==========================================")
+
+
+for index, product in enumerate(
+    after_products,
+    start=1
+):
+
+    print("")
+    print(f"#{index}")
+
     print(
-        f"S3Path: "
-        f"{product.get('S3Path', '-')}"
+        f"Name: "
+        f"{product.get('Name', '-')}"
     )
+
+    print(
+        f"Start: "
+        f"{get_start_date(product)}"
+    )
+
+    print(
+        f"ID: "
+        f"{product.get('Id', '-')}"
+    )
+
+
+# ============================================================
+# AUTOMATIC INITIAL SELECTION
+# ============================================================
+
+selected_before = (
+    before_products[0]
+    if before_products
+    else None
+)
+
+selected_after = (
+    after_products[0]
+    if after_products
+    else None
+)
 
 
 # ============================================================
@@ -479,16 +502,6 @@ result = {
 
         "date":
             fire_date_text,
-
-        "latitude":
-            fire_lat,
-
-        "longitude":
-            fire_lon
-
-    },
-
-    "search_point": {
 
         "latitude":
             fire_lat,
@@ -516,10 +529,10 @@ result = {
 
     "windows": {
 
-        "three_day": {
+        "before_3_day": {
 
             "start":
-                three_day_start.strftime(
+                three_day_before_start.strftime(
                     "%Y-%m-%d"
                 ),
 
@@ -529,14 +542,16 @@ result = {
                 ),
 
             "count":
-                len(three_day_products)
+                len(
+                    three_day_before_products
+                )
 
         },
 
-        "five_day": {
+        "before_5_day": {
 
             "start":
-                five_day_start.strftime(
+                five_day_before_start.strftime(
                     "%Y-%m-%d"
                 ),
 
@@ -546,14 +561,67 @@ result = {
                 ),
 
             "count":
-                len(five_day_products)
+                len(
+                    five_day_before_products
+                )
+
+        },
+
+        "after_5_day": {
+
+            "start":
+                after_start.strftime(
+                    "%Y-%m-%d"
+                ),
+
+            "end":
+                after_end.strftime(
+                    "%Y-%m-%d"
+                ),
+
+            "count":
+                len(
+                    after_products
+                )
 
         }
 
     },
 
-    "products":
-        all_products
+    "before": {
+
+        "count":
+            len(
+                before_products
+            ),
+
+        "products":
+            before_products
+
+    },
+
+    "after": {
+
+        "count":
+            len(
+                after_products
+            ),
+
+        "products":
+            after_products
+
+    },
+
+    "selected": {
+
+        "before":
+            selected_before,
+
+        "after":
+            selected_after
+
+    }
+
 }
 
 
@@ -571,17 +639,75 @@ with open(
     )
 
 
+# ============================================================
+# FINAL STATUS
+# ============================================================
+
+print("")
+print("==========================================")
+print("نتیجه نهایی جستجو")
+print("==========================================")
+
+print(
+    "تعداد تصاویر قبل: "
+    f"{len(before_products)}"
+)
+
+print(
+    "تعداد تصاویر بعد: "
+    f"{len(after_products)}"
+)
+
+
+if selected_before:
+
+    print("")
+    print(
+        "تصویر انتخابی قبل:"
+    )
+
+    print(
+        selected_before.get(
+            "Name",
+            "-"
+        )
+    )
+
+
+else:
+
+    print("")
+    print(
+        "تصویر قبل پیدا نشد."
+    )
+
+
+if selected_after:
+
+    print("")
+    print(
+        "تصویر انتخابی بعد:"
+    )
+
+    print(
+        selected_after.get(
+            "Name",
+            "-"
+        )
+    )
+
+
+else:
+
+    print("")
+    print(
+        "هنوز تصویر بعد از حریق در کاتالوگ موجود نیست."
+    )
+
+
 print("")
 print(
-    "=========================================="
-)
-
-print(
-    "نتیجه ذخیره شد:"
-)
-
-print(
-    "sentinel2_search.json"
+    "نتیجه در sentinel2_search.json ذخیره شد."
 )
 
 print(
