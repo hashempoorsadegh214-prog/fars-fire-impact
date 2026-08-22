@@ -1,1 +1,75 @@
+name: Calculate Fire Spatial Filters
+
+on:
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  calculate-filters:
+
+    runs-on: ubuntu-latest
+
+    steps:
+
+      # ------------------------------------------------------
+      # دریافت Repository
+      # ------------------------------------------------------
+
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+
+      # ------------------------------------------------------
+      # نصب Python
+      # ------------------------------------------------------
+
+      - name: Setup Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+
+
+      # ------------------------------------------------------
+      # نصب کتابخانه‌ها
+      # ------------------------------------------------------
+
+      - name: Install packages
+        run: |
+          python -m pip install --upgrade pip
+          pip install geopandas rasterio shapely pyproj
+
+
+      # ------------------------------------------------------
+      # اجرای محاسبه فیلترها
+      # ------------------------------------------------------
+
+      - name: Calculate fire spatial filters
+        run: |
+          python calculate_fire_filters.py
+
+
+      # ------------------------------------------------------
+      # ذخیره نتیجه
+      # ------------------------------------------------------
+
+      - name: Save filter result
+        run: |
+
+          git config user.name "github-actions[bot]"
+
+          git config user.email \
+            "41898282+github-actions[bot]@users.noreply.github.com"
+
+          git add fire_filters_result.json
+
+          if git diff --cached --quiet; then
+            echo "No result changes."
+            exit 0
+          fi
+
+          git commit -m "Update fire spatial filter result"
+
+          git push
 
