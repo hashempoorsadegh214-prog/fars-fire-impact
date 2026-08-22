@@ -1,15 +1,1015 @@
 {
   "status": "SUCCESS",
-  "dataset": "Sentinel-2 L2A",
-  "product_type": "S2MSI2A",
+  "test_point": {
+    "latitude": 28.68269,
+    "longitude": 52.09232
+  },
   "period": {
     "start": "2026-01-01",
-    "end": "2026-08-22"
+    "end": "2026-08-23"
   },
-  "area": "Fars Province",
-  "max_cloud_percent": 30.0,
-  "product_count": 0,
-  "acquisition_count": 0,
-  "products": [],
-  "acquisitions": []
+  "product_type": "S2MSI2A",
+  "product_count": 100,
+  "products": [
+    {
+      "@odata.mediaContentType": "application/octet-stream",
+      "Id": "17cf0794-e20a-453b-88cd-21fefb0a10dc",
+      "Name": "S2C_MSIL2A_20260821T070621_N0512_R106_T39RWM_20260821T120110.SAFE",
+      "S3Path": "/eodata/Sentinel-2/MSI/L2A/2026/08/21/S2C_MSIL2A_20260821T070621_N0512_R106_T39RWM_20260821T120110.SAFE",
+      "ContentDate": {
+        "Start": "2026-08-21T07:06:21.025000Z",
+        "End": "2026-08-21T07:06:21.025000Z"
+      }
+    },
+    {
+      "@odata.mediaContentType": "application/octet-stream",
+      "Id": "fe2a6f25-190c-4046-be74-42a3564b2f9e",
+      "Name": "S2C_MSIL2A_20260821T070621_N0512_R106_T39RXM_20260821T120110.SAFE",
+      "S3Path": "/eodata/Sentinel-2/MSI/L2A/2026/08/21/S2C_MSIL2A_20260821T070621_N0512_R106_T39RXM_20260821T120110.SAFE",
+      "ContentDate": {
+        "Start": "2026-08-21T07:06:21.025000Z",
+        "End": "2026-08-21T07:06:21.025000Z"
+      }
+    },
+    {
+      "@odata.mediaContentType": "application/octet-stream",
+      "Id": "97d9a90e-daef-4ded-8eb7-1ebc3c66344c",
+      "Name": "S2B_MSIL2A_20260816T070619_N0512_R106_T39RXM_20260816T110314.SAFE",
+      "S3Path": "/eodata/Sentinel-2/MSI/L2A/2026/08/16/S2B_MSIL2A_20260816T070619_N0512_R106_T39RXM_20260816T110314.SAFE",
+      "ContentDate": {
+        "Start": "2026-08-16T07:06:19.024000Z",
+        "End": "2026-08-16T07:06:19.024000Z"
+      }
+    },
+    {
+      "@odata.mediaContentType": "application/octet-stream",
+      "Id": "adab9fde-f323-4bc1-a75f-8fe2f0794eb3",
+      "Name": "S2B_MSIL2A_20260816T070619_N0512_R106_T39RWM_20260816T110314.SAFE",
+      "S3Path": "/eodata/Sentinel-2/MSI/L2A/2026/08/16/S2B_MSIL2A_20260816T070619_N0512_R106_T39RWM_20260816T110314.SAFE",
+      "ContentDate": {
+        "Start": "2026-08-16T07:06:19.024000Z",
+        "End": "2026-08-16T07:06:19.024000Z"
+      }
+    },
+    {
+      "@odata.mediaContentType": "application/octet-stream",
+      "Id": "567e275e-a590-4674-93de-eb771628912f",
+      "Name": "S2A_MSIL2A_20260813T071321_N0512_R106_T39RXM_20260813T122117.SAFE",
+      "S3Path": "/eodata/Sentinel-2/MSI/L2A/2026/08/13/S2A_MSIL2A_20260813T071321_N0512_R106_T39RXM_20260813T122117.SAFE",
+      "ContentDate": {
+        "Start": "2026-08-13T07:13:21.024000Z",
+        "End": "2026-08-13T07:13:21.024000Z"
+      }
+    },
+    {
+      "@odata.mediaContentType": "application/octet-stream",
+      "Id": "a94457cb-0162-49fb-933a-2d649d7fb540",
+      "Name": "S2A_MSIL2A_20260813T071321_N0512_R106_T39RWM_20260813T122117.SAFE",
+      "S3Path": "/eodata/Sentinel-2/MSI/L2A/2026/08/13/S2A_MSIL2A_20260813T071321_N0512_R106_T39RWM_20260813T122117.SAFE",
+      "ContentDate": {
+        "Start": "2026-08-13T07:13:21.024000Z",
+        "End": "2026-08-13T07:13:21.024000Z"
+      }
+    },
+    {
+      "@odata.mediaContentType": "application/octet-stream",
+      "Id": "0252dc5b-363c-4aab-a6ab-e32e388ef0c7",
+      "Name": "S2C_MSIL2A_20260811T070621_N0512_R106_T39RWM_20260811T122817.SAFE",
+      "S3Path": "/eodata/Sentinel-2/MSI/L2A/2026/08/11/S2C_MSIL2A_20260811T070621_N0512_R106_T39RWM_20260811T122817.SAFE",
+      "ContentDate": {
+        "Start": "2026-08-11T07:06:21.025000Z",
+        "End": "2026-08-11T07:06:21.025000Z"
+      }
+    },
+    {
+      "@odata.mediaContentType": "application/octet-stream",
+      "Id": "b4f3a542-852a-4fb1-86a6-0927d05b611b",
+      "Name": "S2C_MSIL2A_20260811T070621_N0512_R106_T39RXM_20260811T122817.SAFE",
+      "S3Path": "/eodata/Sentinel-2/MSI/L2A/2026/08/11/S2C_MSIL2A_20260811T070621_N0512_R106_T39RXM_20260811T122817.SAFE",
+      "ContentDate": {
+        "Start": "2026-08-11T07:06:21.025000Z",
+        "End": "2026-08-11T07:06:21.025000Z"
+      }
+    },
+    {
+      "@odata.mediaContentType": "application/octet-stream",
+      "Id": "08970f9a-a21d-4b96-b008-3d3b1e5f4f27",
+      "Name": "S2B_MSIL2A_20260806T070619_N0512_R106_T39RXM_20260806T110344.SAFE",
+      "S3Path": "/eodata/Sentinel-2/MSI/L2A/2026/08/06/S2B_MSIL2A_20260806T070619_N0512_R106_T39RXM_20260806T110344.SAFE",
+      "ContentDate": {
+        "Start": "2026-08-06T07:06:19.024000Z",
+        "End": "2026-08-06T07:06:19.024000Z"
+      }
+    },
+    {
+      "@odata.mediaContentType": "application/octet-stream",
+      "Id": "1fbf0bca-fb88-410c-b0a2-c8d98f2238ed",
+      "Name": "S2B_MSIL2A_20260806T070619_N0512_R106_T39RWM_20260806T110344.SAFE",
+      "S3Path": "/eodata/Sentinel-2/MSI/L2A/2026/08/06/S2B_MSIL2A_20260806T070619_N0512_R106_T39RWM_20260806T110344.SAFE",
+      "ContentDate": {
+        "Start": "2026-08-06T07:06:19.024000Z",
+        "End": "2026-08-06T07:06:19.024000Z"
+      }
+    },
+    {
+      "@odata.mediaContentType": "application/octet-stream",
+      "Id": "839a9ad7-1d91-42ef-9e1c-ca20e5846f47",
+      "Name": "S2C_MSIL2A_20260801T070621_N0512_R106_T39RXM_20260801T122812.SAFE",
+      "S3Path": "/eodata/Sentinel-2/MSI/L2A/2026/08/01/S2C_MSIL2A_20260801T070621_N0512_R106_T39RXM_20260801T122812.SAFE",
+      "ContentDate": {
+        "Start": "2026-08-01T07:06:21.025000Z",
+        "End": "2026-08-01T07:06:21.025000Z"
+      }
+    },
+    {
+      "@odata.mediaContentType": "application/octet-stream",
+      "Id": "ec7d0eaa-c2bd-471a-8394-60c8912e9b5c",
+      "Name": "S2C_MSIL2A_20260801T070621_N0512_R106_T39RWM_20260801T122812.SAFE",
+      "S3Path": "/eodata/Sentinel-2/MSI/L2A/2026/08/01/S2C_MSIL2A_20260801T070621_N0512_R106_T39RWM_20260801T122812.SAFE",
+      "ContentDate": {
+        "Start": "2026-08-01T07:06:21.025000Z",
+        "End": "2026-08-01T07:06:21.025000Z"
+      }
+    },
+    {
+      "@odata.mediaContentType": "application/octet-stream",
+      "Id": "94c68f9a-0d2b-4ff8-9c77-c30989b6c2d5",
+      "Name": "S2B_MSIL2A_20260727T070619_N0512_R106_T39RWM_20260727T110329.SAFE",
+      "S3Path": "/eodata/Sentinel-2/MSI/L2A/2026/07/27/S2B_MSIL2A_20260727T070619_N0512_R106_T39RWM_20260727T110329.SAFE",
+      "ContentDate": {
+        "Start": "2026-07-27T07:06:19.024000Z",
+        "End": "2026-07-27T07:06:19.024000Z"
+      }
+    },
+    {
+      "@odata.mediaContentType": "application/octet-stream",
+      "Id": "abd50d19-2517-40fa-abc9-597ee621a0cb",
+      "Name": "S2B_MSIL2A_20260727T070619_N0512_R106_T39RXM_20260727T110329.SAFE",
+      "S3Path": "/eodata/Sentinel-2/MSI/L2A/2026/07/27/S2B_MSIL2A_20260727T070619_N0512_R106_T39RXM_20260727T110329.SAFE",
+      "ContentDate": {
+        "Start": "2026-07-27T07:06:19.024000Z",
+        "End": "2026-07-27T07:06:19.024000Z"
+      }
+    },
+    {
+      "@odata.mediaContentType": "application/octet-stream",
+      "Id": "b2b23e49-ff38-4963-8d62-10595131c43f",
+      "Name": "S2A_MSIL2A_20260724T071321_N0512_R106_T39RXM_20260724T104416.SAFE",
+      "S3Path": "/eodata/Sentinel-2/MSI/L2A/2026/07/24/S2A_MSIL2A_20260724T071321_N0512_R106_T39RXM_20260724T104416.SAFE",
+      "ContentDate": {
+        "Start": "2026-07-24T07:13:21.024000Z",
+        "End": "2026-07-24T07:13:21.024000Z"
+      }
+    },
+    {
+      "@odata.mediaContentType": "application/octet-stream",
+      "Id": "fe904cce-a39f-452c-be63-201ce81bc663",
+      "Name": "S2A_MSIL2A_20260724T071321_N0512_R106_T39RWM_20260724T104416.SAFE",
+      "S3Path": "/eodata/Sentinel-2/MSI/L2A/2026/07/24/S2A_MSIL2A_20260724T071321_N0512_R106_T39RWM_20260724T104416.SAFE",
+      "ContentDate": {
+        "Start": "2026-07-24T07:13:21.024000Z",
+        "End": "2026-07-24T07:13:21.024000Z"
+      }
+    },
+    {
+      "@odata.mediaContentType": "application/octet-stream",
+      "Id": "4798c2a0-a6c7-4ae7-bf16-684e14c1cb87",
+      "Name": "S2C_MSIL2A_20260722T070621_N0512_R106_T39RXM_20260722T123115.SAFE",
+      "S3Path": "/eodata/Sentinel-2/MSI/L2A/2026/07/22/S2C_MSIL2A_20260722T070621_N0512_R106_T39RXM_20260722T123115.SAFE",
+      "ContentDate": {
+        "Start": "2026-07-22T07:06:21.025000Z",
+        "End": "2026-07-22T07:06:21.025000Z"
+      }
+    },
+    {
+      "@odata.mediaContentType": "application/octet-stream",
+      "Id": "6465a4d9-c903-41f5-ab2c-d5e2b0466a6c",
+      "Name": "S2C_MSIL2A_20260722T070621_N0512_R106_T39RWM_20260722T123115.SAFE",
+      "S3Path": "/eodata/Sentinel-2/MSI/L2A/2026/07/22/S2C_MSIL2A_20260722T070621_N0512_R106_T39RWM_20260722T123115.SAFE",
+      "ContentDate": {
+        "Start": "2026-07-22T07:06:21.025000Z",
+        "End": "2026-07-22T07:06:21.025000Z"
+      }
+    },
+    {
+      "@odata.mediaContentType": "application/octet-stream",
+      "Id": "22c8a838-a6f4-4c9f-a432-e14e4fcbd905",
+      "Name": "S2B_MSIL2A_20260717T070619_N0512_R106_T39RWM_20260717T110602.SAFE",
+      "S3Path": "/eodata/Sentinel-2/MSI/L2A/2026/07/17/S2B_MSIL2A_20260717T070619_N0512_R106_T39RWM_20260717T110602.SAFE",
+      "ContentDate": {
+        "Start": "2026-07-17T07:06:19.024000Z",
+        "End": "2026-07-17T07:06:19.024000Z"
+      }
+    },
+    {
+      "@odata.mediaContentType": "application/octet-stream",
+      "Id": "b413cba9-3cbe-410f-87fe-a659c0dc7477",
+      "Name": "S2B_MSIL2A_20260717T070619_N0512_R106_T39RXM_20260717T110602.SAFE",
+      "S3Path": "/eodata/Sentinel-2/MSI/L2A/2026/07/17/S2B_MSIL2A_20260717T070619_N0512_R106_T39RXM_20260717T110602.SAFE",
+      "ContentDate": {
+        "Start": "2026-07-17T07:06:19.024000Z",
+        "End": "2026-07-17T07:06:19.024000Z"
+      }
+    },
+    {
+      "@odata.mediaContentType": "application/octet-stream",
+      "Id": "2edd361c-368d-44da-92cf-05cbb1ab14af",
+      "Name": "S2C_MSIL2A_20260712T070621_N0512_R106_T39RXM_20260712T123507.SAFE",
+      "S3Path": "/eodata/Sentinel-2/MSI/L2A/2026/07/12/S2C_MSIL2A_20260712T070621_N0512_R106_T39RXM_20260712T123507.SAFE",
+      "ContentDate": {
+        "Start": "2026-07-12T07:06:21.025000Z",
+        "End": "2026-07-12T07:06:21.025000Z"
+      }
+    },
+    {
+      "@odata.mediaContentType": "application/octet-stream",
+      "Id": "fe8659c4-0742-4b1f-9911-06d44faf5b58",
+      "Name": "S2C_MSIL2A_20260712T070621_N0512_R106_T39RWM_20260712T123507.SAFE",
+      "S3Path": "/eodata/Sentinel-2/MSI/L2A/2026/07/12/S2C_MSIL2A_20260712T070621_N0512_R106_T39RWM_20260712T123507.SAFE",
+      "ContentDate": {
+        "Start": "2026-07-12T07:06:21.025000Z",
+        "End": "2026-07-12T07:06:21.025000Z"
+      }
+    },
+    {
+      "@odata.mediaContentType": "application/octet-stream",
+      "Id": "1b43e6c2-f1b5-41ae-993c-46fbb47beb18",
+      "Name": "S2B_MSIL2A_20260707T070619_N0512_R106_T39RXM_20260707T110415.SAFE",
+      "S3Path": "/eodata/Sentinel-2/MSI/L2A/2026/07/07/S2B_MSIL2A_20260707T070619_N0512_R106_T39RXM_20260707T110415.SAFE",
+      "ContentDate": {
+        "Start": "2026-07-07T07:06:19.024000Z",
+        "End": "2026-07-07T07:06:19.024000Z"
+      }
+    },
+    {
+      "@odata.mediaContentType": "application/octet-stream",
+      "Id": "a0205f26-2fe1-4a62-93fa-8a3a163e2654",
+      "Name": "S2B_MSIL2A_20260707T070619_N0512_R106_T39RWM_20260707T110415.SAFE",
+      "S3Path": "/eodata/Sentinel-2/MSI/L2A/2026/07/07/S2B_MSIL2A_20260707T070619_N0512_R106_T39RWM_20260707T110415.SAFE",
+      "ContentDate": {
+        "Start": "2026-07-07T07:06:19.024000Z",
+        "End": "2026-07-07T07:06:19.024000Z"
+      }
+    },
+    {
+      "@odata.mediaContentType": "application/octet-stream",
+      "Id": "9bf0e689-0074-4135-addf-253368fc3790",
+      "Name": "S2A_MSIL2A_20260704T071321_N0512_R106_T39RWM_20260704T104054.SAFE",
+      "S3Path": "/eodata/Sentinel-2/MSI/L2A/2026/07/04/S2A_MSIL2A_20260704T071321_N0512_R106_T39RWM_20260704T104054.SAFE",
+      "ContentDate": {
+        "Start": "2026-07-04T07:13:21.024000Z",
+        "End": "2026-07-04T07:13:21.024000Z"
+      }
+    },
+    {
+      "@odata.mediaContentType": "application/octet-stream",
+      "Id": "b2dc13fa-de3f-4804-8425-c820d2536d42",
+      "Name": "S2A_MSIL2A_20260704T071321_N0512_R106_T39RXM_20260704T104054.SAFE",
+      "S3Path": "/eodata/Sentinel-2/MSI/L2A/2026/07/04/S2A_MSIL2A_20260704T071321_N0512_R106_T39RXM_20260704T104054.SAFE",
+      "ContentDate": {
+        "Start": "2026-07-04T07:13:21.024000Z",
+        "End": "2026-07-04T07:13:21.024000Z"
+      }
+    },
+    {
+      "@odata.mediaContentType": "application/octet-stream",
+      "Id": "2d255a99-d20e-44a7-b421-b0ee70ca1b04",
+      "Name": "S2C_MSIL2A_20260702T070621_N0512_R106_T39RWM_20260702T122409.SAFE",
+      "S3Path": "/eodata/Sentinel-2/MSI/L2A/2026/07/02/S2C_MSIL2A_20260702T070621_N0512_R106_T39RWM_20260702T122409.SAFE",
+      "ContentDate": {
+        "Start": "2026-07-02T07:06:21.025000Z",
+        "End": "2026-07-02T07:06:21.025000Z"
+      }
+    },
+    {
+      "@odata.mediaContentType": "application/octet-stream",
+      "Id": "bf3b3662-73d8-4ae3-ab8b-2fa15dc16009",
+      "Name": "S2C_MSIL2A_20260702T070621_N0512_R106_T39RXM_20260702T122409.SAFE",
+      "S3Path": "/eodata/Sentinel-2/MSI/L2A/2026/07/02/S2C_MSIL2A_20260702T070621_N0512_R106_T39RXM_20260702T122409.SAFE",
+      "ContentDate": {
+        "Start": "2026-07-02T07:06:21.025000Z",
+        "End": "2026-07-02T07:06:21.025000Z"
+      }
+    },
+    {
+      "@odata.mediaContentType": "application/octet-stream",
+      "Id": "123bcb7b-b72f-40e2-b800-f34a5919cde8",
+      "Name": "S2B_MSIL2A_20260627T070619_N0512_R106_T39RXM_20260627T110239.SAFE",
+      "S3Path": "/eodata/Sentinel-2/MSI/L2A/2026/06/27/S2B_MSIL2A_20260627T070619_N0512_R106_T39RXM_20260627T110239.SAFE",
+      "ContentDate": {
+        "Start": "2026-06-27T07:06:19.024000Z",
+        "End": "2026-06-27T07:06:19.024000Z"
+      }
+    },
+    {
+      "@odata.mediaContentType": "application/octet-stream",
+      "Id": "a7835f22-5c3f-488a-91dc-81edc536c31e",
+      "Name": "S2B_MSIL2A_20260627T070619_N0512_R106_T39RWM_20260627T110239.SAFE",
+      "S3Path": "/eodata/Sentinel-2/MSI/L2A/2026/06/27/S2B_MSIL2A_20260627T070619_N0512_R106_T39RWM_20260627T110239.SAFE",
+      "ContentDate": {
+        "Start": "2026-06-27T07:06:19.024000Z",
+        "End": "2026-06-27T07:06:19.024000Z"
+      }
+    },
+    {
+      "@odata.mediaContentType": "application/octet-stream",
+      "Id": "16c816d6-54d5-44f5-9c95-19d19c204557",
+      "Name": "S2C_MSIL2A_20260622T070621_N0512_R106_T39RWM_20260622T122109.SAFE",
+      "S3Path": "/eodata/Sentinel-2/MSI/L2A/2026/06/22/S2C_MSIL2A_20260622T070621_N0512_R106_T39RWM_20260622T122109.SAFE",
+      "ContentDate": {
+        "Start": "2026-06-22T07:06:21.025000Z",
+        "End": "2026-06-22T07:06:21.025000Z"
+      }
+    },
+    {
+      "@odata.mediaContentType": "application/octet-stream",
+      "Id": "e077a3ba-0f4d-4ee1-a52b-a21baa05a788",
+      "Name": "S2C_MSIL2A_20260622T070621_N0512_R106_T39RXM_20260622T122109.SAFE",
+      "S3Path": "/eodata/Sentinel-2/MSI/L2A/2026/06/22/S2C_MSIL2A_20260622T070621_N0512_R106_T39RXM_20260622T122109.SAFE",
+      "ContentDate": {
+        "Start": "2026-06-22T07:06:21.025000Z",
+        "End": "2026-06-22T07:06:21.025000Z"
+      }
+    },
+    {
+      "@odata.mediaContentType": "application/octet-stream",
+      "Id": "b58018e5-80c8-4af7-87da-07076c8b8e09",
+      "Name": "S2B_MSIL2A_20260617T070619_N0512_R106_T39RWM_20260617T111045.SAFE",
+      "S3Path": "/eodata/Sentinel-2/MSI/L2A/2026/06/17/S2B_MSIL2A_20260617T070619_N0512_R106_T39RWM_20260617T111045.SAFE",
+      "ContentDate": {
+        "Start": "2026-06-17T07:06:19.024000Z",
+        "End": "2026-06-17T07:06:19.024000Z"
+      }
+    },
+    {
+      "@odata.mediaContentType": "application/octet-stream",
+      "Id": "b87669b2-80d6-425b-bc87-46aa1b26f948",
+      "Name": "S2B_MSIL2A_20260617T070619_N0512_R106_T39RXM_20260617T111045.SAFE",
+      "S3Path": "/eodata/Sentinel-2/MSI/L2A/2026/06/17/S2B_MSIL2A_20260617T070619_N0512_R106_T39RXM_20260617T111045.SAFE",
+      "ContentDate": {
+        "Start": "2026-06-17T07:06:19.024000Z",
+        "End": "2026-06-17T07:06:19.024000Z"
+      }
+    },
+    {
+      "@odata.mediaContentType": "application/octet-stream",
+      "Id": "1d93b6e6-4826-4888-a288-36445c4b22ce",
+      "Name": "S2A_MSIL2A_20260614T071321_N0512_R106_T39RWM_20260614T104109.SAFE",
+      "S3Path": "/eodata/Sentinel-2/MSI/L2A/2026/06/14/S2A_MSIL2A_20260614T071321_N0512_R106_T39RWM_20260614T104109.SAFE",
+      "ContentDate": {
+        "Start": "2026-06-14T07:13:21.024000Z",
+        "End": "2026-06-14T07:13:21.024000Z"
+      }
+    },
+    {
+      "@odata.mediaContentType": "application/octet-stream",
+      "Id": "c09b5d15-82fc-4a3b-9ba8-7b7646a43cc8",
+      "Name": "S2A_MSIL2A_20260614T071321_N0512_R106_T39RXM_20260614T104109.SAFE",
+      "S3Path": "/eodata/Sentinel-2/MSI/L2A/2026/06/14/S2A_MSIL2A_20260614T071321_N0512_R106_T39RXM_20260614T104109.SAFE",
+      "ContentDate": {
+        "Start": "2026-06-14T07:13:21.024000Z",
+        "End": "2026-06-14T07:13:21.024000Z"
+      }
+    },
+    {
+      "@odata.mediaContentType": "application/octet-stream",
+      "Id": "4ab3dea0-fee7-4716-a127-d7d3c30c12a6",
+      "Name": "S2C_MSIL2A_20260612T070621_N0512_R106_T39RWM_20260612T122815.SAFE",
+      "S3Path": "/eodata/Sentinel-2/MSI/L2A/2026/06/12/S2C_MSIL2A_20260612T070621_N0512_R106_T39RWM_20260612T122815.SAFE",
+      "ContentDate": {
+        "Start": "2026-06-12T07:06:21.025000Z",
+        "End": "2026-06-12T07:06:21.025000Z"
+      }
+    },
+    {
+      "@odata.mediaContentType": "application/octet-stream",
+      "Id": "692d11cd-bfcf-4f17-a140-2476b4e95a78",
+      "Name": "S2C_MSIL2A_20260612T070621_N0512_R106_T39RXM_20260612T122815.SAFE",
+      "S3Path": "/eodata/Sentinel-2/MSI/L2A/2026/06/12/S2C_MSIL2A_20260612T070621_N0512_R106_T39RXM_20260612T122815.SAFE",
+      "ContentDate": {
+        "Start": "2026-06-12T07:06:21.025000Z",
+        "End": "2026-06-12T07:06:21.025000Z"
+      }
+    },
+    {
+      "@odata.mediaContentType": "application/octet-stream",
+      "Id": "4eb9ff0a-330e-42b4-bf84-f1c1695aded7",
+      "Name": "S2B_MSIL2A_20260607T070619_N0512_R106_T39RWM_20260607T110321.SAFE",
+      "S3Path": "/eodata/Sentinel-2/MSI/L2A/2026/06/07/S2B_MSIL2A_20260607T070619_N0512_R106_T39RWM_20260607T110321.SAFE",
+      "ContentDate": {
+        "Start": "2026-06-07T07:06:19.024000Z",
+        "End": "2026-06-07T07:06:19.024000Z"
+      }
+    },
+    {
+      "@odata.mediaContentType": "application/octet-stream",
+      "Id": "de441236-d1b1-420b-a984-a0478cd0d66b",
+      "Name": "S2B_MSIL2A_20260607T070619_N0512_R106_T39RXM_20260607T110321.SAFE",
+      "S3Path": "/eodata/Sentinel-2/MSI/L2A/2026/06/07/S2B_MSIL2A_20260607T070619_N0512_R106_T39RXM_20260607T110321.SAFE",
+      "ContentDate": {
+        "Start": "2026-06-07T07:06:19.024000Z",
+        "End": "2026-06-07T07:06:19.024000Z"
+      }
+    },
+    {
+      "@odata.mediaContentType": "application/octet-stream",
+      "Id": "1d841c49-5a6f-4ffe-83d8-a7b4b1861691",
+      "Name": "S2C_MSIL2A_20260602T070621_N0512_R106_T39RWM_20260602T123110.SAFE",
+      "S3Path": "/eodata/Sentinel-2/MSI/L2A/2026/06/02/S2C_MSIL2A_20260602T070621_N0512_R106_T39RWM_20260602T123110.SAFE",
+      "ContentDate": {
+        "Start": "2026-06-02T07:06:21.025000Z",
+        "End": "2026-06-02T07:06:21.025000Z"
+      }
+    },
+    {
+      "@odata.mediaContentType": "application/octet-stream",
+      "Id": "9fb10881-9752-4790-9376-df617bfe5035",
+      "Name": "S2C_MSIL2A_20260602T070621_N0512_R106_T39RXM_20260602T123110.SAFE",
+      "S3Path": "/eodata/Sentinel-2/MSI/L2A/2026/06/02/S2C_MSIL2A_20260602T070621_N0512_R106_T39RXM_20260602T123110.SAFE",
+      "ContentDate": {
+        "Start": "2026-06-02T07:06:21.025000Z",
+        "End": "2026-06-02T07:06:21.025000Z"
+      }
+    },
+    {
+      "@odata.mediaContentType": "application/octet-stream",
+      "Id": "38788bd3-629b-49c6-a5a6-3d8326b846d7",
+      "Name": "S2B_MSIL2A_20260528T070619_N0512_R106_T39RXM_20260528T110522.SAFE",
+      "S3Path": "/eodata/Sentinel-2/MSI/L2A/2026/05/28/S2B_MSIL2A_20260528T070619_N0512_R106_T39RXM_20260528T110522.SAFE",
+      "ContentDate": {
+        "Start": "2026-05-28T07:06:19.024000Z",
+        "End": "2026-05-28T07:06:19.024000Z"
+      }
+    },
+    {
+      "@odata.mediaContentType": "application/octet-stream",
+      "Id": "423f422d-c2dc-4813-89aa-9db9433fe2aa",
+      "Name": "S2B_MSIL2A_20260528T070619_N0512_R106_T39RWM_20260528T110522.SAFE",
+      "S3Path": "/eodata/Sentinel-2/MSI/L2A/2026/05/28/S2B_MSIL2A_20260528T070619_N0512_R106_T39RWM_20260528T110522.SAFE",
+      "ContentDate": {
+        "Start": "2026-05-28T07:06:19.024000Z",
+        "End": "2026-05-28T07:06:19.024000Z"
+      }
+    },
+    {
+      "@odata.mediaContentType": "application/octet-stream",
+      "Id": "0c5418f2-d213-42c8-a3b4-54265a6ae206",
+      "Name": "S2A_MSIL2A_20260525T071321_N0512_R106_T39RWM_20260525T103858.SAFE",
+      "S3Path": "/eodata/Sentinel-2/MSI/L2A/2026/05/25/S2A_MSIL2A_20260525T071321_N0512_R106_T39RWM_20260525T103858.SAFE",
+      "ContentDate": {
+        "Start": "2026-05-25T07:13:21.024000Z",
+        "End": "2026-05-25T07:13:21.024000Z"
+      }
+    },
+    {
+      "@odata.mediaContentType": "application/octet-stream",
+      "Id": "42b68df1-a97f-43bf-a229-ebd016855472",
+      "Name": "S2A_MSIL2A_20260525T071321_N0512_R106_T39RXM_20260525T103858.SAFE",
+      "S3Path": "/eodata/Sentinel-2/MSI/L2A/2026/05/25/S2A_MSIL2A_20260525T071321_N0512_R106_T39RXM_20260525T103858.SAFE",
+      "ContentDate": {
+        "Start": "2026-05-25T07:13:21.024000Z",
+        "End": "2026-05-25T07:13:21.024000Z"
+      }
+    },
+    {
+      "@odata.mediaContentType": "application/octet-stream",
+      "Id": "018e2b08-c830-4315-b33c-39302fddecbc",
+      "Name": "S2C_MSIL2A_20260523T070621_N0512_R106_T39RXM_20260523T122319.SAFE",
+      "S3Path": "/eodata/Sentinel-2/MSI/L2A/2026/05/23/S2C_MSIL2A_20260523T070621_N0512_R106_T39RXM_20260523T122319.SAFE",
+      "ContentDate": {
+        "Start": "2026-05-23T07:06:21.025000Z",
+        "End": "2026-05-23T07:06:21.025000Z"
+      }
+    },
+    {
+      "@odata.mediaContentType": "application/octet-stream",
+      "Id": "0281bf0e-7885-4256-8c9e-3960b73da9c1",
+      "Name": "S2C_MSIL2A_20260523T070621_N0512_R106_T39RWM_20260523T122319.SAFE",
+      "S3Path": "/eodata/Sentinel-2/MSI/L2A/2026/05/23/S2C_MSIL2A_20260523T070621_N0512_R106_T39RWM_20260523T122319.SAFE",
+      "ContentDate": {
+        "Start": "2026-05-23T07:06:21.025000Z",
+        "End": "2026-05-23T07:06:21.025000Z"
+      }
+    },
+    {
+      "@odata.mediaContentType": "application/octet-stream",
+      "Id": "b440f5d0-0ceb-4b10-b83b-66835ff6a964",
+      "Name": "S2B_MSIL2A_20260518T070619_N0512_R106_T39RWM_20260518T110600.SAFE",
+      "S3Path": "/eodata/Sentinel-2/MSI/L2A/2026/05/18/S2B_MSIL2A_20260518T070619_N0512_R106_T39RWM_20260518T110600.SAFE",
+      "ContentDate": {
+        "Start": "2026-05-18T07:06:19.024000Z",
+        "End": "2026-05-18T07:06:19.024000Z"
+      }
+    },
+    {
+      "@odata.mediaContentType": "application/octet-stream",
+      "Id": "f5a9908a-a695-46a9-b8c0-3cf51a0c606c",
+      "Name": "S2B_MSIL2A_20260518T070619_N0512_R106_T39RXM_20260518T110600.SAFE",
+      "S3Path": "/eodata/Sentinel-2/MSI/L2A/2026/05/18/S2B_MSIL2A_20260518T070619_N0512_R106_T39RXM_20260518T110600.SAFE",
+      "ContentDate": {
+        "Start": "2026-05-18T07:06:19.024000Z",
+        "End": "2026-05-18T07:06:19.024000Z"
+      }
+    },
+    {
+      "@odata.mediaContentType": "application/octet-stream",
+      "Id": "145496d1-32b8-4292-90c7-e72c03f86747",
+      "Name": "S2C_MSIL2A_20260513T070621_N0512_R106_T39RXM_20260513T140719.SAFE",
+      "S3Path": "/eodata/Sentinel-2/MSI/L2A/2026/05/13/S2C_MSIL2A_20260513T070621_N0512_R106_T39RXM_20260513T140719.SAFE",
+      "ContentDate": {
+        "Start": "2026-05-13T07:06:21.025000Z",
+        "End": "2026-05-13T07:06:21.025000Z"
+      }
+    },
+    {
+      "@odata.mediaContentType": "application/octet-stream",
+      "Id": "42bb2856-f34e-4193-8753-3a50100d8348",
+      "Name": "S2C_MSIL2A_20260513T070621_N0512_R106_T39RWM_20260513T140719.SAFE",
+      "S3Path": "/eodata/Sentinel-2/MSI/L2A/2026/05/13/S2C_MSIL2A_20260513T070621_N0512_R106_T39RWM_20260513T140719.SAFE",
+      "ContentDate": {
+        "Start": "2026-05-13T07:06:21.025000Z",
+        "End": "2026-05-13T07:06:21.025000Z"
+      }
+    },
+    {
+      "@odata.mediaContentType": "application/octet-stream",
+      "Id": "2028fee7-d294-49e2-8844-de9250124bba",
+      "Name": "S2B_MSIL2A_20260508T070619_N0512_R106_T39RWM_20260508T110530.SAFE",
+      "S3Path": "/eodata/Sentinel-2/MSI/L2A/2026/05/08/S2B_MSIL2A_20260508T070619_N0512_R106_T39RWM_20260508T110530.SAFE",
+      "ContentDate": {
+        "Start": "2026-05-08T07:06:19.024000Z",
+        "End": "2026-05-08T07:06:19.024000Z"
+      }
+    },
+    {
+      "@odata.mediaContentType": "application/octet-stream",
+      "Id": "a3803820-f4bd-4bdb-a703-abf8e7a66a96",
+      "Name": "S2B_MSIL2A_20260508T070619_N0512_R106_T39RXM_20260508T110530.SAFE",
+      "S3Path": "/eodata/Sentinel-2/MSI/L2A/2026/05/08/S2B_MSIL2A_20260508T070619_N0512_R106_T39RXM_20260508T110530.SAFE",
+      "ContentDate": {
+        "Start": "2026-05-08T07:06:19.024000Z",
+        "End": "2026-05-08T07:06:19.024000Z"
+      }
+    },
+    {
+      "@odata.mediaContentType": "application/octet-stream",
+      "Id": "7d0df9ee-c487-4228-9090-3f451e5a91b7",
+      "Name": "S2A_MSIL2A_20260505T071321_N0512_R106_T39RWM_20260505T110122.SAFE",
+      "S3Path": "/eodata/Sentinel-2/MSI/L2A/2026/05/05/S2A_MSIL2A_20260505T071321_N0512_R106_T39RWM_20260505T110122.SAFE",
+      "ContentDate": {
+        "Start": "2026-05-05T07:13:21.024000Z",
+        "End": "2026-05-05T07:13:21.024000Z"
+      }
+    },
+    {
+      "@odata.mediaContentType": "application/octet-stream",
+      "Id": "cd367111-524f-412f-81c8-60376f6e4d73",
+      "Name": "S2A_MSIL2A_20260505T071321_N0512_R106_T39RXM_20260505T110122.SAFE",
+      "S3Path": "/eodata/Sentinel-2/MSI/L2A/2026/05/05/S2A_MSIL2A_20260505T071321_N0512_R106_T39RXM_20260505T110122.SAFE",
+      "ContentDate": {
+        "Start": "2026-05-05T07:13:21.024000Z",
+        "End": "2026-05-05T07:13:21.024000Z"
+      }
+    },
+    {
+      "@odata.mediaContentType": "application/octet-stream",
+      "Id": "9175d524-84b8-48b2-8e1c-91e8451ea351",
+      "Name": "S2C_MSIL2A_20260503T070731_N0512_R106_T39RWM_20260503T105117.SAFE",
+      "S3Path": "/eodata/Sentinel-2/MSI/L2A/2026/05/03/S2C_MSIL2A_20260503T070731_N0512_R106_T39RWM_20260503T105117.SAFE",
+      "ContentDate": {
+        "Start": "2026-05-03T07:07:31.025000Z",
+        "End": "2026-05-03T07:07:31.025000Z"
+      }
+    },
+    {
+      "@odata.mediaContentType": "application/octet-stream",
+      "Id": "b1e35255-db82-41d5-bad7-754339ebf90b",
+      "Name": "S2C_MSIL2A_20260503T070731_N0512_R106_T39RXM_20260503T105117.SAFE",
+      "S3Path": "/eodata/Sentinel-2/MSI/L2A/2026/05/03/S2C_MSIL2A_20260503T070731_N0512_R106_T39RXM_20260503T105117.SAFE",
+      "ContentDate": {
+        "Start": "2026-05-03T07:07:31.025000Z",
+        "End": "2026-05-03T07:07:31.025000Z"
+      }
+    },
+    {
+      "@odata.mediaContentType": "application/octet-stream",
+      "Id": "5a6033ed-600d-4fd2-8559-6d4b137e1898",
+      "Name": "S2B_MSIL2A_20260428T070619_N0512_R106_T39RWM_20260428T110356.SAFE",
+      "S3Path": "/eodata/Sentinel-2/MSI/L2A/2026/04/28/S2B_MSIL2A_20260428T070619_N0512_R106_T39RWM_20260428T110356.SAFE",
+      "ContentDate": {
+        "Start": "2026-04-28T07:06:19.024000Z",
+        "End": "2026-04-28T07:06:19.024000Z"
+      }
+    },
+    {
+      "@odata.mediaContentType": "application/octet-stream",
+      "Id": "c2ce5f8c-1ee7-4e3b-9e83-e756e2fc6833",
+      "Name": "S2B_MSIL2A_20260428T070619_N0512_R106_T39RXM_20260428T110356.SAFE",
+      "S3Path": "/eodata/Sentinel-2/MSI/L2A/2026/04/28/S2B_MSIL2A_20260428T070619_N0512_R106_T39RXM_20260428T110356.SAFE",
+      "ContentDate": {
+        "Start": "2026-04-28T07:06:19.024000Z",
+        "End": "2026-04-28T07:06:19.024000Z"
+      }
+    },
+    {
+      "@odata.mediaContentType": "application/octet-stream",
+      "Id": "3c60db82-2aca-42f4-88cc-1e19567a0268",
+      "Name": "S2C_MSIL2A_20260423T070731_N0512_R106_T39RXM_20260423T104117.SAFE",
+      "S3Path": "/eodata/Sentinel-2/MSI/L2A/2026/04/23/S2C_MSIL2A_20260423T070731_N0512_R106_T39RXM_20260423T104117.SAFE",
+      "ContentDate": {
+        "Start": "2026-04-23T07:07:31.025000Z",
+        "End": "2026-04-23T07:07:31.025000Z"
+      }
+    },
+    {
+      "@odata.mediaContentType": "application/octet-stream",
+      "Id": "9d2f4a24-c79c-412c-9820-9585db9766ac",
+      "Name": "S2C_MSIL2A_20260423T070731_N0512_R106_T39RWM_20260423T104117.SAFE",
+      "S3Path": "/eodata/Sentinel-2/MSI/L2A/2026/04/23/S2C_MSIL2A_20260423T070731_N0512_R106_T39RWM_20260423T104117.SAFE",
+      "ContentDate": {
+        "Start": "2026-04-23T07:07:31.025000Z",
+        "End": "2026-04-23T07:07:31.025000Z"
+      }
+    },
+    {
+      "@odata.mediaContentType": "application/octet-stream",
+      "Id": "813b3b7b-ac70-4317-a193-c8b8abddef3a",
+      "Name": "S2B_MSIL2A_20260418T070619_N0512_R106_T39RWM_20260418T105727.SAFE",
+      "S3Path": "/eodata/Sentinel-2/MSI/L2A/2026/04/18/S2B_MSIL2A_20260418T070619_N0512_R106_T39RWM_20260418T105727.SAFE",
+      "ContentDate": {
+        "Start": "2026-04-18T07:06:19.024000Z",
+        "End": "2026-04-18T07:06:19.024000Z"
+      }
+    },
+    {
+      "@odata.mediaContentType": "application/octet-stream",
+      "Id": "9fc8bca2-0469-493e-ac72-f65c49e60e92",
+      "Name": "S2B_MSIL2A_20260418T070619_N0512_R106_T39RXM_20260418T105727.SAFE",
+      "S3Path": "/eodata/Sentinel-2/MSI/L2A/2026/04/18/S2B_MSIL2A_20260418T070619_N0512_R106_T39RXM_20260418T105727.SAFE",
+      "ContentDate": {
+        "Start": "2026-04-18T07:06:19.024000Z",
+        "End": "2026-04-18T07:06:19.024000Z"
+      }
+    },
+    {
+      "@odata.mediaContentType": "application/octet-stream",
+      "Id": "42399d84-fadc-4860-a5ba-a01f3e815de8",
+      "Name": "S2A_MSIL2A_20260415T071321_N0512_R106_T39RWM_20260415T111423.SAFE",
+      "S3Path": "/eodata/Sentinel-2/MSI/L2A/2026/04/15/S2A_MSIL2A_20260415T071321_N0512_R106_T39RWM_20260415T111423.SAFE",
+      "ContentDate": {
+        "Start": "2026-04-15T07:13:21.024000Z",
+        "End": "2026-04-15T07:13:21.024000Z"
+      }
+    },
+    {
+      "@odata.mediaContentType": "application/octet-stream",
+      "Id": "55561b86-5652-4826-8cb7-224efb01105c",
+      "Name": "S2A_MSIL2A_20260415T071321_N0512_R106_T39RXM_20260415T111423.SAFE",
+      "S3Path": "/eodata/Sentinel-2/MSI/L2A/2026/04/15/S2A_MSIL2A_20260415T071321_N0512_R106_T39RXM_20260415T111423.SAFE",
+      "ContentDate": {
+        "Start": "2026-04-15T07:13:21.024000Z",
+        "End": "2026-04-15T07:13:21.024000Z"
+      }
+    },
+    {
+      "@odata.mediaContentType": "application/octet-stream",
+      "Id": "8978e11f-5f03-4197-8468-89980d71f490",
+      "Name": "S2C_MSIL2A_20260413T070731_N0512_R106_T39RXM_20260413T105313.SAFE",
+      "S3Path": "/eodata/Sentinel-2/MSI/L2A/2026/04/13/S2C_MSIL2A_20260413T070731_N0512_R106_T39RXM_20260413T105313.SAFE",
+      "ContentDate": {
+        "Start": "2026-04-13T07:07:31.025000Z",
+        "End": "2026-04-13T07:07:31.025000Z"
+      }
+    },
+    {
+      "@odata.mediaContentType": "application/octet-stream",
+      "Id": "c8c9cac2-4271-400e-ac2d-6c791f560207",
+      "Name": "S2C_MSIL2A_20260413T070731_N0512_R106_T39RWM_20260413T105313.SAFE",
+      "S3Path": "/eodata/Sentinel-2/MSI/L2A/2026/04/13/S2C_MSIL2A_20260413T070731_N0512_R106_T39RWM_20260413T105313.SAFE",
+      "ContentDate": {
+        "Start": "2026-04-13T07:07:31.025000Z",
+        "End": "2026-04-13T07:07:31.025000Z"
+      }
+    },
+    {
+      "@odata.mediaContentType": "application/octet-stream",
+      "Id": "4e2317cd-e859-427d-b64a-28906a20cfce",
+      "Name": "S2B_MSIL2A_20260408T070619_N0512_R106_T39RWM_20260408T110448.SAFE",
+      "S3Path": "/eodata/Sentinel-2/MSI/L2A/2026/04/08/S2B_MSIL2A_20260408T070619_N0512_R106_T39RWM_20260408T110448.SAFE",
+      "ContentDate": {
+        "Start": "2026-04-08T07:06:19.024000Z",
+        "End": "2026-04-08T07:06:19.024000Z"
+      }
+    },
+    {
+      "@odata.mediaContentType": "application/octet-stream",
+      "Id": "6a195d92-4337-4a56-90d7-c53434080f62",
+      "Name": "S2B_MSIL2A_20260408T070619_N0512_R106_T39RXM_20260408T110448.SAFE",
+      "S3Path": "/eodata/Sentinel-2/MSI/L2A/2026/04/08/S2B_MSIL2A_20260408T070619_N0512_R106_T39RXM_20260408T110448.SAFE",
+      "ContentDate": {
+        "Start": "2026-04-08T07:06:19.024000Z",
+        "End": "2026-04-08T07:06:19.024000Z"
+      }
+    },
+    {
+      "@odata.mediaContentType": "application/octet-stream",
+      "Id": "228e9c49-817f-434c-b78b-b5009febbb7c",
+      "Name": "S2C_MSIL2A_20260403T070621_N0512_R106_T39RWM_20260403T124612.SAFE",
+      "S3Path": "/eodata/Sentinel-2/MSI/L2A/2026/04/03/S2C_MSIL2A_20260403T070621_N0512_R106_T39RWM_20260403T124612.SAFE",
+      "ContentDate": {
+        "Start": "2026-04-03T07:06:21.025000Z",
+        "End": "2026-04-03T07:06:21.025000Z"
+      }
+    },
+    {
+      "@odata.mediaContentType": "application/octet-stream",
+      "Id": "87e1fc59-9a13-4368-a179-7087e39bac26",
+      "Name": "S2C_MSIL2A_20260403T070621_N0512_R106_T39RXM_20260403T124612.SAFE",
+      "S3Path": "/eodata/Sentinel-2/MSI/L2A/2026/04/03/S2C_MSIL2A_20260403T070621_N0512_R106_T39RXM_20260403T124612.SAFE",
+      "ContentDate": {
+        "Start": "2026-04-03T07:06:21.025000Z",
+        "End": "2026-04-03T07:06:21.025000Z"
+      }
+    },
+    {
+      "@odata.mediaContentType": "application/octet-stream",
+      "Id": "5a7a1c71-ed66-44e8-8bf6-ad984636c242",
+      "Name": "S2B_MSIL2A_20260329T070619_N0512_R106_T39RWM_20260329T110742.SAFE",
+      "S3Path": "/eodata/Sentinel-2/MSI/L2A/2026/03/29/S2B_MSIL2A_20260329T070619_N0512_R106_T39RWM_20260329T110742.SAFE",
+      "ContentDate": {
+        "Start": "2026-03-29T07:06:19.024000Z",
+        "End": "2026-03-29T07:06:19.024000Z"
+      }
+    },
+    {
+      "@odata.mediaContentType": "application/octet-stream",
+      "Id": "f8bec7c4-6d94-4642-bccf-f19215879e97",
+      "Name": "S2B_MSIL2A_20260329T070619_N0512_R106_T39RXM_20260329T110742.SAFE",
+      "S3Path": "/eodata/Sentinel-2/MSI/L2A/2026/03/29/S2B_MSIL2A_20260329T070619_N0512_R106_T39RXM_20260329T110742.SAFE",
+      "ContentDate": {
+        "Start": "2026-03-29T07:06:19.024000Z",
+        "End": "2026-03-29T07:06:19.024000Z"
+      }
+    },
+    {
+      "@odata.mediaContentType": "application/octet-stream",
+      "Id": "30a03d4c-3adc-4d5d-8815-23ffeb5b2039",
+      "Name": "S2A_MSIL2A_20260326T071321_N0512_R106_T39RWM_20260326T111126.SAFE",
+      "S3Path": "/eodata/Sentinel-2/MSI/L2A/2026/03/26/S2A_MSIL2A_20260326T071321_N0512_R106_T39RWM_20260326T111126.SAFE",
+      "ContentDate": {
+        "Start": "2026-03-26T07:13:21.024000Z",
+        "End": "2026-03-26T07:13:21.024000Z"
+      }
+    },
+    {
+      "@odata.mediaContentType": "application/octet-stream",
+      "Id": "8ab5e277-887d-485e-98f4-adb70333bc4a",
+      "Name": "S2A_MSIL2A_20260326T071321_N0512_R106_T39RXM_20260326T111126.SAFE",
+      "S3Path": "/eodata/Sentinel-2/MSI/L2A/2026/03/26/S2A_MSIL2A_20260326T071321_N0512_R106_T39RXM_20260326T111126.SAFE",
+      "ContentDate": {
+        "Start": "2026-03-26T07:13:21.024000Z",
+        "End": "2026-03-26T07:13:21.024000Z"
+      }
+    },
+    {
+      "@odata.mediaContentType": "application/octet-stream",
+      "Id": "2c051585-4ac0-46e0-8c82-4d7e8e41a434",
+      "Name": "S2B_MSIL2A_20260319T070619_N0512_R106_T39RWM_20260319T110634.SAFE",
+      "S3Path": "/eodata/Sentinel-2/MSI/L2A/2026/03/19/S2B_MSIL2A_20260319T070619_N0512_R106_T39RWM_20260319T110634.SAFE",
+      "ContentDate": {
+        "Start": "2026-03-19T07:06:19.024000Z",
+        "End": "2026-03-19T07:06:19.024000Z"
+      }
+    },
+    {
+      "@odata.mediaContentType": "application/octet-stream",
+      "Id": "b9ffb5df-d9b7-407c-8bc1-1811793d8333",
+      "Name": "S2B_MSIL2A_20260319T070619_N0512_R106_T39RXM_20260319T110634.SAFE",
+      "S3Path": "/eodata/Sentinel-2/MSI/L2A/2026/03/19/S2B_MSIL2A_20260319T070619_N0512_R106_T39RXM_20260319T110634.SAFE",
+      "ContentDate": {
+        "Start": "2026-03-19T07:06:19.024000Z",
+        "End": "2026-03-19T07:06:19.024000Z"
+      }
+    },
+    {
+      "@odata.mediaContentType": "application/octet-stream",
+      "Id": "66614b95-459f-4c08-aa1c-8ca9deddd94e",
+      "Name": "S2C_MSIL2A_20260314T070651_N0512_R106_T39RXM_20260314T124315.SAFE",
+      "S3Path": "/eodata/Sentinel-2/MSI/L2A/2026/03/14/S2C_MSIL2A_20260314T070651_N0512_R106_T39RXM_20260314T124315.SAFE",
+      "ContentDate": {
+        "Start": "2026-03-14T07:06:51.025000Z",
+        "End": "2026-03-14T07:06:51.025000Z"
+      }
+    },
+    {
+      "@odata.mediaContentType": "application/octet-stream",
+      "Id": "d4348105-ea1d-4489-9d2e-49eb8cad60c3",
+      "Name": "S2C_MSIL2A_20260314T070651_N0512_R106_T39RWM_20260314T124315.SAFE",
+      "S3Path": "/eodata/Sentinel-2/MSI/L2A/2026/03/14/S2C_MSIL2A_20260314T070651_N0512_R106_T39RWM_20260314T124315.SAFE",
+      "ContentDate": {
+        "Start": "2026-03-14T07:06:51.025000Z",
+        "End": "2026-03-14T07:06:51.025000Z"
+      }
+    },
+    {
+      "@odata.mediaContentType": "application/octet-stream",
+      "Id": "2dd6601f-d505-4dae-bfce-0a3040ceac6d",
+      "Name": "S2B_MSIL2A_20260309T070629_N0512_R106_T39RWM_20260309T111951.SAFE",
+      "S3Path": "/eodata/Sentinel-2/MSI/L2A/2026/03/09/S2B_MSIL2A_20260309T070629_N0512_R106_T39RWM_20260309T111951.SAFE",
+      "ContentDate": {
+        "Start": "2026-03-09T07:06:29.024000Z",
+        "End": "2026-03-09T07:06:29.024000Z"
+      }
+    },
+    {
+      "@odata.mediaContentType": "application/octet-stream",
+      "Id": "a80581a5-7e70-4fca-8d38-845f64b6b2eb",
+      "Name": "S2B_MSIL2A_20260309T070629_N0512_R106_T39RXM_20260309T111951.SAFE",
+      "S3Path": "/eodata/Sentinel-2/MSI/L2A/2026/03/09/S2B_MSIL2A_20260309T070629_N0512_R106_T39RXM_20260309T111951.SAFE",
+      "ContentDate": {
+        "Start": "2026-03-09T07:06:29.024000Z",
+        "End": "2026-03-09T07:06:29.024000Z"
+      }
+    },
+    {
+      "@odata.mediaContentType": "application/octet-stream",
+      "Id": "241b019e-b56c-4e76-bbb1-e1b9b4d9dfb6",
+      "Name": "S2C_MSIL2A_20260304T070801_N0512_R106_T39RWM_20260304T124416.SAFE",
+      "S3Path": "/eodata/Sentinel-2/MSI/L2A/2026/03/04/S2C_MSIL2A_20260304T070801_N0512_R106_T39RWM_20260304T124416.SAFE",
+      "ContentDate": {
+        "Start": "2026-03-04T07:08:01.025000Z",
+        "End": "2026-03-04T07:08:01.025000Z"
+      }
+    },
+    {
+      "@odata.mediaContentType": "application/octet-stream",
+      "Id": "2aa41ef0-d67f-4e8b-815f-87b58ae590fa",
+      "Name": "S2C_MSIL2A_20260304T070801_N0512_R106_T39RXM_20260304T124416.SAFE",
+      "S3Path": "/eodata/Sentinel-2/MSI/L2A/2026/03/04/S2C_MSIL2A_20260304T070801_N0512_R106_T39RXM_20260304T124416.SAFE",
+      "ContentDate": {
+        "Start": "2026-03-04T07:08:01.025000Z",
+        "End": "2026-03-04T07:08:01.025000Z"
+      }
+    },
+    {
+      "@odata.mediaContentType": "application/octet-stream",
+      "Id": "855a8330-2a2e-4bd3-a01b-782c2733071a",
+      "Name": "S2B_MSIL2A_20260227T070739_N0512_R106_T39RWM_20260227T111301.SAFE",
+      "S3Path": "/eodata/Sentinel-2/MSI/L2A/2026/02/27/S2B_MSIL2A_20260227T070739_N0512_R106_T39RWM_20260227T111301.SAFE",
+      "ContentDate": {
+        "Start": "2026-02-27T07:07:39.024000Z",
+        "End": "2026-02-27T07:07:39.024000Z"
+      }
+    },
+    {
+      "@odata.mediaContentType": "application/octet-stream",
+      "Id": "eec99783-cdb4-4b80-8785-88c35cfaf436",
+      "Name": "S2B_MSIL2A_20260227T070739_N0512_R106_T39RXM_20260227T111301.SAFE",
+      "S3Path": "/eodata/Sentinel-2/MSI/L2A/2026/02/27/S2B_MSIL2A_20260227T070739_N0512_R106_T39RXM_20260227T111301.SAFE",
+      "ContentDate": {
+        "Start": "2026-02-27T07:07:39.024000Z",
+        "End": "2026-02-27T07:07:39.024000Z"
+      }
+    },
+    {
+      "@odata.mediaContentType": "application/octet-stream",
+      "Id": "c14ed9a2-00f0-4ba1-9461-48f22386605c",
+      "Name": "S2C_MSIL2A_20260222T070911_N0512_R106_T39RWM_20260222T102812.SAFE",
+      "S3Path": "/eodata/Sentinel-2/MSI/L2A/2026/02/22/S2C_MSIL2A_20260222T070911_N0512_R106_T39RWM_20260222T102812.SAFE",
+      "ContentDate": {
+        "Start": "2026-02-22T07:09:11.024000Z",
+        "End": "2026-02-22T07:09:11.024000Z"
+      }
+    },
+    {
+      "@odata.mediaContentType": "application/octet-stream",
+      "Id": "d173734a-5575-4471-b4f2-9398c910bbbc",
+      "Name": "S2C_MSIL2A_20260222T070911_N0512_R106_T39RXM_20260222T102812.SAFE",
+      "S3Path": "/eodata/Sentinel-2/MSI/L2A/2026/02/22/S2C_MSIL2A_20260222T070911_N0512_R106_T39RXM_20260222T102812.SAFE",
+      "ContentDate": {
+        "Start": "2026-02-22T07:09:11.024000Z",
+        "End": "2026-02-22T07:09:11.024000Z"
+      }
+    },
+    {
+      "@odata.mediaContentType": "application/octet-stream",
+      "Id": "29010b5c-5ae3-4655-be85-c290062193de",
+      "Name": "S2B_MSIL2A_20260217T070849_N0512_R106_T39RXM_20260217T110608.SAFE",
+      "S3Path": "/eodata/Sentinel-2/MSI/L2A/2026/02/17/S2B_MSIL2A_20260217T070849_N0512_R106_T39RXM_20260217T110608.SAFE",
+      "ContentDate": {
+        "Start": "2026-02-17T07:08:49.024000Z",
+        "End": "2026-02-17T07:08:49.024000Z"
+      }
+    },
+    {
+      "@odata.mediaContentType": "application/octet-stream",
+      "Id": "5665b604-0d89-4fce-a3b5-c0361916d05a",
+      "Name": "S2B_MSIL2A_20260217T070849_N0512_R106_T39RWM_20260217T110608.SAFE",
+      "S3Path": "/eodata/Sentinel-2/MSI/L2A/2026/02/17/S2B_MSIL2A_20260217T070849_N0512_R106_T39RWM_20260217T110608.SAFE",
+      "ContentDate": {
+        "Start": "2026-02-17T07:08:49.024000Z",
+        "End": "2026-02-17T07:08:49.024000Z"
+      }
+    },
+    {
+      "@odata.mediaContentType": "application/octet-stream",
+      "Id": "0e4efa79-fc3d-467b-98fa-749dbe593a02",
+      "Name": "S2C_MSIL2A_20260212T071021_N0512_R106_T39RXM_20260212T105721.SAFE",
+      "S3Path": "/eodata/Sentinel-2/MSI/L2A/2026/02/12/S2C_MSIL2A_20260212T071021_N0512_R106_T39RXM_20260212T105721.SAFE",
+      "ContentDate": {
+        "Start": "2026-02-12T07:10:21.025000Z",
+        "End": "2026-02-12T07:10:21.025000Z"
+      }
+    },
+    {
+      "@odata.mediaContentType": "application/octet-stream",
+      "Id": "346ecd59-2eb7-4b60-81f7-45e8abf02fa6",
+      "Name": "S2C_MSIL2A_20260212T071021_N0512_R106_T39RWM_20260212T105721.SAFE",
+      "S3Path": "/eodata/Sentinel-2/MSI/L2A/2026/02/12/S2C_MSIL2A_20260212T071021_N0512_R106_T39RWM_20260212T105721.SAFE",
+      "ContentDate": {
+        "Start": "2026-02-12T07:10:21.025000Z",
+        "End": "2026-02-12T07:10:21.025000Z"
+      }
+    },
+    {
+      "@odata.mediaContentType": "application/octet-stream",
+      "Id": "25338221-ae24-469b-b684-d2503b7c45fa",
+      "Name": "S2B_MSIL2A_20260207T070949_N0512_R106_T39RWM_20260207T110435.SAFE",
+      "S3Path": "/eodata/Sentinel-2/MSI/L2A/2026/02/07/S2B_MSIL2A_20260207T070949_N0512_R106_T39RWM_20260207T110435.SAFE",
+      "ContentDate": {
+        "Start": "2026-02-07T07:09:49.024000Z",
+        "End": "2026-02-07T07:09:49.024000Z"
+      }
+    },
+    {
+      "@odata.mediaContentType": "application/octet-stream",
+      "Id": "855950ea-6783-4b2f-a901-e724816eec0b",
+      "Name": "S2B_MSIL2A_20260207T070949_N0512_R106_T39RXM_20260207T110435.SAFE",
+      "S3Path": "/eodata/Sentinel-2/MSI/L2A/2026/02/07/S2B_MSIL2A_20260207T070949_N0512_R106_T39RXM_20260207T110435.SAFE",
+      "ContentDate": {
+        "Start": "2026-02-07T07:09:49.024000Z",
+        "End": "2026-02-07T07:09:49.024000Z"
+      }
+    },
+    {
+      "@odata.mediaContentType": "application/octet-stream",
+      "Id": "3c817729-1afc-4fde-91d0-e53a62dedcd6",
+      "Name": "S2C_MSIL2A_20260202T071121_N0511_R106_T39RXM_20260202T105514.SAFE",
+      "S3Path": "/eodata/Sentinel-2/MSI/L2A/2026/02/02/S2C_MSIL2A_20260202T071121_N0511_R106_T39RXM_20260202T105514.SAFE",
+      "ContentDate": {
+        "Start": "2026-02-02T07:11:21.025000Z",
+        "End": "2026-02-02T07:11:21.025000Z"
+      }
+    },
+    {
+      "@odata.mediaContentType": "application/octet-stream",
+      "Id": "d14e597e-5118-41c5-aaee-b182e895c289",
+      "Name": "S2C_MSIL2A_20260202T071121_N0511_R106_T39RWM_20260202T105514.SAFE",
+      "S3Path": "/eodata/Sentinel-2/MSI/L2A/2026/02/02/S2C_MSIL2A_20260202T071121_N0511_R106_T39RWM_20260202T105514.SAFE",
+      "ContentDate": {
+        "Start": "2026-02-02T07:11:21.025000Z",
+        "End": "2026-02-02T07:11:21.025000Z"
+      }
+    },
+    {
+      "@odata.mediaContentType": "application/octet-stream",
+      "Id": "389f5b94-7fa5-4925-9035-d24b045617c3",
+      "Name": "S2B_MSIL2A_20260128T071039_N0511_R106_T39RWM_20260128T111841.SAFE",
+      "S3Path": "/eodata/Sentinel-2/MSI/L2A/2026/01/28/S2B_MSIL2A_20260128T071039_N0511_R106_T39RWM_20260128T111841.SAFE",
+      "ContentDate": {
+        "Start": "2026-01-28T07:10:39.024000Z",
+        "End": "2026-01-28T07:10:39.024000Z"
+      }
+    },
+    {
+      "@odata.mediaContentType": "application/octet-stream",
+      "Id": "e4cb27e5-37d8-441d-877e-56af2713d50f",
+      "Name": "S2B_MSIL2A_20260128T071039_N0511_R106_T39RXM_20260128T111841.SAFE",
+      "S3Path": "/eodata/Sentinel-2/MSI/L2A/2026/01/28/S2B_MSIL2A_20260128T071039_N0511_R106_T39RXM_20260128T111841.SAFE",
+      "ContentDate": {
+        "Start": "2026-01-28T07:10:39.024000Z",
+        "End": "2026-01-28T07:10:39.024000Z"
+      }
+    },
+    {
+      "@odata.mediaContentType": "application/octet-stream",
+      "Id": "87ae6ac5-3e1d-4139-922d-d75f1aea013d",
+      "Name": "S2C_MSIL2A_20260123T071211_N0511_R106_T39RXM_20260123T104913.SAFE",
+      "S3Path": "/eodata/Sentinel-2/MSI/L2A/2026/01/23/S2C_MSIL2A_20260123T071211_N0511_R106_T39RXM_20260123T104913.SAFE",
+      "ContentDate": {
+        "Start": "2026-01-23T07:12:11.025000Z",
+        "End": "2026-01-23T07:12:11.025000Z"
+      }
+    },
+    {
+      "@odata.mediaContentType": "application/octet-stream",
+      "Id": "ace99073-3f6b-42da-9f8b-dc06c74f30e4",
+      "Name": "S2C_MSIL2A_20260123T071211_N0511_R106_T39RWM_20260123T104913.SAFE",
+      "S3Path": "/eodata/Sentinel-2/MSI/L2A/2026/01/23/S2C_MSIL2A_20260123T071211_N0511_R106_T39RWM_20260123T104913.SAFE",
+      "ContentDate": {
+        "Start": "2026-01-23T07:12:11.025000Z",
+        "End": "2026-01-23T07:12:11.025000Z"
+      }
+    }
+  ]
 }
