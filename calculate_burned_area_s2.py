@@ -13,7 +13,7 @@ from rasterio.io import MemoryFile
 # ============================================================
 
 SELECTED_FIRE_FILE = (
-    "selected_fire_2026.json"
+    "selected_protected_fire_2026.json"
 )
 
 RESULT_FILE = (
@@ -43,10 +43,10 @@ PROCESS_URL = (
     "process/v1"
 )
 
-# محدوده بررسی اطراف نقطه حریق
+# شعاع محدوده محاسبه اطراف نقطه حریق
 AOI_RADIUS_KM = 5
 
-# خروجی 20 متری
+# تفکیک مکانی خروجی
 RESOLUTION_M = 20
 
 # آستانه اولیه dNBR
@@ -83,7 +83,7 @@ after_data = selected_data.get(
 
 if not fire:
     raise RuntimeError(
-        "fire در selected_fire_2026.json پیدا نشد."
+        "fire در selected_protected_fire_2026.json پیدا نشد."
     )
 
 
@@ -107,6 +107,11 @@ fire_date = fire.get(
     "acq_date"
 )
 
+fire_time = fire.get(
+    "acq_time",
+    ""
+)
+
 fire_lat = float(
     fire["latitude"]
 )
@@ -114,7 +119,6 @@ fire_lat = float(
 fire_lon = float(
     fire["longitude"]
 )
-
 
 before_date = before_data.get(
     "date"
@@ -124,6 +128,16 @@ after_date = after_data.get(
     "date"
 )
 
+inside_protected = selected_data.get(
+    "inside_protected_areas",
+    False
+)
+
+inside_hunting = selected_data.get(
+    "inside_hunting_banned",
+    False
+)
+
 
 print("")
 print(
@@ -131,11 +145,15 @@ print(
 )
 
 print(
-    "حریق انتخاب‌شده"
+    "حریق حفاظتی انتخاب‌شده"
 )
 
 print(
     f"تاریخ حریق: {fire_date}"
+)
+
+print(
+    f"زمان حریق: {fire_time}"
 )
 
 print(
@@ -144,6 +162,16 @@ print(
 
 print(
     f"Longitude: {fire_lon}"
+)
+
+print(
+    f"داخل مناطق چهارگانه: "
+    f"{inside_protected}"
+)
+
+print(
+    f"داخل شکار ممنوع: "
+    f"{inside_hunting}"
 )
 
 print(
@@ -211,6 +239,7 @@ token_response = requests.post(
 
         "client_secret":
             CLIENT_SECRET
+
     },
 
     timeout=60
@@ -239,12 +268,25 @@ if not access_token:
 
 
 # ============================================================
-# AOI
+# BUILD AOI
 # ============================================================
 
 lat_delta = (
     AOI_RADIUS_KM / 111.0
 )
+
+cos_lat = np.cos(
+    np.radians(
+        fire_lat
+    )
+)
+
+if abs(cos_lat) < 0.01:
+
+    raise RuntimeError(
+        "محاسبه طول جغرافیایی AOI نامعتبر است."
+    )
+
 
 lon_delta = (
     AOI_RADIUS_KM
@@ -252,19 +294,17 @@ lon_delta = (
     (
         111.0
         *
-        np.cos(
-            np.radians(
-                fire_lat
-            )
-        )
+        cos_lat
     )
 )
+
 
 min_lon = fire_lon - lon_delta
 max_lon = fire_lon + lon_delta
 
 min_lat = fire_lat - lat_delta
 max_lat = fire_lat + lat_delta
+
 
 bbox = [
 
@@ -284,15 +324,14 @@ width = max(
     1,
     int(
         (
-            (max_lon - min_lon)
+            (
+                max_lon
+                - min_lon
+            )
             *
             111000
             *
-            np.cos(
-                np.radians(
-                    fire_lat
-                )
-            )
+            cos_lat
         )
         /
         RESOLUTION_M
@@ -303,7 +342,10 @@ height = max(
     1,
     int(
         (
-            (max_lat - min_lat)
+            (
+                max_lat
+                - min_lat
+            )
             *
             111000
         )
@@ -534,17 +576,11 @@ def get_nbr(
 
 
     return (
-
         array,
-
         transform,
-
         crs,
-
         raster_width,
-
         raster_height
-
     )
 
 
@@ -679,9 +715,11 @@ pixel_area_ha = (
     10000.0
 )
 
+
 burned_pixels = int(
     burned_mask.sum()
 )
+
 
 burned_area_ha = (
     burned_pixels
@@ -691,7 +729,7 @@ burned_area_ha = (
 
 
 # ============================================================
-# SAVE RASTER
+# SAVE BURN MASK
 # ============================================================
 
 with rasterio.open(
@@ -740,11 +778,20 @@ result = {
         "date":
             fire_date,
 
+        "time":
+            fire_time,
+
         "latitude":
             fire_lat,
 
         "longitude":
-            fire_lon
+            fire_lon,
+
+        "inside_protected_areas":
+            inside_protected,
+
+        "inside_hunting_banned":
+            inside_hunting
 
     },
 
@@ -785,7 +832,10 @@ result = {
             BURN_THRESHOLD,
 
         "resolution_m":
-            RESOLUTION_M
+            RESOLUTION_M,
+
+        "aoi_radius_km":
+            AOI_RADIUS_KM
 
     },
 
@@ -809,7 +859,7 @@ result = {
 
 
 # ============================================================
-# SAVE RESULT JSON
+# SAVE RESULT
 # ============================================================
 
 with open(
@@ -836,11 +886,26 @@ print(
 )
 
 print(
-    "نتیجه اولین محاسبه سوختگی"
+    "نتیجه محاسبه سوختگی حریق حفاظتی"
 )
 
 print(
     f"حریق: {fire_date}"
+)
+
+print(
+    f"مختصات: "
+    f"{fire_lat}, {fire_lon}"
+)
+
+print(
+    f"داخل مناطق چهارگانه: "
+    f"{inside_protected}"
+)
+
+print(
+    f"داخل شکار ممنوع: "
+    f"{inside_hunting}"
 )
 
 print(
