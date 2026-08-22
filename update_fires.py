@@ -8,12 +8,11 @@ from urllib.error import HTTPError, URLError
 
 
 # ============================================================
-# تنظیمات
+# SETTINGS
 # ============================================================
 
 MAP_KEY = os.environ.get("FIRMS_MAP_KEY")
 
-# محدوده تقریبی استان فارس برای درخواست FIRMS
 WEST = 50.0
 SOUTH = 27.0
 EAST = 54.5
@@ -32,7 +31,7 @@ BOUNDARY_FILE = "fars.geojson"
 
 
 # ============================================================
-# بررسی MAP KEY
+# CHECK MAP KEY
 # ============================================================
 
 if not MAP_KEY:
@@ -42,7 +41,7 @@ if not MAP_KEY:
 
 
 # ============================================================
-# خواندن مرز فارس
+# LOAD FARS GEOJSON
 # ============================================================
 
 with open(
@@ -55,7 +54,68 @@ with open(
 
 
 # ============================================================
-# Point in Polygon
+# GET GEOMETRIES FROM GEOJSON
+# ============================================================
+
+def get_geometries(geojson):
+
+    geojson_type = geojson.get("type")
+
+    # حالت FeatureCollection
+    if geojson_type == "FeatureCollection":
+
+        geometries = []
+
+        for feature in geojson.get("features", []):
+
+            geometry = feature.get("geometry")
+
+            if geometry:
+                geometries.append(geometry)
+
+        return geometries
+
+    # حالت Feature
+    if geojson_type == "Feature":
+
+        geometry = geojson.get("geometry")
+
+        if geometry:
+            return [geometry]
+
+        return []
+
+    # حالت مستقیم Geometry
+    if geojson_type in [
+        "Polygon",
+        "MultiPolygon"
+    ]:
+
+        return [geojson]
+
+    return []
+
+
+FARS_GEOMETRIES = get_geometries(
+    boundary
+)
+
+
+if not FARS_GEOMETRIES:
+
+    raise RuntimeError(
+        "هندسه معتبر برای fars.geojson پیدا نشد."
+    )
+
+
+print(
+    f"تعداد هندسه‌های مرز فارس: "
+    f"{len(FARS_GEOMETRIES)}"
+)
+
+
+# ============================================================
+# POINT IN RING
 # ============================================================
 
 def point_in_ring(lon, lat, ring):
@@ -73,12 +133,13 @@ def point_in_ring(lon, lat, ring):
             ((yi > lat) != (yj > lat))
             and
             (
-                lon
-                <
-                (xj - xi)
-                * (lat - yi)
-                / ((yj - yi) or 1e-15)
-                + xi
+                lon <
+                (
+                    (xj - xi)
+                    * (lat - yi)
+                    / ((yj - yi) or 1e-15)
+                    + xi
+                )
             )
         )
 
@@ -90,14 +151,37 @@ def point_in_ring(lon, lat, ring):
     return inside
 
 
-def point_in_polygon(lon, lat, coordinates):
+# ============================================================
+# POINT IN POLYGON
+# ============================================================
+
+def point_in_polygon(
+    lon,
+    lat,
+    coordinates
+):
 
     if not coordinates:
         return False
 
-    # Polygon
-    if isinstance(coordinates[0][0][0], (int, float)):
+    # Polygon:
+    # [
+    #   outer_ring,
+    #   hole_1,
+    #   hole_2
+    # ]
 
+    if (
+        isinstance(coordinates, list)
+        and len(coordinates) > 0
+        and isinstance(coordinates[0], list)
+        and len(coordinates[0]) > 0
+        and isinstance(coordinates[0][0], list)
+        and len(coordinates[0][0]) > 0
+        and isinstance(coordinates[0][0][0], (int, float))
+    ):
+
+        # بیرون از پوسته اصلی
         if not point_in_ring(
             lon,
             lat,
@@ -105,7 +189,7 @@ def point_in_polygon(lon, lat, coordinates):
         ):
             return False
 
-        # سوراخ‌های داخلی
+        # بررسی سوراخ‌های داخلی
         for hole in coordinates[1:]:
 
             if point_in_ring(
@@ -117,26 +201,26 @@ def point_in_polygon(lon, lat, coordinates):
 
         return True
 
-    # MultiPolygon
-    for polygon in coordinates:
-
-        if point_in_polygon(
-            lon,
-            lat,
-            polygon
-        ):
-            return True
-
     return False
 
 
-def point_inside_fars(lon, lat):
+# ============================================================
+# POINT INSIDE GEOMETRY
+# ============================================================
 
-    geometry = boundary["geometry"]
+def point_inside_geometry(
+    lon,
+    lat,
+    geometry
+):
 
-    geometry_type = geometry["type"]
+    geometry_type = geometry.get(
+        "type"
+    )
 
-    coordinates = geometry["coordinates"]
+    coordinates = geometry.get(
+        "coordinates"
+    )
 
     if geometry_type == "Polygon":
 
@@ -157,11 +241,34 @@ def point_inside_fars(lon, lat):
             ):
                 return True
 
+        return False
+
     return False
 
 
 # ============================================================
-# دریافت داده از FIRMS
+# POINT INSIDE FARS
+# ============================================================
+
+def point_inside_fars(
+    lon,
+    lat
+):
+
+    for geometry in FARS_GEOMETRIES:
+
+        if point_inside_geometry(
+            lon,
+            lat,
+            geometry
+        ):
+            return True
+
+    return False
+
+
+# ============================================================
+# GET FIRMS DATA
 # ============================================================
 
 def get_firms_data(source):
@@ -173,6 +280,10 @@ def get_firms_data(source):
         f"{source}/"
         f"{AREA}/"
         "1"
+    )
+
+    print(
+        f"دریافت داده {source} ..."
     )
 
     try:
@@ -189,8 +300,8 @@ def get_firms_data(source):
     except HTTPError as error:
 
         raise RuntimeError(
-            f"FIRMS HTTP Error {error.code}: "
-            f"{source}"
+            f"FIRMS HTTP Error "
+            f"{error.code}: {source}"
         )
 
     except URLError as error:
@@ -202,17 +313,13 @@ def get_firms_data(source):
 
 
 # ============================================================
-# پردازش حریق‌ها
+# READ FIRE DATA
 # ============================================================
 
 fires = []
 
 
 for source in SOURCES:
-
-    print(
-        f"دریافت داده {source} ..."
-    )
 
     csv_text = get_firms_data(
         source
@@ -221,6 +328,8 @@ for source in SOURCES:
     reader = csv.DictReader(
         io.StringIO(csv_text)
     )
+
+    source_count = 0
 
     for row in reader:
 
@@ -242,12 +351,15 @@ for source in SOURCES:
             continue
 
 
-        # فقط حریق‌هایی که واقعاً داخل فارس هستند
+        # فقط نقاط داخل فارس
         if not point_inside_fars(
             lon,
             lat
         ):
             continue
+
+
+        source_count += 1
 
 
         acq_date = row.get(
@@ -260,7 +372,11 @@ for source in SOURCES:
             ""
         )
 
-        # ساعت FIRMS به صورت UTC
+
+        # ----------------------------------------------------
+        # UTC TIME
+        # ----------------------------------------------------
+
         try:
 
             time_value = int(
@@ -287,9 +403,13 @@ for source in SOURCES:
         fires.append(
             {
                 "latitude": lat,
+
                 "longitude": lon,
+
                 "acq_date": acq_date,
+
                 "acq_time": acq_time,
+
                 "acquisition_utc":
                     acquisition_utc,
 
@@ -335,8 +455,14 @@ for source in SOURCES:
         )
 
 
+    print(
+        f"{source}: "
+        f"{source_count} حریق داخل فارس"
+    )
+
+
 # ============================================================
-# مرتب‌سازی
+# SORT
 # ============================================================
 
 def sort_key(item):
@@ -365,12 +491,13 @@ fires.sort(
 
 
 # ============================================================
-# حذف داده‌های کاملاً تکراری
+# REMOVE DUPLICATES
 # ============================================================
 
 unique_fires = []
 
 seen = set()
+
 
 for fire in fires:
 
@@ -393,14 +520,13 @@ for fire in fires:
 
 
 # ============================================================
-# ساخت خروجی
+# CREATE OUTPUT
 # ============================================================
 
 output = {
 
     "updated_at_utc":
-        datetime.utcnow()
-        .strftime(
+        datetime.utcnow().strftime(
             "%Y-%m-%d %H:%M:%S"
         ),
 
@@ -426,12 +552,17 @@ with open(
     )
 
 
+# ============================================================
+# RESULT
+# ============================================================
+
+print("")
 print(
     "=========================================="
 )
 
 print(
-    f"تعداد حریق‌های فارس: "
+    f"تعداد کل حریق‌های فارس: "
     f"{len(unique_fires)}"
 )
 
