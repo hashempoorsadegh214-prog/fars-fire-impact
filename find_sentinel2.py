@@ -14,6 +14,7 @@ CATALOGUE_URL = (
     "odata/v1/Products"
 )
 
+# حداکثر درصد ابر
 MAX_CLOUD = 30.0
 
 
@@ -122,25 +123,75 @@ def search_sentinel2(
     )
 
 
-    cloud_filter = (
-        "Attributes/"
-        "OData.CSC.DoubleAttribute/"
-        "any(att:"
-        "att/Name eq 'cloudCover'"
-        " and "
-        f"att/OData.CSC.DoubleAttribute/Value le {MAX_CLOUD})"
+    # --------------------------------------------------------
+    # نقطه حریق
+    # --------------------------------------------------------
+
+    point_wkt = (
+        f"POINT({fire_lon} {fire_lat})"
     )
 
+
+    # --------------------------------------------------------
+    # فیلتر مکانی رسمی CDSE
+    # --------------------------------------------------------
+
+    spatial_filter = (
+        "OData.CSC.Intersects("
+        "area=geography'SRID=4326;"
+        f"{point_wkt}"
+        "')"
+    )
+
+
+    # --------------------------------------------------------
+    # Sentinel-2 L2A
+    # --------------------------------------------------------
 
     product_type_filter = (
         "Attributes/"
         "OData.CSC.StringAttribute/"
-        "any(att:"
+        "any("
+        "att:"
         "att/Name eq 'productType'"
         " and "
-        "att/OData.CSC.StringAttribute/Value eq 'S2MSI2A')"
+        "att/"
+        "OData.CSC.StringAttribute/"
+        "Value eq 'S2MSI2A'"
+        ")"
     )
 
+
+    # --------------------------------------------------------
+    # Cloud cover
+    # --------------------------------------------------------
+
+    cloud_filter = (
+        "Attributes/"
+        "OData.CSC.DoubleAttribute/"
+        "any("
+        "att:"
+        "att/Name eq 'cloudCover'"
+        " and "
+        "att/"
+        "OData.CSC.DoubleAttribute/"
+        f"Value le {MAX_CLOUD}"
+        ")"
+    )
+
+
+    # --------------------------------------------------------
+    # Collection
+    # --------------------------------------------------------
+
+    collection_filter = (
+        "Collection/Name eq 'SENTINEL-2'"
+    )
+
+
+    # --------------------------------------------------------
+    # Date
+    # --------------------------------------------------------
 
     date_filter = (
         "ContentDate/Start gt "
@@ -151,13 +202,14 @@ def search_sentinel2(
     )
 
 
-    collection_filter = (
-        "Collection/Name eq 'SENTINEL-2'"
-    )
-
+    # --------------------------------------------------------
+    # Final filter
+    # --------------------------------------------------------
 
     query_filter = (
         collection_filter
+        + " and "
+        + spatial_filter
         + " and "
         + product_type_filter
         + " and "
@@ -176,12 +228,25 @@ def search_sentinel2(
             "ContentDate/Start desc",
 
         "$top":
-            "100",
+            "50",
 
         "$select":
             "Id,Name,S3Path,ContentDate,GeoFootprint"
 
     }
+
+
+    print("")
+    print(
+        "در حال جستجوی Sentinel-2 ..."
+    )
+
+    print(
+        f"بازه: "
+        f"{start_date.strftime('%Y-%m-%d')}"
+        " تا "
+        f"{end_date.strftime('%Y-%m-%d')}"
+    )
 
 
     response = requests.get(
@@ -191,14 +256,13 @@ def search_sentinel2(
         params=params,
 
         timeout=90
-
     )
 
 
     if response.status_code != 200:
 
         raise RuntimeError(
-            "خطا در جستجوی Sentinel-2: "
+            "خطا در جستجوی Sentinel-2:\n"
             f"HTTP {response.status_code}\n"
             f"{response.text}"
         )
@@ -230,7 +294,11 @@ three_day_end = (
 
 print("")
 print(
-    "جستجوی بازه ۳ روزه:"
+    "=========================================="
+)
+
+print(
+    "بازه ۳ روزه"
 )
 
 print(
@@ -247,8 +315,8 @@ three_day_products = search_sentinel2(
 
 
 print(
-    "تعداد تصاویر:"
-    f" {len(three_day_products)}"
+    f"تعداد تصاویر: "
+    f"{len(three_day_products)}"
 )
 
 
@@ -270,7 +338,11 @@ five_day_end = (
 
 print("")
 print(
-    "جستجوی بازه ۵ روزه:"
+    "=========================================="
+)
+
+print(
+    "بازه ۵ روزه"
 )
 
 print(
@@ -287,8 +359,8 @@ five_day_products = search_sentinel2(
 
 
 print(
-    "تعداد تصاویر:"
-    f" {len(five_day_products)}"
+    f"تعداد تصاویر: "
+    f"{len(five_day_products)}"
 )
 
 
@@ -310,6 +382,9 @@ for product in (
         "Id"
     )
 
+    if not product_id:
+        continue
+
     if product_id in seen:
         continue
 
@@ -323,7 +398,7 @@ for product in (
 
 
 # ============================================================
-# SORT BY ACQUISITION DATE
+# SORT BY DATE
 # ============================================================
 
 def get_start_date(product):
@@ -355,7 +430,7 @@ print(
 )
 
 print(
-    "تصاویر Sentinel-2 پیدا شده"
+    "تصاویر واقعی مرتبط با نقطه حریق"
 )
 
 print(
@@ -413,13 +488,29 @@ result = {
 
     },
 
+    "search_point": {
+
+        "latitude":
+            fire_lat,
+
+        "longitude":
+            fire_lon
+
+    },
+
     "criteria": {
 
         "max_cloud_percent":
             MAX_CLOUD,
 
         "product_type":
-            "S2MSI2A"
+            "S2MSI2A",
+
+        "spatial_filter":
+            "POINT",
+
+        "spatial_crs":
+            "EPSG:4326"
 
     },
 
@@ -486,7 +577,11 @@ print(
 )
 
 print(
-    "نتیجه در sentinel2_search.json ذخیره شد."
+    "نتیجه ذخیره شد:"
+)
+
+print(
+    "sentinel2_search.json"
 )
 
 print(
