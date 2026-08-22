@@ -12,6 +12,33 @@
   >
 
   <style>
+
+    /* =====================================================
+       FONT
+    ====================================================== */
+
+    html,
+    body,
+    button,
+    input,
+    textarea,
+    select,
+    .leaflet-container,
+    .leaflet-control,
+    .leaflet-popup-content {
+      font-family:
+        "B Nazanin",
+        "BNazanin",
+        Tahoma,
+        Arial,
+        sans-serif;
+    }
+
+
+    /* =====================================================
+       BASE
+    ====================================================== */
+
     * {
       box-sizing: border-box;
     }
@@ -22,8 +49,11 @@
       padding: 0;
       width: 100%;
       height: 100%;
-      font-family: Tahoma, Arial, sans-serif;
       background: #f4f4f4;
+      color: #222;
+      transition:
+        background 0.3s ease,
+        color 0.3s ease;
     }
 
     body.dark {
@@ -38,24 +68,30 @@
       flex-direction: column;
     }
 
-    /* =========================
+
+    /* =====================================================
        HEADER
-    ========================== */
+    ====================================================== */
 
     #header {
-      height: 72px;
-      flex-shrink: 0;
+      height: 76px;
+      min-height: 76px;
+      position: relative;
+      z-index: 2000;
+
       display: flex;
       align-items: center;
       justify-content: space-between;
+
       padding: 0 18px;
-      color: white;
+
+      color: #fff;
 
       background:
         linear-gradient(
           180deg,
           #ff4b4b 0%,
-          #e50000 45%,
+          #ea0000 45%,
           #a90000 100%
         );
 
@@ -63,8 +99,7 @@
         0 2px 12px rgba(0, 0, 0, 0.35),
         inset 0 1px 0 rgba(255, 255, 255, 0.45);
 
-      position: relative;
-      z-index: 1000;
+      overflow: hidden;
     }
 
     #header::after {
@@ -74,102 +109,256 @@
       right: 0;
       top: 0;
       height: 2px;
-      background: rgba(255, 255, 255, 0.75);
+      background: rgba(255,255,255,0.8);
     }
 
-    .header-title {
-      display: flex;
-      align-items: center;
-      gap: 12px;
-    }
 
-    .fire-icon {
-      width: 42px;
-      height: 42px;
-      border-radius: 50%;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      font-size: 24px;
+    /* =====================================================
+       HEADER TITLE - EXACT CENTER
+    ====================================================== */
 
-      background: rgba(255,255,255,0.16);
-      border: 1px solid rgba(255,255,255,0.35);
-      box-shadow: inset 0 1px 4px rgba(255,255,255,0.25);
+    .header-center {
+      position: absolute;
+      top: 50%;
+      left: 50%;
+
+      transform:
+        translate(-50%, -50%);
+
+      text-align: center;
+      white-space: nowrap;
+
+      pointer-events: none;
     }
 
     .title-main {
-      font-size: 18px;
+      font-size: 22px;
       font-weight: bold;
-      line-height: 1.5;
+      line-height: 1.35;
+      text-shadow:
+        0 1px 2px rgba(0,0,0,0.35);
     }
 
     .title-sub {
-      font-size: 11px;
-      opacity: 0.9;
+      margin-top: 1px;
+
+      font-family:
+        Arial,
+        sans-serif;
+
       direction: ltr;
-      text-align: right;
+
+      font-size: 11px;
+      letter-spacing: 1px;
+
+      opacity: 0.95;
     }
 
+
+    /* =====================================================
+       FIRE ICON - LEFT
+    ====================================================== */
+
+    .fire-icon {
+      position: relative;
+      z-index: 3;
+
+      width: 44px;
+      height: 44px;
+
+      border-radius: 50%;
+
+      display: flex;
+      align-items: center;
+      justify-content: center;
+
+      font-family: Arial, sans-serif;
+      font-size: 24px;
+
+      background:
+        rgba(255,255,255,0.14);
+
+      border:
+        1px solid rgba(255,255,255,0.35);
+
+      box-shadow:
+        inset 0 1px 4px rgba(255,255,255,0.25);
+    }
+
+    .header-left {
+      display: flex;
+      align-items: center;
+    }
+
+
+    /* =====================================================
+       HEADER BUTTONS - RIGHT
+    ====================================================== */
+
     .header-buttons {
+      position: relative;
+      z-index: 3;
+
       display: flex;
       align-items: center;
       gap: 7px;
     }
 
     .header-btn {
-      border: 1px solid rgba(255,255,255,0.35);
-      background: rgba(0,0,0,0.16);
-      color: white;
+      border:
+        1px solid rgba(255,255,255,0.35);
+
+      background:
+        rgba(0,0,0,0.16);
+
+      color: #fff;
+
       border-radius: 8px;
-      padding: 8px 11px;
+
+      padding: 8px 12px;
+
       cursor: pointer;
-      font-family: inherit;
-      font-size: 13px;
-      transition: 0.2s;
+
+      font-family:
+        "B Nazanin",
+        "BNazanin",
+        Tahoma,
+        Arial,
+        sans-serif;
+
+      font-size: 14px;
+
+      transition:
+        background 0.2s ease,
+        transform 0.2s ease;
     }
 
     .header-btn:hover {
-      background: rgba(255,255,255,0.18);
+      background:
+        rgba(255,255,255,0.18);
+
+      transform:
+        translateY(-1px);
     }
 
-    /* =========================
+
+    /* =====================================================
        MAP
-    ========================== */
+    ====================================================== */
 
     #map {
       flex: 1;
       width: 100%;
       min-height: 0;
+      background: #d9d9d9;
     }
+
+
+    /* =====================================================
+       DARK MODE - THE MAP ITSELF
+    ====================================================== */
+
+    .dark-map .leaflet-tile-pane {
+      filter:
+        brightness(0.55)
+        contrast(1.05)
+        saturate(0.75);
+    }
+
+    .dark-map .leaflet-overlay-pane {
+      filter:
+        brightness(0.9)
+        contrast(1.05);
+    }
+
+    .dark-map .leaflet-marker-pane {
+      filter:
+        brightness(1.05);
+    }
+
+
+    /* =====================================================
+       LEAFLET CONTROLS
+    ====================================================== */
 
     .leaflet-control-layers,
     .leaflet-control-zoom {
-      font-family: Tahoma, Arial, sans-serif;
+      font-family:
+        "B Nazanin",
+        "BNazanin",
+        Tahoma,
+        Arial,
+        sans-serif;
     }
 
     .leaflet-control-layers {
       border-radius: 10px !important;
-      box-shadow: 0 2px 12px rgba(0,0,0,0.2) !important;
+
+      box-shadow:
+        0 2px 12px rgba(0,0,0,0.20) !important;
     }
 
-    /* =========================
-       SIDE PANEL
-    ========================== */
+    .leaflet-control-layers label {
+      line-height: 1.8;
+    }
+
+
+    /* =====================================================
+       DARK MODE - LEAFLET CONTROLS
+    ====================================================== */
+
+    body.dark .leaflet-control-layers {
+      background: #202020;
+      color: #fff;
+      border-color: #444;
+    }
+
+    body.dark .leaflet-control-layers-list {
+      color: #fff;
+    }
+
+    body.dark .leaflet-control-zoom a {
+      background: #222;
+      color: #fff;
+      border-color: #444;
+    }
+
+    body.dark .leaflet-control-zoom a:hover {
+      background: #333;
+    }
+
+
+    /* =====================================================
+       PANELS
+    ====================================================== */
 
     .panel {
       position: fixed;
-      top: 82px;
+
+      top: 88px;
       left: 18px;
-      width: 330px;
-      max-width: calc(100vw - 36px);
-      max-height: calc(100vh - 100px);
+
+      width: 340px;
+      max-width:
+        calc(100vw - 36px);
+
+      max-height:
+        calc(100vh - 106px);
+
       overflow-y: auto;
 
-      background: rgba(255,255,255,0.97);
-      border-radius: 14px;
-      box-shadow: 0 8px 30px rgba(0,0,0,0.25);
+      background:
+        rgba(255,255,255,0.98);
 
-      z-index: 1500;
+      color: #222;
+
+      border-radius: 14px;
+
+      box-shadow:
+        0 8px 30px rgba(0,0,0,0.25);
+
+      z-index: 3000;
+
       display: none;
     }
 
@@ -178,44 +367,66 @@
     }
 
     body.dark .panel {
-      background: rgba(30,30,30,0.98);
+      background:
+        rgba(30,30,30,0.98);
+
       color: #eee;
     }
 
+
+    /* =====================================================
+       PANEL HEADER
+    ====================================================== */
+
     .panel-header {
-      padding: 14px 16px;
+      padding: 13px 16px;
+
       background:
         linear-gradient(
           180deg,
           #f22 0%,
           #c40000 100%
         );
-      color: white;
-      font-weight: bold;
-      border-radius: 14px 14px 0 0;
+
+      color: #fff;
+
+      border-radius:
+        14px 14px 0 0;
+
       display: flex;
       align-items: center;
       justify-content: space-between;
+
+      font-size: 17px;
+      font-weight: bold;
     }
 
     .close-panel {
       border: 0;
       background: transparent;
-      color: white;
-      font-size: 20px;
+      color: #fff;
+      font-size: 22px;
       cursor: pointer;
+      font-family: Arial, sans-serif;
     }
+
+
+    /* =====================================================
+       PANEL BODY
+    ====================================================== */
 
     .panel-body {
       padding: 16px;
-      line-height: 1.9;
-      font-size: 13px;
+
+      line-height: 2;
+
+      font-size: 14px;
     }
 
     .panel-body h3 {
       margin-top: 8px;
       color: #d00000;
-      font-size: 15px;
+      font-size: 16px;
     }
 
     body.dark .panel-body h3 {
@@ -231,15 +442,21 @@
       padding-right: 20px;
     }
 
-    /* =========================
-       REPORT PANEL
-    ========================== */
+
+    /* =====================================================
+       REPORT
+    ====================================================== */
 
     .report-box {
       background: #fafafa;
-      border: 1px solid #ddd;
+
+      border:
+        1px solid #ddd;
+
       border-radius: 10px;
+
       padding: 12px;
+
       margin-bottom: 12px;
     }
 
@@ -260,64 +477,73 @@
 
     .export-btn {
       width: 100%;
+
       padding: 11px;
+
       border: 0;
+
       border-radius: 9px;
+
       cursor: pointer;
+
       color: white;
-      font-family: inherit;
+
+      font-family:
+        "B Nazanin",
+        "BNazanin",
+        Tahoma,
+        Arial,
+        sans-serif;
+
+      font-size: 15px;
       font-weight: bold;
-      background: linear-gradient(#20a94b, #087d2d);
-      box-shadow: 0 3px 8px rgba(0,0,0,0.18);
+
+      background:
+        linear-gradient(
+          #20a94b,
+          #087d2d
+        );
+
+      box-shadow:
+        0 3px 8px rgba(0,0,0,0.18);
     }
 
     .export-btn:hover {
       opacity: 0.9;
     }
 
-    /* =========================
-       DARK MAP FILTER
-    ========================== */
 
-    body.dark .leaflet-control-layers {
-      background: #222;
-      color: white;
-      border-color: #444;
-    }
-
-    body.dark .leaflet-bar a {
-      background: #222;
-      color: white;
-      border-bottom-color: #444;
-    }
-
-    body.dark .leaflet-bar a:hover {
-      background: #333;
-    }
-
-    /* =========================
+    /* =====================================================
        MOBILE
-    ========================== */
+    ====================================================== */
 
-    @media (max-width: 700px) {
+    @media (max-width: 850px) {
 
       #header {
-        height: 64px;
-        padding: 0 10px;
+        height: 68px;
+        min-height: 68px;
+        padding: 0 8px;
       }
 
-      .fire-icon {
-        width: 36px;
-        height: 36px;
-        font-size: 20px;
+      .header-center {
+        max-width:
+          48vw;
+
+        white-space: normal;
       }
 
       .title-main {
-        font-size: 14px;
+        font-size: 16px;
       }
 
       .title-sub {
-        font-size: 9px;
+        font-size: 8px;
+      }
+
+      .fire-icon {
+        width: 37px;
+        height: 37px;
+        font-size: 20px;
       }
 
       .header-buttons {
@@ -325,46 +551,91 @@
       }
 
       .header-btn {
-        padding: 7px 8px;
+        padding: 6px 7px;
         font-size: 11px;
       }
 
       .panel {
-        top: 74px;
+        top: 78px;
         left: 10px;
-        width: calc(100vw - 20px);
+        width:
+          calc(100vw - 20px);
       }
     }
+
+
+    @media (max-width: 560px) {
+
+      .header-left {
+        display: none;
+      }
+
+      .header-center {
+        left: 50%;
+        max-width: 62vw;
+      }
+
+      .title-main {
+        font-size: 14px;
+      }
+
+      .title-sub {
+        display: none;
+      }
+
+      .header-buttons {
+        margin-right: auto;
+      }
+
+      .header-btn {
+        font-size: 10px;
+        padding: 6px;
+      }
+    }
+
   </style>
 </head>
+
 
 <body>
 
 <div id="app">
 
-  <!-- =========================
+
+  <!-- =====================================================
        HEADER
-  ========================== -->
+  ====================================================== -->
 
   <header id="header">
 
-    <div class="header-title">
+
+    <!-- LEFT -->
+
+    <div class="header-left">
 
       <div class="fire-icon">
         🔥
       </div>
 
-      <div>
-        <div class="title-main">
-          سامانه پایش و ارزیابی اثر حریق‌های استان فارس
-        </div>
+    </div>
 
-        <div class="title-sub">
-          FARS FIRE IMPACT MONITORING
-        </div>
+
+    <!-- CENTER -->
+
+    <div class="header-center">
+
+      <div class="title-main">
+        سامانه پایش و ارزیابی اثر حریق‌های استان فارس
+      </div>
+
+      <div class="title-sub">
+        FARS FIRE IMPACT MONITORING
       </div>
 
     </div>
+
+
+    <!-- RIGHT -->
 
     <div class="header-buttons">
 
@@ -402,16 +673,16 @@
   </header>
 
 
-  <!-- =========================
+  <!-- =====================================================
        MAP
-  ========================== -->
+  ====================================================== -->
 
   <div id="map"></div>
 
 
-  <!-- =========================
-       GUIDE
-  ========================== -->
+  <!-- =====================================================
+       GUIDE PANEL
+  ====================================================== -->
 
   <div
     id="guidePanel"
@@ -420,7 +691,9 @@
 
     <div class="panel-header">
 
-      <span>راهنمای سامانه</span>
+      <span>
+        راهنمای سامانه
+      </span>
 
       <button
         class="close-panel"
@@ -431,13 +704,16 @@
 
     </div>
 
+
     <div class="panel-body">
 
-      <h3>فیلترهای مکانی</h3>
+      <h3>
+        فیلترهای مکانی
+      </h3>
 
       <p>
-        از کنترل لایه‌های روی نقشه می‌توانید لایه‌های مکانی
-        موردنظر خود را روشن یا خاموش کنید.
+        از کنترل لایه‌های روی نقشه می‌توانید
+        محدوده موردنظر خود را فعال یا غیرفعال کنید.
       </p>
 
       <ul>
@@ -446,23 +722,25 @@
         <li>مناطق شکار ممنوع</li>
       </ul>
 
-      <h3>هدف سامانه</h3>
+
+      <h3>
+        نحوه استفاده
+      </h3>
 
       <p>
-        سامانه برای شناسایی حریق‌های استان فارس و برآورد
-        میزان تأثیر آن‌ها بر عرصه‌های مختلف طراحی شده است.
+        ابتدا محدوده موردنظر را روی نقشه انتخاب کنید.
+        سپس سامانه میزان حریق واقع‌شده در آن محدوده
+        را محاسبه و به هکتار نمایش خواهد داد.
       </p>
 
-      <h3>مساحت حریق</h3>
+
+      <h3>
+        گزارش
+      </h3>
 
       <p>
-        در مرحله عملیاتی، محدوده سوخته استخراج شده و
-        مساحت آن به هکتار محاسبه خواهد شد.
-      </p>
-
-      <p>
-        با فعال کردن یک فیلتر مکانی، مقدار حریق داخل
-        همان محدوده نیز محاسبه و گزارش می‌شود.
+        نتیجه محاسبات در قالب گزارش قابل دریافت خواهد بود
+        و امکان خروجی Excel نیز برای آن در نظر گرفته شده است.
       </p>
 
     </div>
@@ -470,9 +748,9 @@
   </div>
 
 
-  <!-- =========================
-       ABOUT
-  ========================== -->
+  <!-- =====================================================
+       ABOUT PANEL
+  ====================================================== -->
 
   <div
     id="aboutPanel"
@@ -481,7 +759,9 @@
 
     <div class="panel-header">
 
-      <span>معرفی سامانه</span>
+      <span>
+        معرفی سامانه
+      </span>
 
       <button
         class="close-panel"
@@ -492,32 +772,40 @@
 
     </div>
 
+
     <div class="panel-body">
 
-      <h3>سامانه پایش و ارزیابی اثر حریق‌های استان فارس</h3>
+      <h3>
+        سامانه پایش و ارزیابی اثر حریق‌های استان فارس
+      </h3>
 
       <p>
-        این سامانه با هدف پایش ماهواره‌ای حریق‌های استان فارس
-        و ارزیابی میزان تأثیر آن‌ها بر عرصه‌های طبیعی ایجاد شده است.
+        این سامانه با هدف پایش ماهواره‌ای حریق‌های
+        استان فارس و برآورد میزان تأثیر آن‌ها
+        بر عرصه‌های طبیعی طراحی شده است.
       </p>
 
-      <h3>اجزای اصلی</h3>
+
+      <h3>
+        داده‌ها و محدوده‌ها
+      </h3>
 
       <ul>
-        <li>داده‌های ماهواره‌ای حریق</li>
-        <li>محدوده استان فارس</li>
+        <li>حریق‌های ماهواره‌ای</li>
+        <li>مرز استان فارس</li>
         <li>مناطق چهارگانه محیط‌زیست</li>
         <li>مناطق شکار ممنوع</li>
-        <li>محاسبه سطح سوخته به هکتار</li>
-        <li>گزارش‌گیری و خروجی داده</li>
       </ul>
 
-      <h3>هدف نهایی</h3>
+
+      <h3>
+        خروجی سامانه
+      </h3>
 
       <p>
-        هدف نهایی، ارائه یک تصویر ساده و قابل فهم از محل حریق،
-        میزان سطح سوخته و میزان تأثیر حریق در محدوده‌های
-        حفاظتی استان فارس است.
+        سامانه در نهایت محل حریق، محدوده سوخته،
+        مساحت آن به هکتار و میزان حریق در محدوده‌های
+        حفاظتی را نمایش می‌دهد.
       </p>
 
     </div>
@@ -525,9 +813,9 @@
   </div>
 
 
-  <!-- =========================
-       REPORT
-  ========================== -->
+  <!-- =====================================================
+       REPORT PANEL
+  ====================================================== -->
 
   <div
     id="reportPanel"
@@ -536,7 +824,9 @@
 
     <div class="panel-header">
 
-      <span>گزارش حریق</span>
+      <span>
+        گزارش حریق
+      </span>
 
       <button
         class="close-panel"
@@ -546,6 +836,7 @@
       </button>
 
     </div>
+
 
     <div class="panel-body">
 
@@ -556,16 +847,16 @@
         </div>
 
         <p>
-          این بخش در مرحله بعد با داده واقعی حریق
-          و مساحت سوخته تکمیل خواهد شد.
+          سامانه آماده دریافت داده حریق است.
         </p>
 
       </div>
 
+
       <div class="report-box">
 
         <div class="report-title">
-          محدوده گزارش
+          محدوده‌های قابل بررسی
         </div>
 
         <p>
@@ -582,6 +873,7 @@
 
       </div>
 
+
       <button
         class="export-btn"
         onclick="exportExcel()"
@@ -596,36 +888,41 @@
 </div>
 
 
-<!-- =========================
+<!-- =====================================================
      LEAFLET
-========================== -->
+====================================================== -->
 
 <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
-
-<!-- Excel library -->
 
 <script src="https://cdn.sheetjs.com/xlsx-0.20.3/package/dist/xlsx.full.min.js"></script>
 
 
 <script>
 
-  /* =========================
+  /* =====================================================
      MAP
-  ========================== */
+  ====================================================== */
 
-  const map = L.map("map").setView(
-    [29.6, 53.0],
-    7
-  );
+  const map =
+    L.map("map").setView(
+      [29.6, 53.0],
+      7
+    );
 
-  L.tileLayer(
-    "https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png",
-    {
-      attribution:
-        "&copy; OpenStreetMap contributors"
-    }
-  ).addTo(map);
 
+  const lightTiles =
+    L.tileLayer(
+      "https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png",
+      {
+        attribution:
+          "&copy; OpenStreetMap contributors"
+      }
+    ).addTo(map);
+
+
+  /* =====================================================
+     LAYERS
+  ====================================================== */
 
   let farsLayer;
   let protectedLayer;
@@ -636,126 +933,160 @@
   let layerControl;
 
 
-  /* =========================
+  /* =====================================================
      FARS
-  ========================== */
+  ====================================================== */
 
   fetch("fars.geojson")
-    .then(response => response.json())
-    .then(data => {
+    .then(
+      response => response.json()
+    )
+    .then(
+      data => {
 
-      farsLayer = L.geoJSON(
-        data,
-        {
-          style: {
-            color: "#ff6600",
-            weight: 2,
-            fillOpacity: 0.05
-          }
-        }
-      ).addTo(map);
-
-      overlayLayers["مرز استان فارس"] =
-        farsLayer;
-
-      map.fitBounds(
-        farsLayer.getBounds()
-      );
-
-      updateLayerControl();
-
-    })
-    .catch(error => {
-
-      console.error(
-        "خطا در بارگذاری fars.geojson:",
-        error
-      );
-
-    });
+        farsLayer =
+          L.geoJSON(
+            data,
+            {
+              style: {
+                color: "#ff6600",
+                weight: 2,
+                fillOpacity: 0.05
+              }
+            }
+          ).addTo(map);
 
 
-  /* =========================
+        overlayLayers[
+          "مرز استان فارس"
+        ] = farsLayer;
+
+
+        map.fitBounds(
+          farsLayer.getBounds()
+        );
+
+
+        updateLayerControl();
+
+      }
+    )
+    .catch(
+      error => {
+
+        console.error(
+          "خطا در بارگذاری fars.geojson:",
+          error
+        );
+
+      }
+    );
+
+
+  /* =====================================================
      PROTECTED AREAS
-  ========================== */
+  ====================================================== */
 
   fetch("protected_areas.geojson")
-    .then(response => response.json())
-    .then(data => {
+    .then(
+      response => response.json()
+    )
+    .then(
+      data => {
 
-      protectedLayer = L.geoJSON(
-        data,
-        {
-          style: {
-            color: "#008000",
-            weight: 1.5,
-            fillOpacity: 0.15
-          }
-        }
-      ).addTo(map);
-
-      overlayLayers[
-        "مناطق چهارگانه محیط‌زیست"
-      ] = protectedLayer;
-
-      updateLayerControl();
-
-    })
-    .catch(error => {
-
-      console.error(
-        "خطا در بارگذاری protected_areas.geojson:",
-        error
-      );
-
-    });
+        protectedLayer =
+          L.geoJSON(
+            data,
+            {
+              style: {
+                color: "#008000",
+                weight: 1.5,
+                fillOpacity: 0.15
+              }
+            }
+          ).addTo(map);
 
 
-  /* =========================
+        overlayLayers[
+          "مناطق چهارگانه محیط‌زیست"
+        ] =
+          protectedLayer;
+
+
+        updateLayerControl();
+
+      }
+    )
+    .catch(
+      error => {
+
+        console.error(
+          "خطا در بارگذاری protected_areas.geojson:",
+          error
+        );
+
+      }
+    );
+
+
+  /* =====================================================
      HUNTING BANNED
-  ========================== */
+  ====================================================== */
 
   fetch("hunting_banned.geojson")
-    .then(response => response.json())
-    .then(data => {
+    .then(
+      response => response.json()
+    )
+    .then(
+      data => {
 
-      huntingLayer = L.geoJSON(
-        data,
-        {
-          style: {
-            color: "#800080",
-            weight: 1.5,
-            fillOpacity: 0.15
-          }
-        }
-      ).addTo(map);
-
-      overlayLayers[
-        "مناطق شکار ممنوع"
-      ] = huntingLayer;
-
-      updateLayerControl();
-
-    })
-    .catch(error => {
-
-      console.error(
-        "خطا در بارگذاری hunting_banned.geojson:",
-        error
-      );
-
-    });
+        huntingLayer =
+          L.geoJSON(
+            data,
+            {
+              style: {
+                color: "#800080",
+                weight: 1.5,
+                fillOpacity: 0.15
+              }
+            }
+          ).addTo(map);
 
 
-  /* =========================
+        overlayLayers[
+          "مناطق شکار ممنوع"
+        ] =
+          huntingLayer;
+
+
+        updateLayerControl();
+
+      }
+    )
+    .catch(
+      error => {
+
+        console.error(
+          "خطا در بارگذاری hunting_banned.geojson:",
+          error
+        );
+
+      }
+    );
+
+
+  /* =====================================================
      LAYER CONTROL
-  ========================== */
+  ====================================================== */
 
   function updateLayerControl() {
 
     if (layerControl) {
-      map.removeControl(layerControl);
+      map.removeControl(
+        layerControl
+      );
     }
+
 
     layerControl =
       L.control.layers(
@@ -765,22 +1096,25 @@
           collapsed: false
         }
       ).addTo(map);
+
   }
 
 
-  /* =========================
+  /* =====================================================
      PANELS
-  ========================== */
+  ====================================================== */
 
   function closePanels() {
 
     document
       .querySelectorAll(".panel")
-      .forEach(panel => {
-
-        panel.classList.remove("active");
-
-      });
+      .forEach(
+        panel => {
+          panel.classList.remove(
+            "active"
+          );
+        }
+      );
 
   }
 
@@ -788,15 +1122,24 @@
   function togglePanel(panelId) {
 
     const panel =
-      document.getElementById(panelId);
+      document.getElementById(
+        panelId
+      );
+
 
     const isActive =
-      panel.classList.contains("active");
+      panel.classList.contains(
+        "active"
+      );
+
 
     closePanels();
 
+
     if (!isActive) {
-      panel.classList.add("active");
+      panel.classList.add(
+        "active"
+      );
     }
 
   }
@@ -804,24 +1147,36 @@
 
   function openReportPanel() {
 
-    togglePanel("reportPanel");
+    togglePanel(
+      "reportPanel"
+    );
 
   }
 
 
-  /* =========================
+  /* =====================================================
      DARK MODE
-  ========================== */
+  ====================================================== */
 
   function toggleDarkMode() {
 
-    document.body.classList.toggle("dark");
-
     const isDark =
-      document.body.classList.contains("dark");
+      document.body.classList.toggle(
+        "dark"
+      );
+
+
+    document.body.classList.toggle(
+      "dark-map",
+      isDark
+    );
+
 
     const button =
-      document.getElementById("darkModeButton");
+      document.getElementById(
+        "darkModeButton"
+      );
+
 
     if (isDark) {
 
@@ -848,18 +1203,26 @@
   }
 
 
-  /* =========================
-     REMEMBER DARK MODE
-  ========================== */
+  /* =====================================================
+     RESTORE DARK MODE
+  ====================================================== */
 
   const savedDarkMode =
     localStorage.getItem(
       "farsFireDarkMode"
     );
 
+
   if (savedDarkMode === "1") {
 
-    document.body.classList.add("dark");
+    document.body.classList.add(
+      "dark"
+    );
+
+    document.body.classList.add(
+      "dark-map"
+    );
+
 
     document.getElementById(
       "darkModeButton"
@@ -869,33 +1232,56 @@
   }
 
 
-  /* =========================
-     EXCEL REPORT
-  ========================== */
+  /* =====================================================
+     EXCEL
+  ====================================================== */
 
   function exportExcel() {
 
     const reportData = [
 
       {
-        "عنوان": "سامانه پایش و ارزیابی اثر حریق‌های استان فارس",
-        "محدوده": "استان فارس",
-        "مساحت حریق (هکتار)": "",
-        "وضعیت": "در انتظار اتصال داده حریق"
+        "عنوان":
+          "سامانه پایش و ارزیابی اثر حریق‌های استان فارس",
+
+        "محدوده":
+          "استان فارس",
+
+        "مساحت حریق (هکتار)":
+          "",
+
+        "وضعیت":
+          "در انتظار اتصال داده حریق"
       },
 
-      {
-        "عنوان": "مناطق چهارگانه محیط‌زیست",
-        "محدوده": "مناطق چهارگانه",
-        "مساحت حریق (هکتار)": "",
-        "وضعیت": "در انتظار محاسبه"
-      },
 
       {
-        "عنوان": "مناطق شکار ممنوع",
-        "محدوده": "مناطق شکار ممنوع",
-        "مساحت حریق (هکتار)": "",
-        "وضعیت": "در انتظار محاسبه"
+        "عنوان":
+          "مناطق چهارگانه محیط‌زیست",
+
+        "محدوده":
+          "مناطق چهارگانه",
+
+        "مساحت حریق (هکتار)":
+          "",
+
+        "وضعیت":
+          "در انتظار محاسبه"
+      },
+
+
+      {
+        "عنوان":
+          "مناطق شکار ممنوع",
+
+        "محدوده":
+          "مناطق شکار ممنوع",
+
+        "مساحت حریق (هکتار)":
+          "",
+
+        "وضعیت":
+          "در انتظار محاسبه"
       }
 
     ];
