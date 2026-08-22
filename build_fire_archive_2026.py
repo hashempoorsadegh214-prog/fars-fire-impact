@@ -13,8 +13,11 @@ import requests
 
 MAP_KEY = os.environ.get("FIRMS_MAP_KEY")
 
+BOUNDARY_FILE = "fars.geojson"
+
 OUTPUT_FILE = "fire_archive_2026.json"
 
+# محدوده کلی برای کم کردن حجم درخواست FIRMS
 WEST = 50.0
 SOUTH = 27.0
 EAST = 54.5
@@ -22,22 +25,26 @@ NORTH = 31.5
 
 AREA = f"{WEST},{SOUTH},{EAST},{NORTH}"
 
+# بازه آرشیو
 START_DATE = datetime(2026, 1, 1)
 
 # پایان انحصاری
 # یعنی تا پایان 22 اوت 2026
 END_DATE = datetime(2026, 8, 23)
 
+# FIRMS حداکثر 5 روز در هر درخواست
 DAY_RANGE = 5
 
-# برای آرشیو تاریخی فقط SP
+# فقط داده استاندارد تاریخی
 SOURCES = [
     "VIIRS_SNPP_SP",
     "VIIRS_NOAA20_SP",
     "VIIRS_NOAA21_SP",
 ]
 
-URL = "https://firms.modaps.eosdis.nasa.gov/api/area/csv"
+BASE_URL = (
+    "https://firms.modaps.eosdis.nasa.gov"
+)
 
 TIMEOUT = 120
 
@@ -53,17 +60,294 @@ if not MAP_KEY:
 
 
 # ============================================================
-# DOWNLOAD ONE 5-DAY PERIOD
+# LOAD FARS GEOJSON
 # ============================================================
 
-def download_period(source, start_date):
+with open(
+    BOUNDARY_FILE,
+    "r",
+    encoding="utf-8"
+) as file:
+
+    fars_data = json.load(file)
+
+
+# ============================================================
+# EXTRACT GEOMETRIES
+# ============================================================
+
+def extract_geometries(
+    geojson
+):
+
+    geojson_type = geojson.get(
+        "type"
+    )
+
+    if geojson_type == "FeatureCollection":
+
+        geometries = []
+
+        for feature in geojson.get(
+            "features",
+            []
+        ):
+
+            geometry = feature.get(
+                "geometry"
+            )
+
+            if geometry:
+                geometries.append(
+                    geometry
+                )
+
+        return geometries
+
+
+    if geojson_type == "Feature":
+
+        geometry = geojson.get(
+            "geometry"
+        )
+
+        return (
+            [geometry]
+            if geometry
+            else []
+        )
+
+
+    if geojson_type in (
+        "Polygon",
+        "MultiPolygon"
+    ):
+
+        return [geojson]
+
+
+    return []
+
+
+FARS_GEOMETRIES = extract_geometries(
+    fars_data
+)
+
+
+if not FARS_GEOMETRIES:
+
+    raise RuntimeError(
+        "هندسه معتبر در fars.geojson پیدا نشد."
+    )
+
+
+print("")
+print(
+    "=========================================="
+)
+
+print(
+    "مرز واقعی فارس بارگذاری شد."
+)
+
+print(
+    f"تعداد هندسه‌ها: "
+    f"{len(FARS_GEOMETRIES)}"
+)
+
+print(
+    "=========================================="
+)
+
+
+# ============================================================
+# POINT IN RING
+# ============================================================
+
+def point_in_ring(
+    lon,
+    lat,
+    ring
+):
+
+    inside = False
+
+    j = len(ring) - 1
+
+    for i in range(
+        len(ring)
+    ):
+
+        xi = ring[i][0]
+        yi = ring[i][1]
+
+        xj = ring[j][0]
+        yj = ring[j][1]
+
+        intersects = (
+
+            ((yi > lat) != (yj > lat))
+
+            and
+
+            (
+                lon
+                <
+                (
+                    (xj - xi)
+                    * (lat - yi)
+                    /
+                    ((yj - yi) or 1e-15)
+                    + xi
+                )
+            )
+        )
+
+        if intersects:
+
+            inside = not inside
+
+        j = i
+
+    return inside
+
+
+# ============================================================
+# POINT IN POLYGON
+# ============================================================
+
+def point_in_polygon(
+    lon,
+    lat,
+    polygon
+):
+
+    if not polygon:
+        return False
+
+
+    # حلقه بیرونی
+    if not point_in_ring(
+        lon,
+        lat,
+        polygon[0]
+    ):
+
+        return False
+
+
+    # حفره‌ها
+    for hole in polygon[1:]:
+
+        if point_in_ring(
+            lon,
+            lat,
+            hole
+        ):
+
+            return False
+
+
+    return True
+
+
+# ============================================================
+# POINT IN GEOMETRY
+# ============================================================
+
+def point_in_geometry(
+    lon,
+    lat,
+    geometry
+):
+
+    geometry_type = geometry.get(
+        "type"
+    )
+
+    coordinates = geometry.get(
+        "coordinates"
+    )
+
+
+    if geometry_type == "Polygon":
+
+        return point_in_polygon(
+            lon,
+            lat,
+            coordinates
+        )
+
+
+    if geometry_type == "MultiPolygon":
+
+        for polygon in coordinates:
+
+            if point_in_polygon(
+                lon,
+                lat,
+                polygon
+            ):
+
+                return True
+
+        return False
+
+
+    return False
+
+
+# ============================================================
+# POINT INSIDE FARS
+# ============================================================
+
+def point_inside_fars(
+    lon,
+    lat
+):
+
+    # ابتدا Bounding Box
+    # برای سرعت بیشتر
+    if not (
+        WEST <= lon <= EAST
+        and
+        SOUTH <= lat <= NORTH
+    ):
+
+        return False
+
+
+    # سپس مرز واقعی
+    for geometry in FARS_GEOMETRIES:
+
+        if point_in_geometry(
+            lon,
+            lat,
+            geometry
+        ):
+
+            return True
+
+
+    return False
+
+
+# ============================================================
+# REQUEST FIRMS
+# ============================================================
+
+def download_period(
+    source,
+    start_date
+):
 
     date_text = start_date.strftime(
         "%Y-%m-%d"
     )
 
+
     url = (
-        f"{URL}/"
+        f"{BASE_URL}/api/area/csv/"
         f"{MAP_KEY}/"
         f"{source}/"
         f"{AREA}/"
@@ -71,25 +355,17 @@ def download_period(source, start_date):
         f"{date_text}"
     )
 
-    print("")
-    print(
-        f"درخواست FIRMS:"
-    )
-    print(
-        f"منبع: {source}"
-    )
-    print(
-        f"شروع: {date_text}"
-    )
 
     response = requests.get(
         url,
         timeout=TIMEOUT
     )
 
+
     if response.status_code != 200:
 
         print(
+            f"{source} | "
             f"HTTP {response.status_code}"
         )
 
@@ -104,14 +380,14 @@ def download_period(source, start_date):
 
 
     if not text:
+
         return []
 
 
-    # اگر FIRMS به‌جای CSV خطا برگرداند
     if text.startswith("{"):
 
         print(
-            "پاسخ JSON/خطا دریافت شد:"
+            f"{source} | پاسخ غیر CSV"
         )
 
         print(
@@ -121,12 +397,32 @@ def download_period(source, start_date):
         return []
 
 
+    return text
+
+
+# ============================================================
+# READ CSV AND FILTER WITH FARS BOUNDARY
+# ============================================================
+
+def read_fires(
+    csv_text,
+    source
+):
+
+    if not csv_text:
+
+        return []
+
+
     reader = csv.DictReader(
-        io.StringIO(text)
+        io.StringIO(csv_text)
     )
 
 
     fires = []
+
+    box_count = 0
+    fars_count = 0
 
 
     for row in reader:
@@ -150,6 +446,10 @@ def download_period(source, start_date):
             continue
 
 
+        # ----------------------------------------------------
+        # Bounding Box
+        # ----------------------------------------------------
+
         if not (
             SOUTH <= lat <= NORTH
             and
@@ -159,66 +459,115 @@ def download_period(source, start_date):
             continue
 
 
-        fires.append({
+        box_count += 1
 
-            "latitude":
-                lat,
 
-            "longitude":
-                lon,
+        # ----------------------------------------------------
+        # مرز واقعی فارس
+        # ----------------------------------------------------
 
-            "acq_date":
-                row.get(
-                    "acq_date",
-                    ""
-                ),
+        if not point_inside_fars(
+            lon,
+            lat
+        ):
 
-            "acq_time":
-                row.get(
-                    "acq_time",
-                    ""
-                ),
+            continue
 
-            "satellite":
-                row.get(
-                    "satellite",
-                    ""
-                ),
 
-            "instrument":
-                row.get(
-                    "instrument",
-                    ""
-                ),
+        fars_count += 1
 
-            "confidence":
-                row.get(
-                    "confidence",
-                    ""
-                ),
 
-            "frp":
-                row.get(
-                    "frp",
-                    ""
-                ),
+        fires.append(
 
-            "daynight":
-                row.get(
-                    "daynight",
-                    ""
-                ),
+            {
 
-            "source":
-                source
-        })
+                "latitude":
+                    lat,
+
+                "longitude":
+                    lon,
+
+                "acq_date":
+                    row.get(
+                        "acq_date",
+                        ""
+                    ),
+
+                "acq_time":
+                    row.get(
+                        "acq_time",
+                        ""
+                    ),
+
+                "satellite":
+                    row.get(
+                        "satellite",
+                        ""
+                    ),
+
+                "instrument":
+                    row.get(
+                        "instrument",
+                        ""
+                    ),
+
+                "confidence":
+                    row.get(
+                        "confidence",
+                        ""
+                    ),
+
+                "frp":
+                    row.get(
+                        "frp",
+                        ""
+                    ),
+
+                "daynight":
+                    row.get(
+                        "daynight",
+                        ""
+                    ),
+
+                "source":
+                    source
+            }
+        )
+
+
+    print(
+        f"{source} | داخل Bounding Box: "
+        f"{box_count} | داخل مرز فارس: "
+        f"{fars_count}"
+    )
 
 
     return fires
 
 
 # ============================================================
-# COLLECT
+# SORT
+# ============================================================
+
+def sort_key(
+    fire
+):
+
+    try:
+
+        return datetime.strptime(
+            f"{fire.get('acq_date', '')} "
+            f"{str(fire.get('acq_time', '')).zfill(4)}",
+            "%Y-%m-%d %H%M"
+        )
+
+    except Exception:
+
+        return datetime.min
+
+
+# ============================================================
+# COLLECT HISTORICAL FIRES
 # ============================================================
 
 all_fires = []
@@ -229,10 +578,12 @@ current_date = START_DATE
 while current_date < END_DATE:
 
     period_end = min(
+
         current_date
         + timedelta(
             days=DAY_RANGE - 1
         ),
+
         END_DATE
         - timedelta(
             days=1
@@ -259,15 +610,15 @@ while current_date < END_DATE:
 
     for source in SOURCES:
 
-        fires = download_period(
+        text = download_period(
             source,
             current_date
         )
 
 
-        print(
-            f"{source}: "
-            f"{len(fires)} رکورد"
+        fires = read_fires(
+            text,
+            source
         )
 
 
@@ -285,21 +636,6 @@ while current_date < END_DATE:
 # SORT
 # ============================================================
 
-def sort_key(fire):
-
-    try:
-
-        return datetime.strptime(
-            f"{fire.get('acq_date', '')} "
-            f"{str(fire.get('acq_time', '')).zfill(4)}",
-            "%Y-%m-%d %H%M"
-        )
-
-    except Exception:
-
-        return datetime.min
-
-
 all_fires.sort(
     key=sort_key,
     reverse=True
@@ -307,7 +643,7 @@ all_fires.sort(
 
 
 # ============================================================
-# REMOVE DUPLICATES
+# REMOVE EXACT DUPLICATES
 # ============================================================
 
 unique_fires = []
@@ -361,6 +697,16 @@ for fire in all_fires:
 
 
 # ============================================================
+# SORT FINAL
+# ============================================================
+
+unique_fires.sort(
+    key=sort_key,
+    reverse=True
+)
+
+
+# ============================================================
 # GROUP BY DATE
 # ============================================================
 
@@ -369,19 +715,22 @@ date_summary = {}
 
 for fire in unique_fires:
 
-    date = fire.get(
+    date_value = fire.get(
         "acq_date",
         ""
     )
 
 
-    if not date:
+    if not date_value:
+
         continue
 
 
-    date_summary[date] = (
+    date_summary[
+        date_value
+    ] = (
         date_summary.get(
-            date,
+            date_value,
             0
         )
         + 1
@@ -389,7 +738,7 @@ for fire in unique_fires:
 
 
 # ============================================================
-# SAVE
+# RESULT
 # ============================================================
 
 result = {
@@ -413,22 +762,23 @@ result = {
             ).strftime(
                 "%Y-%m-%d"
             )
-
     },
 
     "area": {
 
-        "west":
+        "type":
+            "Fars Province",
+
+        "bounding_box": [
+
             WEST,
-
-        "south":
             SOUTH,
-
-        "east":
             EAST,
-
-        "north":
             NORTH
+        ],
+
+        "boundary_file":
+            BOUNDARY_FILE
 
     },
 
@@ -452,6 +802,10 @@ result = {
 }
 
 
+# ============================================================
+# SAVE
+# ============================================================
+
 with open(
     OUTPUT_FILE,
     "w",
@@ -467,7 +821,7 @@ with open(
 
 
 # ============================================================
-# FINAL
+# FINAL REPORT
 # ============================================================
 
 print("")
@@ -476,23 +830,27 @@ print(
 )
 
 print(
-    "آرشیو تاریخی حریق 2026 آماده شد"
+    "آرشیو واقعی حریق‌های داخل فارس آماده شد"
 )
 
 print(
-    f"رکورد خام: {len(all_fires)}"
+    f"رکورد خام داخل فارس: "
+    f"{len(all_fires)}"
 )
 
 print(
-    f"رکورد یکتا: {len(unique_fires)}"
+    f"رکورد یکتا: "
+    f"{len(unique_fires)}"
 )
 
 print(
-    f"روزهای دارای حریق: {len(date_summary)}"
+    f"روزهای دارای حریق: "
+    f"{len(date_summary)}"
 )
 
 print(
-    f"خروجی: {OUTPUT_FILE}"
+    f"خروجی: "
+    f"{OUTPUT_FILE}"
 )
 
 print(
