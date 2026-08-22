@@ -1,0 +1,17 @@
+{
+  "status": "WAITING_FOR_AFTER_IMAGE",
+  "message": "تصویر Sentinel-2 بعد از حریق هنوز موجود نیست.",
+  "fire": {
+    "date": "2026-08-22",
+    "latitude": 28.68269,
+    "longitude": 52.09232
+  },
+  "before": {
+    "date": "2026-08-21T07:06:21",
+    "tile_count": 2
+  },
+  "after_search": {
+    "start": "2026-08-23",
+    "end": "2026-08-27"
+  }
+}
