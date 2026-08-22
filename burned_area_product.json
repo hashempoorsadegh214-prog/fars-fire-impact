@@ -1,0 +1,199 @@
+{
+  "status": "PRODUCT_FOUND",
+  "fire": {
+    "date": "2026-08-22",
+    "latitude": 28.68074,
+    "longitude": 52.09113
+  },
+  "product": {
+    "@odata.mediaContentType": "application/tiff",
+    "Id": "63ba7927-bad5-44d2-9fe8-038f5aa088dc",
+    "Name": "c_gls_BA300-NRT_202412070000_GLOBE_S3_V4.0.1_cog",
+    "ContentType": "application/tiff",
+    "ContentLength": 188072405,
+    "OriginDate": "2025-10-10T08:06:40.000000Z",
+    "PublicationDate": "2025-10-10T08:08:04.331385Z",
+    "ModificationDate": "2025-10-10T08:08:04.331385Z",
+    "Online": true,
+    "EvictionDate": "9999-12-31T23:59:59.999999Z",
+    "S3Path": "/eodata/CLMS/bio-geophysical/burnt_area/ba_global_300m_daily_v4/2024/12/07/c_gls_BA300-NRT_202412070000_GLOBE_S3_V4.0.1_cog",
+    "Checksum": [
+      {
+        "Value": "705fd39bc3533de476ac331e1e59a372",
+        "Algorithm": "MD5",
+        "ChecksumDate": "2025-10-10T08:08:02.717449Z"
+      },
+      {
+        "Value": "56f21e62e8268de7706f9495416c39e8329317af6ac3e603aca6ffc2d3c66c34",
+        "Algorithm": "BLAKE3",
+        "ChecksumDate": "2025-10-10T08:08:02.922541Z"
+      }
+    ],
+    "ContentDate": {
+      "Start": "2024-12-07T00:00:00.000000Z",
+      "End": "2024-12-07T23:59:59.999999Z"
+    },
+    "Footprint": "geography'SRID=4326;POLYGON ((-180.0014881 -59.9985119, -180.0014881 80.0014881, 179.9985119 80.0014881, 179.9985119 -59.9985119, -180.0014881 -59.9985119))'",
+    "GeoFootprint": {
+      "type": "Polygon",
+      "coordinates": [
+        [
+          [
+            -180.0014881,
+            -59.9985119
+          ],
+          [
+            -180.0014881,
+            80.0014881
+          ],
+          [
+            179.9985119,
+            80.0014881
+          ],
+          [
+            179.9985119,
+            -59.9985119
+          ],
+          [
+            -180.0014881,
+            -59.9985119
+          ]
+        ]
+      ]
+    },
+    "Attributes": [
+      {
+        "@odata.type": "#OData.CSC.StringAttribute",
+        "Name": "component",
+        "Value": "bio-geophysical",
+        "ValueType": "String"
+      },
+      {
+        "@odata.type": "#OData.CSC.StringAttribute",
+        "Name": "gridLabel",
+        "Value": "300m",
+        "ValueType": "String"
+      },
+      {
+        "@odata.type": "#OData.CSC.StringAttribute",
+        "Name": "fileFormat",
+        "Value": "cog",
+        "ValueType": "String"
+      },
+      {
+        "@odata.type": "#OData.CSC.DateTimeOffsetAttribute",
+        "Name": "nominalDate",
+        "Value": "2024-12-07T00:00:00.000000Z",
+        "ValueType": "DateTimeOffset"
+      },
+      {
+        "@odata.type": "#OData.CSC.StringAttribute",
+        "Name": "datasetAlias",
+        "Value": "ba_global_300m_daily",
+        "ValueType": "String"
+      },
+      {
+        "@odata.type": "#OData.CSC.StringAttribute",
+        "Name": "areaOfInterest",
+        "Value": "global",
+        "ValueType": "String"
+      },
+      {
+        "@odata.type": "#OData.CSC.StringAttribute",
+        "Name": "collectionName",
+        "Value": "CLMS",
+        "ValueType": "String"
+      },
+      {
+        "@odata.type": "#OData.CSC.IntegerAttribute",
+        "Name": "datasetVersion",
+        "Value": 4,
+        "ValueType": "Integer"
+      },
+      {
+        "@odata.type": "#OData.CSC.StringAttribute",
+        "Name": "productVersion",
+        "Value": "v4.0.1",
+        "ValueType": "String"
+      },
+      {
+        "@odata.type": "#OData.CSC.StringAttribute",
+        "Name": "platformAcronym",
+        "Value": "unspecified",
+        "ValueType": "String"
+      },
+      {
+        "@odata.type": "#OData.CSC.StringAttribute",
+        "Name": "datasetShortName",
+        "Value": "ba",
+        "ValueType": "String"
+      },
+      {
+        "@odata.type": "#OData.CSC.StringAttribute",
+        "Name": "missionShortName",
+        "Value": "SENTINEL3",
+        "ValueType": "String"
+      },
+      {
+        "@odata.type": "#OData.CSC.StringAttribute",
+        "Name": "processingCenter",
+        "Value": "VITO",
+        "ValueType": "String"
+      },
+      {
+        "@odata.type": "#OData.CSC.StringAttribute",
+        "Name": "datasetIdentifier",
+        "Value": "ba_global_300m_daily_v4",
+        "ValueType": "String"
+      },
+      {
+        "@odata.type": "#OData.CSC.IntegerAttribute",
+        "Name": "metricGridSpacing",
+        "Value": 300,
+        "ValueType": "Integer"
+      },
+      {
+        "@odata.type": "#OData.CSC.StringAttribute",
+        "Name": "platformShortName",
+        "Value": "unspecified",
+        "ValueType": "String"
+      },
+      {
+        "@odata.type": "#OData.CSC.StringAttribute",
+        "Name": "temporalRepeatRate",
+        "Value": "daily",
+        "ValueType": "String"
+      },
+      {
+        "@odata.type": "#OData.CSC.StringAttribute",
+        "Name": "instrumentShortName",
+        "Value": "OLCI,SLSTR",
+        "ValueType": "String"
+      },
+      {
+        "@odata.type": "#OData.CSC.DateTimeOffsetAttribute",
+        "Name": "productDeliveryDate",
+        "Value": "2025-10-10T08:08:00.383000Z",
+        "ValueType": "DateTimeOffset"
+      },
+      {
+        "@odata.type": "#OData.CSC.StringAttribute",
+        "Name": "productType",
+        "Value": "burnt_area",
+        "ValueType": "String"
+      },
+      {
+        "@odata.type": "#OData.CSC.DateTimeOffsetAttribute",
+        "Name": "beginningDateTime",
+        "Value": "2024-12-07T00:00:00.000000Z",
+        "ValueType": "DateTimeOffset"
+      },
+      {
+        "@odata.type": "#OData.CSC.DateTimeOffsetAttribute",
+        "Name": "endingDateTime",
+        "Value": "2024-12-07T23:59:59.999999Z",
+        "ValueType": "DateTimeOffset"
+      }
+    ]
+  }
+}
