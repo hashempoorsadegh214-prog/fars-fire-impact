@@ -2,10 +2,9 @@ import csv
 import io
 import json
 import os
-import time
 from datetime import datetime, timedelta
-from urllib.request import urlopen
-from urllib.error import HTTPError, URLError
+
+import requests
 
 
 # ============================================================
@@ -16,7 +15,6 @@ MAP_KEY = os.environ.get("FIRMS_MAP_KEY")
 
 OUTPUT_FILE = "fire_archive_2026.json"
 
-# محدوده استان فارس
 WEST = 50.0
 SOUTH = 27.0
 EAST = 54.5
@@ -24,57 +22,98 @@ NORTH = 31.5
 
 AREA = f"{WEST},{SOUTH},{EAST},{NORTH}"
 
-# آرشیو موردنظر
-START_DATE = datetime(
-    2026,
-    1,
-    1
-)
+START_DATE = datetime(2026, 1, 1)
+END_DATE = datetime(2026, 8, 23)   # پایان انحصاری
 
-# پایان انحصاری
-# یعنی تا پایان 22 August 2026
-END_DATE = datetime(
-    2026,
-    8,
-    23
-)
-
-# FIRMS حداکثر 5 روز در هر درخواست
 DAY_RANGE = 5
 
-# داده تاریخی استاندارد + داده نزدیک به زمان واقعی
+# فقط منابع تاریخی استاندارد
 SOURCES = [
-
     "VIIRS_SNPP_SP",
     "VIIRS_NOAA20_SP",
     "VIIRS_NOAA21_SP",
-
-    "VIIRS_SNPP_NRT",
-    "VIIRS_NOAA20_NRT",
-    "VIIRS_NOAA21_NRT"
-
 ]
 
-MAX_RETRIES = 3
-RETRY_DELAY = 5
+BASE_URL = "https://firms.modaps.eosdis.nasa.gov"
+
+TIMEOUT = 120
 
 
 # ============================================================
-# CHECK MAP KEY
+# CHECK KEY
 # ============================================================
 
 if not MAP_KEY:
-
     raise RuntimeError(
-        "FIRMS_MAP_KEY در GitHub Secrets پیدا نشد."
+        "FIRMS_MAP_KEY در GitHub Secrets وجود ندارد."
     )
 
 
 # ============================================================
-# FIRMS REQUEST
+# DATA AVAILABILITY
 # ============================================================
 
-def get_firms_data(
+def get_availability():
+
+    url = (
+        f"{BASE_URL}/api/data_availability/csv/"
+        f"{MAP_KEY}/ALL"
+    )
+
+    response = requests.get(
+        url,
+        timeout=TIMEOUT
+    )
+
+    if response.status_code != 200:
+        raise RuntimeError(
+            "خطا در data_availability:\n"
+            f"HTTP {response.status_code}\n"
+            f"{response.text}"
+        )
+
+    availability = {}
+
+    reader = csv.DictReader(
+        io.StringIO(response.text)
+    )
+
+    for row in reader:
+
+        source = row.get("data_id")
+        min_date = row.get("min_date")
+        max_date = row.get("max_date")
+
+        if not source or not min_date or not max_date:
+            continue
+
+        try:
+            min_dt = datetime.strptime(
+                min_date[:10],
+                "%Y-%m-%d"
+            )
+
+            max_dt = datetime.strptime(
+                max_date[:10],
+                "%Y-%m-%d"
+            )
+
+        except ValueError:
+            continue
+
+        availability[source] = {
+            "min": min_dt,
+            "max": max_dt
+        }
+
+    return availability
+
+
+# ============================================================
+# FIRMS AREA REQUEST
+# ============================================================
+
+def get_fires(
     source,
     start_date
 ):
@@ -84,8 +123,7 @@ def get_firms_data(
     )
 
     url = (
-        "https://firms.modaps.eosdis.nasa.gov/"
-        "api/area/csv/"
+        f"{BASE_URL}/api/area/csv/"
         f"{MAP_KEY}/"
         f"{source}/"
         f"{AREA}/"
@@ -93,425 +131,288 @@ def get_firms_data(
         f"{date_text}"
     )
 
-    for attempt in range(
-        1,
-        MAX_RETRIES + 1
-    ):
-
-        try:
-
-            print(
-                f"FIRMS | {source} | "
-                f"{date_text} | "
-                f"تلاش {attempt}/{MAX_RETRIES}"
-            )
-
-            with urlopen(
-                url,
-                timeout=90
-            ) as response:
-
-                return response.read().decode(
-                    "utf-8"
-                )
-
-
-        except HTTPError as error:
-
-            print(
-                f"HTTP {error.code}"
-            )
-
-
-        except URLError as error:
-
-            print(
-                f"خطای اتصال: {error.reason}"
-            )
-
-
-        except Exception as error:
-
-            print(
-                f"خطا: {error}"
-            )
-
-
-        if attempt < MAX_RETRIES:
-
-            time.sleep(
-                RETRY_DELAY
-            )
-
-
-    return None
-
-
-# ============================================================
-# READ FIRMS CSV
-# ============================================================
-
-def read_fires(
-    csv_text,
-    source
-):
-
-    if not csv_text:
-
-        return []
-
-
-    results = []
-
-
-    reader = csv.DictReader(
-        io.StringIO(csv_text)
+    response = requests.get(
+        url,
+        timeout=TIMEOUT
     )
 
+    if response.status_code != 200:
+        print(
+            f"{source} | HTTP {response.status_code}"
+        )
+        return []
+
+    reader = csv.DictReader(
+        io.StringIO(response.text)
+    )
+
+    fires = []
 
     for row in reader:
 
         try:
-
-            latitude = float(
+            lat = float(
                 row["latitude"]
             )
 
-            longitude = float(
+            lon = float(
                 row["longitude"]
             )
-
 
         except (
             ValueError,
             TypeError,
             KeyError
         ):
-
             continue
-
-
-        # --------------------------------------------
-        # محدود کردن به فارس
-        # --------------------------------------------
 
         if not (
-            SOUTH <= latitude <= NORTH
+            SOUTH <= lat <= NORTH
             and
-            WEST <= longitude <= EAST
+            WEST <= lon <= EAST
         ):
-
             continue
 
-
-        results.append({
-
-            "latitude":
-                latitude,
-
-            "longitude":
-                longitude,
-
-            "acq_date":
-                row.get(
-                    "acq_date",
-                    ""
-                ),
-
-            "acq_time":
-                row.get(
-                    "acq_time",
-                    ""
-                ),
-
-            "satellite":
-                row.get(
-                    "satellite",
-                    ""
-                ),
-
-            "instrument":
-                row.get(
-                    "instrument",
-                    ""
-                ),
-
-            "confidence":
-                row.get(
-                    "confidence",
-                    ""
-                ),
-
-            "frp":
-                row.get(
-                    "frp",
-                    ""
-                ),
-
-            "daynight":
-                row.get(
-                    "daynight",
-                    ""
-                ),
-
-            "version":
-                row.get(
-                    "version",
-                    ""
-                ),
-
-            "source":
-                source
-
+        fires.append({
+            "latitude": lat,
+            "longitude": lon,
+            "acq_date": row.get(
+                "acq_date",
+                ""
+            ),
+            "acq_time": row.get(
+                "acq_time",
+                ""
+            ),
+            "satellite": row.get(
+                "satellite",
+                ""
+            ),
+            "instrument": row.get(
+                "instrument",
+                ""
+            ),
+            "confidence": row.get(
+                "confidence",
+                ""
+            ),
+            "frp": row.get(
+                "frp",
+                ""
+            ),
+            "daynight": row.get(
+                "daynight",
+                ""
+            ),
+            "source": source
         })
 
-
-    return results
+    return fires
 
 
 # ============================================================
-# SORT
+# MAIN
 # ============================================================
 
-def fire_sort_key(
-    fire
-):
+print("")
+print("==========================================")
+print("آرشیو تاریخی FIRMS - سال 2026")
+print("==========================================")
 
-    date_text = fire.get(
-        "acq_date",
-        ""
+availability = get_availability()
+
+
+for source in SOURCES:
+
+    if source not in availability:
+
+        print(
+            f"{source}: در دسترس نیست"
+        )
+
+        continue
+
+    info = availability[source]
+
+    print(
+        f"{source}: "
+        f"{info['min'].strftime('%Y-%m-%d')}"
+        " تا "
+        f"{info['max'].strftime('%Y-%m-%d')}"
     )
 
-    time_text = str(
-        fire.get(
-            "acq_time",
-            ""
-        )
-    ).zfill(4)
-
-
-    try:
-
-        return datetime.strptime(
-            f"{date_text} {time_text}",
-            "%Y-%m-%d %H%M"
-        )
-
-
-    except Exception:
-
-        return datetime.min
-
-
-# ============================================================
-# COLLECT HISTORICAL FIRES
-# ============================================================
 
 all_fires = []
 
-current_date = START_DATE
+current = START_DATE
 
 
-while current_date < END_DATE:
+while current < END_DATE:
+
+    period_end = min(
+        current + timedelta(
+            days=DAY_RANGE - 1
+        ),
+        END_DATE - timedelta(
+            days=1
+        )
+    )
 
     print("")
     print(
-        "=========================================="
-    )
-
-    print(
-        "بازه:"
-    )
-
-    print(
-        f"{current_date.strftime('%Y-%m-%d')}"
+        f"بازه: "
+        f"{current.strftime('%Y-%m-%d')}"
         " تا "
-        f"{min("
-            current_date + timedelta(days=DAY_RANGE - 1),
-            END_DATE - timedelta(days=1)
-        ).strftime('%Y-%m-%d')}"
+        f"{period_end.strftime('%Y-%m-%d')}"
     )
-
-    print(
-        "=========================================="
-    )
-
 
     for source in SOURCES:
 
-        csv_text = get_firms_data(
-            source,
-            current_date
-        )
-
-
-        source_fires = read_fires(
-            csv_text,
+        info = availability.get(
             source
         )
 
+        if not info:
+            continue
+
+        if (
+            period_end < info["min"]
+            or
+            current > info["max"]
+        ):
+            print(
+                f"{source}: خارج از بازه داده"
+            )
+            continue
+
+        fires = get_fires(
+            source,
+            current
+        )
 
         print(
-            f"{source}: "
-            f"{len(source_fires)} رکورد"
+            f"{source}: {len(fires)} رکورد"
         )
-
 
         all_fires.extend(
-            source_fires
+            fires
         )
 
-
-    current_date += timedelta(
+    current += timedelta(
         days=DAY_RANGE
     )
 
 
 # ============================================================
-# SORT
+# DEDUPLICATE
 # ============================================================
 
-all_fires.sort(
-    key=fire_sort_key,
-    reverse=True
-)
-
-
-# ============================================================
-# REMOVE DUPLICATES
-# ============================================================
-
-unique_fires = []
-
-seen = set()
+unique = {}
+source_priority = {
+    "VIIRS_SNPP_SP": 1,
+    "VIIRS_NOAA20_SP": 1,
+    "VIIRS_NOAA21_SP": 1,
+}
 
 
 for fire in all_fires:
 
     key = (
-
         round(
             fire["latitude"],
             5
         ),
-
         round(
             fire["longitude"],
             5
         ),
-
-        fire.get(
-            "acq_date",
-            ""
-        ),
-
-        fire.get(
-            "acq_time",
-            ""
-        ),
-
-        fire.get(
-            "satellite",
-            ""
-        )
-
+        fire["acq_date"],
+        fire["acq_time"],
+        fire["satellite"]
     )
 
-
-    if key in seen:
-
-        continue
+    if key not in unique:
+        unique[key] = fire
 
 
-    seen.add(
-        key
-    )
-
-
-    unique_fires.append(
-        fire
-    )
+fires = list(
+    unique.values()
+)
 
 
 # ============================================================
-# GROUP BY DATE
+# SORT NEWEST FIRST
+# ============================================================
+
+def sort_key(fire):
+
+    try:
+        return datetime.strptime(
+            f"{fire['acq_date']} "
+            f"{str(fire['acq_time']).zfill(4)}",
+            "%Y-%m-%d %H%M"
+        )
+
+    except Exception:
+        return datetime.min
+
+
+fires.sort(
+    key=sort_key,
+    reverse=True
+)
+
+
+# ============================================================
+# DATE SUMMARY
 # ============================================================
 
 date_summary = {}
 
+for fire in fires:
 
-for fire in unique_fires:
+    date = fire["acq_date"]
 
-    date_value = fire.get(
-        "acq_date",
-        ""
+    date_summary[date] = (
+        date_summary.get(
+            date,
+            0
+        )
+        + 1
     )
 
 
-    if not date_value:
-
-        continue
-
-
-    if date_value not in date_summary:
-
-        date_summary[
-            date_value
-        ] = 0
-
-
-    date_summary[
-        date_value
-    ] += 1
-
-
 # ============================================================
-# RESULT
+# SAVE
 # ============================================================
 
 result = {
-
-    "status":
-        "SUCCESS",
+    "status": "SUCCESS",
 
     "period": {
-
         "start":
             START_DATE.strftime(
                 "%Y-%m-%d"
             ),
-
         "end":
             (
-                END_DATE
-                - timedelta(days=1)
+                END_DATE - timedelta(
+                    days=1
+                )
             ).strftime(
                 "%Y-%m-%d"
             )
-
     },
 
     "area": {
-
-        "west":
-            WEST,
-
-        "south":
-            SOUTH,
-
-        "east":
-            EAST,
-
-        "north":
-            NORTH
-
+        "west": WEST,
+        "south": SOUTH,
+        "east": EAST,
+        "north": NORTH
     },
 
-    "sources":
-        SOURCES,
-
     "count":
-        len(unique_fires),
+        len(fires),
 
     "date_count":
         len(date_summary),
@@ -520,14 +421,9 @@ result = {
         date_summary,
 
     "fires":
-        unique_fires
-
+        fires
 }
 
-
-# ============================================================
-# SAVE
-# ============================================================
 
 with open(
     OUTPUT_FILE,
@@ -543,40 +439,18 @@ with open(
     )
 
 
-# ============================================================
-# FINAL REPORT
-# ============================================================
-
 print("")
+print("==========================================")
 print(
-    "=========================================="
+    f"رکوردهای خام: {len(all_fires)}"
 )
-
 print(
-    "آرشیو تاریخی حریق 2026 آماده شد"
+    f"رکوردهای یکتا: {len(fires)}"
 )
-
 print(
-    f"بازه: "
-    f"{START_DATE.strftime('%Y-%m-%d')}"
-    " تا "
-    f"{(END_DATE - timedelta(days=1)).strftime('%Y-%m-%d')}"
+    f"روزهای دارای حریق: {len(date_summary)}"
 )
-
 print(
-    f"رکوردهای یکتا: "
-    f"{len(unique_fires)}"
+    f"خروجی: {OUTPUT_FILE}"
 )
-
-print(
-    f"روزهای دارای حریق: "
-    f"{len(date_summary)}"
-)
-
-print(
-    f"فایل: {OUTPUT_FILE}"
-)
-
-print(
-    "=========================================="
-)
+print("==========================================")
