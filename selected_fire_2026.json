@@ -1,0 +1,37 @@
+{
+  "status": "SELECTED",
+  "reason": "اولین حریق READY در آرشیو 2026",
+  "fire": {
+    "latitude": 30.03576,
+    "longitude": 50.64047,
+    "acq_date": "2026-01-02",
+    "acq_time": "848",
+    "satellite": "N20",
+    "source": "VIIRS_NOAA20_SP",
+    "frp": "8.41"
+  },
+  "before": {
+    "date": "2026-01-01",
+    "days_from_fire": 1,
+    "tile_count": 1,
+    "tiles": [
+      {
+        "id": "35748f8c-068b-419c-b232-b052da19d463",
+        "name": "S2B_MSIL2A_20260101T072219_N0511_R006_T39RVP_20260101T091726.SAFE",
+        "acquisition": "2026-01-01T07:22:19.024000Z"
+      }
+    ]
+  },
+  "after": {
+    "date": "2026-01-03",
+    "days_from_fire": 1,
+    "tile_count": 1,
+    "tiles": [
+      {
+        "id": "6fee488e-cd1b-4190-a688-c29e29335e19",
+        "name": "S2C_MSIL2A_20260103T071311_N0511_R106_T39RVP_20260103T104312.SAFE",
+        "acquisition": "2026-01-03T07:13:11.025000Z"
+      }
+    ]
+  }
+}
