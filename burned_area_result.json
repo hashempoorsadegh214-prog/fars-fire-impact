@@ -1,17 +1,26 @@
 {
-  "status": "WAITING_FOR_AFTER_IMAGE",
-  "message": "تصویر Sentinel-2 بعد از حریق هنوز موجود نیست.",
+  "status": "SUCCESS",
   "fire": {
-    "date": "2026-08-22",
-    "latitude": 28.68269,
-    "longitude": 52.09232
+    "date": "2026-01-02",
+    "latitude": 30.03576,
+    "longitude": 50.64047
   },
-  "before": {
-    "date": "2026-08-21T07:06:21",
-    "tile_count": 2
+  "sentinel2": {
+    "before_date": "2026-01-01",
+    "after_date": "2026-01-03",
+    "before_tile_count": 1,
+    "after_tile_count": 1
   },
-  "after_search": {
-    "start": "2026-08-23",
-    "end": "2026-08-27"
+  "method": {
+    "index": "NBR",
+    "formula": "NBR = (B8A - B12) / (B8A + B12)",
+    "difference": "dNBR = NBR_before - NBR_after",
+    "threshold": 0.27,
+    "resolution_m": 20
+  },
+  "burned_area": {
+    "pixels": 91,
+    "pixel_area_ha": 0.04,
+    "hectares": 3.64
   }
 }
