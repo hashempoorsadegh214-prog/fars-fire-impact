@@ -1,4 +1,17 @@
 {
-  "status": "WAITING_FOR_BURNED_AREA_MASK",
-  "message": "هنوز burned_area_mask.tif تولید نشده است."
+  "status": "SUCCESS",
+  "burned_area": {
+    "total_ha": 3.64,
+    "inside_fars_ha": 0.0,
+    "inside_protected_areas_ha": 0.0,
+    "inside_hunting_banned_ha": 0.0
+  },
+  "pixel": {
+    "resolution_m": 20.0,
+    "area_ha": 0.04
+  },
+  "projection": {
+    "source_crs": "EPSG:4326",
+    "target_crs": "EPSG:32639"
+  }
 }
