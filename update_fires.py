@@ -2,6 +2,7 @@ import csv
 import io
 import json
 import os
+import time
 from datetime import datetime
 from urllib.request import urlopen
 from urllib.error import HTTPError, URLError
@@ -29,6 +30,9 @@ SOURCES = [
 OUTPUT_FILE = "fires.json"
 BOUNDARY_FILE = "fars.geojson"
 
+MAX_RETRIES = 3
+RETRY_DELAY = 10
+
 
 # ============================================================
 # CHECK MAP KEY
@@ -54,38 +58,47 @@ with open(
 
 
 # ============================================================
-# GET GEOMETRIES FROM GEOJSON
+# GET GEOMETRIES
 # ============================================================
 
 def get_geometries(geojson):
 
     geojson_type = geojson.get("type")
 
-    # حالت FeatureCollection
+    # FeatureCollection
     if geojson_type == "FeatureCollection":
 
         geometries = []
 
-        for feature in geojson.get("features", []):
+        for feature in geojson.get(
+            "features",
+            []
+        ):
 
-            geometry = feature.get("geometry")
+            geometry = feature.get(
+                "geometry"
+            )
 
             if geometry:
-                geometries.append(geometry)
+                geometries.append(
+                    geometry
+                )
 
         return geometries
 
-    # حالت Feature
+    # Feature
     if geojson_type == "Feature":
 
-        geometry = geojson.get("geometry")
+        geometry = geojson.get(
+            "geometry"
+        )
 
         if geometry:
             return [geometry]
 
         return []
 
-    # حالت مستقیم Geometry
+    # Direct Geometry
     if geojson_type in [
         "Polygon",
         "MultiPolygon"
@@ -118,7 +131,11 @@ print(
 # POINT IN RING
 # ============================================================
 
-def point_in_ring(lon, lat, ring):
+def point_in_ring(
+    lon,
+    lat,
+    ring
+):
 
     inside = False
 
@@ -164,13 +181,7 @@ def point_in_polygon(
     if not coordinates:
         return False
 
-    # Polygon:
-    # [
-    #   outer_ring,
-    #   hole_1,
-    #   hole_2
-    # ]
-
+    # Polygon
     if (
         isinstance(coordinates, list)
         and len(coordinates) > 0
@@ -178,10 +189,13 @@ def point_in_polygon(
         and len(coordinates[0]) > 0
         and isinstance(coordinates[0][0], list)
         and len(coordinates[0][0]) > 0
-        and isinstance(coordinates[0][0][0], (int, float))
+        and isinstance(
+            coordinates[0][0][0],
+            (int, float)
+        )
     ):
 
-        # بیرون از پوسته اصلی
+        # پوسته بیرونی
         if not point_in_ring(
             lon,
             lat,
@@ -189,7 +203,7 @@ def point_in_polygon(
         ):
             return False
 
-        # بررسی سوراخ‌های داخلی
+        # سوراخ‌های داخلی
         for hole in coordinates[1:]:
 
             if point_in_ring(
@@ -268,7 +282,7 @@ def point_inside_fars(
 
 
 # ============================================================
-# GET FIRMS DATA
+# GET FIRMS DATA WITH RETRY
 # ============================================================
 
 def get_firms_data(source):
@@ -282,34 +296,63 @@ def get_firms_data(source):
         "1"
     )
 
-    print(
-        f"دریافت داده {source} ..."
-    )
+    for attempt in range(
+        1,
+        MAX_RETRIES + 1
+    ):
 
-    try:
+        print(
+            f"درخواست FIRMS برای {source} "
+            f"(تلاش {attempt}/{MAX_RETRIES})"
+        )
 
-        with urlopen(
-            url,
-            timeout=60
-        ) as response:
+        try:
 
-            return response.read().decode(
-                "utf-8"
+            with urlopen(
+                url,
+                timeout=90
+            ) as response:
+
+                return response.read().decode(
+                    "utf-8"
+                )
+
+        except HTTPError as error:
+
+            print(
+                f"خطای HTTP برای {source}: "
+                f"{error.code}"
             )
 
-    except HTTPError as error:
+        except URLError as error:
 
-        raise RuntimeError(
-            f"FIRMS HTTP Error "
-            f"{error.code}: {source}"
-        )
+            print(
+                f"خطای شبکه برای {source}: "
+                f"{error.reason}"
+            )
 
-    except URLError as error:
+        except OSError as error:
 
-        raise RuntimeError(
-            f"خطا در اتصال به FIRMS: "
-            f"{error.reason}"
-        )
+            print(
+                f"خطای شبکه سیستم برای {source}: "
+                f"{error}"
+            )
+
+        if attempt < MAX_RETRIES:
+
+            print(
+                f"{RETRY_DELAY} ثانیه صبر می‌کنیم..."
+            )
+
+            time.sleep(
+                RETRY_DELAY
+            )
+
+    print(
+        f"داده {source} در این اجرا در دسترس نبود."
+    )
+
+    return None
 
 
 # ============================================================
@@ -318,6 +361,10 @@ def get_firms_data(source):
 
 fires = []
 
+successful_sources = []
+
+failed_sources = []
+
 
 for source in SOURCES:
 
@@ -325,11 +372,42 @@ for source in SOURCES:
         source
     )
 
-    reader = csv.DictReader(
-        io.StringIO(csv_text)
+    if csv_text is None:
+
+        failed_sources.append(
+            source
+        )
+
+        continue
+
+
+    successful_sources.append(
+        source
     )
 
+
+    try:
+
+        reader = csv.DictReader(
+            io.StringIO(csv_text)
+        )
+
+    except Exception as error:
+
+        print(
+            f"خطا در خواندن CSV "
+            f"{source}: {error}"
+        )
+
+        failed_sources.append(
+            source
+        )
+
+        continue
+
+
     source_count = 0
+
 
     for row in reader:
 
@@ -345,13 +423,14 @@ for source in SOURCES:
 
         except (
             ValueError,
-            KeyError
+            KeyError,
+            TypeError
         ):
 
             continue
 
 
-        # فقط نقاط داخل فارس
+        # فقط حریق‌های داخل فارس
         if not point_inside_fars(
             lon,
             lat
@@ -373,9 +452,9 @@ for source in SOURCES:
         )
 
 
-        # ----------------------------------------------------
+        # ====================================================
         # UTC TIME
-        # ----------------------------------------------------
+        # ====================================================
 
         try:
 
@@ -399,6 +478,10 @@ for source in SOURCES:
                 f"{acq_time}"
             )
 
+
+        # ====================================================
+        # FIRE RECORD
+        # ====================================================
 
         fires.append(
             {
@@ -462,6 +545,70 @@ for source in SOURCES:
 
 
 # ============================================================
+# IF NO SOURCE WAS AVAILABLE
+# ============================================================
+
+if not successful_sources:
+
+    print("")
+    print(
+        "هیچ‌یک از سرویس‌های FIRMS "
+        "در این اجرا در دسترس نبودند."
+    )
+
+    if os.path.exists(
+        OUTPUT_FILE
+    ):
+
+        print(
+            "فایل fires.json قبلی حفظ می‌شود."
+        )
+
+        print(
+            "Workflow بدون خطای اطلاعاتی "
+            "پایان می‌یابد."
+        )
+
+        raise SystemExit(0)
+
+    else:
+
+        print(
+            "فایل قبلی fires.json وجود ندارد."
+        )
+
+        output = {
+
+            "updated_at_utc":
+                datetime.utcnow().strftime(
+                    "%Y-%m-%d %H:%M:%S"
+                ),
+
+            "count": 0,
+
+            "fires": [],
+
+            "status":
+                "FIRMS temporarily unavailable"
+        }
+
+        with open(
+            OUTPUT_FILE,
+            "w",
+            encoding="utf-8"
+        ) as file:
+
+            json.dump(
+                output,
+                file,
+                ensure_ascii=False,
+                indent=2
+            )
+
+        raise SystemExit(0)
+
+
+# ============================================================
 # SORT
 # ============================================================
 
@@ -510,9 +657,12 @@ for fire in fires:
     )
 
     if key in seen:
+
         continue
 
-    seen.add(key)
+    seen.add(
+        key
+    )
 
     unique_fires.append(
         fire
@@ -532,6 +682,12 @@ output = {
 
     "count":
         len(unique_fires),
+
+    "successful_sources":
+        successful_sources,
+
+    "failed_sources":
+        failed_sources,
 
     "fires":
         unique_fires
@@ -564,6 +720,16 @@ print(
 print(
     f"تعداد کل حریق‌های فارس: "
     f"{len(unique_fires)}"
+)
+
+print(
+    f"منابع موفق: "
+    f"{', '.join(successful_sources) if successful_sources else 'هیچ‌کدام'}"
+)
+
+print(
+    f"منابع ناموفق: "
+    f"{', '.join(failed_sources) if failed_sources else 'هیچ‌کدام'}"
 )
 
 print(
