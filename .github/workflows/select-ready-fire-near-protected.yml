@@ -1,0 +1,44 @@
+name: Select Ready Fire Near Protected Area
+
+on:
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  select-protected-fire:
+
+    runs-on: ubuntu-latest
+
+    steps:
+
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Setup Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+
+      - name: Run selector
+        run: |
+          python select_ready_fire_near_protected.py
+
+      - name: Save selected fire
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+
+          git add selected_protected_fire_2026.json
+
+          if git diff --cached --quiet; then
+            echo "No changes."
+            exit 0
+          fi
+
+          git commit -m "Select protected ready fire"
+
+          git pull --rebase origin main
+
+          git push origin main
