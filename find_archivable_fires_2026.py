@@ -1,13 +1,13 @@
 import json
-from datetime import datetime
+from datetime import datetime, timedelta
 
 
 # ============================================================
 # SETTINGS
 # ============================================================
 
-FIRES_FILE = "fires.json"
-ARCHIVE_FILE = "sentinel2_archive_2026.json"
+FIRE_ARCHIVE = "fire_archive_2026.json"
+S2_ARCHIVE = "sentinel2_archive_2026.json"
 
 OUTPUT_FILE = "archivable_fires_2026.json"
 
@@ -16,46 +16,49 @@ AFTER_DAYS = 5
 
 
 # ============================================================
-# LOAD DATA
+# LOAD FILES
 # ============================================================
 
 with open(
-    FIRES_FILE,
+    FIRE_ARCHIVE,
     "r",
     encoding="utf-8"
 ) as file:
-    fires_data = json.load(file)
+
+    fire_data = json.load(file)
 
 
 with open(
-    ARCHIVE_FILE,
+    S2_ARCHIVE,
     "r",
     encoding="utf-8"
 ) as file:
-    archive_data = json.load(file)
+
+    s2_data = json.load(file)
 
 
-fires = fires_data.get(
+fires = fire_data.get(
     "fires",
     []
 )
 
-acquisitions = archive_data.get(
-    "acquisitions",
+products = s2_data.get(
+    "products",
     []
 )
 
 
 if not fires:
+
     raise RuntimeError(
-        "fires.json حاوی حریق نیست."
+        "fire_archive_2026.json خالی است."
     )
 
 
-if not acquisitions:
+if not products:
+
     raise RuntimeError(
-        "sentinel2_archive_2026.json "
-        "حاوی برداشت Sentinel-2 نیست."
+        "sentinel2_archive_2026.json خالی است."
     )
 
 
@@ -82,11 +85,11 @@ def point_in_ring(
             ((yi > lat) != (yj > lat))
             and
             (
-                lon <
+                lon
+                <
                 (
                     (xj - xi)
-                    *
-                    (lat - yi)
+                    * (lat - yi)
                     /
                     ((yj - yi) or 1e-15)
                     + xi
@@ -108,24 +111,26 @@ def point_in_ring(
 def point_in_polygon(
     lon,
     lat,
-    coordinates
+    polygon
 ):
 
-    if not coordinates:
+    if not polygon:
+
         return False
 
 
+    # حلقه بیرونی
     if not point_in_ring(
         lon,
         lat,
-        coordinates[0]
+        polygon[0]
     ):
 
         return False
 
 
-    # holes
-    for hole in coordinates[1:]:
+    # حفره‌ها
+    for hole in polygon[1:]:
 
         if point_in_ring(
             lon,
@@ -150,6 +155,7 @@ def point_in_geometry(
 ):
 
     if not geometry:
+
         return False
 
 
@@ -190,262 +196,263 @@ def point_in_geometry(
 
 
 # ============================================================
-# PREPARE SENTINEL-2 ACQUISITIONS
+# PREPARE SENTINEL-2 PRODUCTS
 # ============================================================
 
-sentinel_acquisitions = []
+s2_products = []
 
 
-for acquisition in acquisitions:
+for product in products:
 
-    acquisition_time = acquisition.get(
-        "acquisition"
+    name = product.get(
+        "Name",
+        ""
     )
 
-    if not acquisition_time:
+    acquisition = (
+        product
+        .get(
+            "ContentDate",
+            {}
+        )
+        .get(
+            "Start",
+            ""
+        )
+    )
+
+    footprint = product.get(
+        "GeoFootprint"
+    )
+
+
+    if not acquisition:
+
         continue
 
 
     try:
 
         acquisition_dt = datetime.fromisoformat(
-            acquisition_time.replace(
+            acquisition.replace(
                 "Z",
                 "+00:00"
             )
         )
+
 
     except Exception:
 
         continue
 
 
-    sentinel_acquisitions.append(
+    if not footprint:
+
+        continue
+
+
+    s2_products.append(
         {
+
+            "id":
+                product.get(
+                    "Id",
+                    ""
+                ),
+
+            "name":
+                name,
+
+            "s3_path":
+                product.get(
+                    "S3Path",
+                    ""
+                ),
+
             "datetime":
                 acquisition_dt,
 
             "acquisition":
-                acquisition_time,
+                acquisition,
 
-            "tile_count":
-                acquisition.get(
-                    "tile_count",
-                    0
-                ),
+            "footprint":
+                footprint
 
-            "tiles":
-                acquisition.get(
-                    "tiles",
-                    []
-                )
         }
     )
 
 
 # ============================================================
-# FIND PRODUCTS COVERING FIRE POINT
+# GROUP SENTINEL-2 PRODUCTS BY DATE
 # ============================================================
 
-def tiles_covering_fire(
-    fire_lon,
-    fire_lat,
-    acquisition
+products_by_date = {}
+
+
+for product in s2_products:
+
+    date_key = product[
+        "datetime"
+    ].date()
+
+
+    products_by_date.setdefault(
+        date_key,
+        []
+    ).append(
+        product
+    )
+
+
+# ============================================================
+# GET TILES COVERING FIRE POINT
+# ============================================================
+
+def get_covering_tiles(
+    lon,
+    lat,
+    date_value
 ):
 
-    matching_tiles = []
+    result = []
 
 
-    for tile in acquisition.get(
-        "tiles",
+    for product in products_by_date.get(
+        date_value,
         []
     ):
 
-        geofootprint = tile.get(
-            "geofootprint"
-        )
-
-
-        if geofootprint is None:
-
-            # اگر footprint در آرشیو ذخیره نشده،
-            # فعلاً Tile را نگه می‌داریم.
-            matching_tiles.append(
-                tile
-            )
-
-            continue
-
-
         if point_in_geometry(
-            fire_lon,
-            fire_lat,
-            geofootprint
+            lon,
+            lat,
+            product["footprint"]
         ):
 
-            matching_tiles.append(
-                tile
+            result.append(
+                product
             )
 
 
-    return matching_tiles
+    return result
 
 
 # ============================================================
-# FIND BEFORE / AFTER
+# FIND BEST BEFORE / AFTER
 # ============================================================
 
-def find_images_for_fire(
-    fire
+def find_before_after(
+    fire_date,
+    lon,
+    lat
 ):
 
-    fire_date_text = fire.get(
-        "acq_date"
-    )
-
-    if not fire_date_text:
-
-        return None, None
+    before = []
+    after = []
 
 
-    fire_date = datetime.strptime(
-        fire_date_text,
-        "%Y-%m-%d"
-    ).date()
+    for offset in range(
+        1,
+        BEFORE_DAYS + 1
+    ):
 
-
-    fire_lon = float(
-        fire["longitude"]
-    )
-
-    fire_lat = float(
-        fire["latitude"]
-    )
-
-
-    before_candidates = []
-    after_candidates = []
-
-
-    for acquisition in sentinel_acquisitions:
-
-        acquisition_date = (
-            acquisition["datetime"].date()
-        )
-
-
-        difference = (
-            acquisition_date
-            -
+        candidate_date = (
             fire_date
-        ).days
-
-
-        # ----------------------------
-        # BEFORE
-        # ----------------------------
-
-        if (
-            -BEFORE_DAYS
-            <= difference
-            <= -1
-        ):
-
-            tiles = tiles_covering_fire(
-                fire_lon,
-                fire_lat,
-                acquisition
+            - timedelta(
+                days=offset
             )
-
-
-            if tiles:
-
-                before_candidates.append(
-                    {
-                        "difference":
-                            difference,
-
-                        "acquisition":
-                            acquisition[
-                                "acquisition"
-                            ],
-
-                        "tile_count":
-                            len(tiles),
-
-                        "tiles":
-                            tiles
-                    }
-                )
-
-
-        # ----------------------------
-        # AFTER
-        # ----------------------------
-
-        if (
-            1
-            <= difference
-            <= AFTER_DAYS
-        ):
-
-            tiles = tiles_covering_fire(
-                fire_lon,
-                fire_lat,
-                acquisition
-            )
-
-
-            if tiles:
-
-                after_candidates.append(
-                    {
-                        "difference":
-                            difference,
-
-                        "acquisition":
-                            acquisition[
-                                "acquisition"
-                            ],
-
-                        "tile_count":
-                            len(tiles),
-
-                        "tiles":
-                            tiles
-                    }
-                )
-
-
-    # نزدیک‌ترین قبل
-    before = None
-
-    if before_candidates:
-
-        before = min(
-            before_candidates,
-            key=lambda item:
-                abs(
-                    item["difference"]
-                )
         )
 
 
-    # نزدیک‌ترین بعد
-    after = None
-
-    if after_candidates:
-
-        after = min(
-            after_candidates,
-            key=lambda item:
-                abs(
-                    item["difference"]
-                )
+        tiles = get_covering_tiles(
+            lon,
+            lat,
+            candidate_date
         )
 
 
-    return before, after
+        if tiles:
+
+            before.append(
+                {
+
+                    "date":
+                        candidate_date.strftime(
+                            "%Y-%m-%d"
+                        ),
+
+                    "days_from_fire":
+                        offset,
+
+                    "tile_count":
+                        len(tiles),
+
+                    "tiles":
+                        tiles
+
+                }
+            )
+
+
+    for offset in range(
+        1,
+        AFTER_DAYS + 1
+    ):
+
+        candidate_date = (
+            fire_date
+            + timedelta(
+                days=offset
+            )
+        )
+
+
+        tiles = get_covering_tiles(
+            lon,
+            lat,
+            candidate_date
+        )
+
+
+        if tiles:
+
+            after.append(
+                {
+
+                    "date":
+                        candidate_date.strftime(
+                            "%Y-%m-%d"
+                        ),
+
+                    "days_from_fire":
+                        offset,
+
+                    "tile_count":
+                        len(tiles),
+
+                    "tiles":
+                        tiles
+
+                }
+            )
+
+
+    best_before = (
+        before[0]
+        if before
+        else None
+    )
+
+    best_after = (
+        after[0]
+        if after
+        else None
+    )
+
+
+    return (
+        best_before,
+        best_after
+    )
 
 
 # ============================================================
@@ -454,20 +461,65 @@ def find_images_for_fire(
 
 results = []
 
+ready = 0
+waiting = 0
+no_before = 0
+
 
 for index, fire in enumerate(
     fires,
     start=1
 ):
 
-    print("")
-    print(
-        f"بررسی حریق {index}/{len(fires)}"
+    if index % 500 == 0:
+
+        print(
+            f"بررسی {index}/{len(fires)}"
+        )
+
+
+    date_text = fire.get(
+        "acq_date"
     )
 
+    if not date_text:
 
-    before, after = find_images_for_fire(
-        fire
+        continue
+
+
+    try:
+
+        fire_date = datetime.strptime(
+            date_text,
+            "%Y-%m-%d"
+        ).date()
+
+
+    except Exception:
+
+        continue
+
+
+    try:
+
+        lon = float(
+            fire["longitude"]
+        )
+
+        lat = float(
+            fire["latitude"]
+        )
+
+
+    except Exception:
+
+        continue
+
+
+    before, after = find_before_after(
+        fire_date,
+        lon,
+        lat
     )
 
 
@@ -475,53 +527,24 @@ for index, fire in enumerate(
 
         status = "READY"
 
+        ready += 1
+
     elif before:
 
         status = "WAITING_FOR_AFTER_IMAGE"
+
+        waiting += 1
 
     else:
 
         status = "NO_BEFORE_IMAGE"
 
-
-    print(
-        f"تاریخ حریق: "
-        f"{fire.get('acq_date', '-')}"
-    )
-
-    print(
-        f"وضعیت: {status}"
-    )
-
-
-    if before:
-
-        print(
-            f"قبل: "
-            f"{before['acquisition']}"
-        )
-
-        print(
-            f"Tileهای قبل: "
-            f"{before['tile_count']}"
-        )
-
-
-    if after:
-
-        print(
-            f"بعد: "
-            f"{after['acquisition']}"
-        )
-
-        print(
-            f"Tileهای بعد: "
-            f"{after['tile_count']}"
-        )
+        no_before += 1
 
 
     results.append(
         {
+
             "fire":
                 fire,
 
@@ -533,35 +556,9 @@ for index, fire in enumerate(
 
             "after":
                 after
+
         }
     )
-
-
-# ============================================================
-# SUMMARY
-# ============================================================
-
-ready = sum(
-    1
-    for item in results
-    if item["status"] == "READY"
-)
-
-
-waiting = sum(
-    1
-    for item in results
-    if item["status"]
-    == "WAITING_FOR_AFTER_IMAGE"
-)
-
-
-no_before = sum(
-    1
-    for item in results
-    if item["status"]
-    == "NO_BEFORE_IMAGE"
-)
 
 
 # ============================================================
@@ -574,6 +571,7 @@ result = {
         "SUCCESS",
 
     "rules":
+
         {
             "before_days":
                 BEFORE_DAYS,
@@ -583,6 +581,7 @@ result = {
         },
 
     "summary":
+
         {
             "total_fires":
                 len(results),
@@ -626,11 +625,11 @@ print(
 )
 
 print(
-    "تطبیق حریق و Sentinel-2 تمام شد"
+    "تطبیق FIRMS و Sentinel-2 تمام شد"
 )
 
 print(
-    f"کل حریق‌ها: {len(results)}"
+    f"کل رکوردها: {len(results)}"
 )
 
 print(
