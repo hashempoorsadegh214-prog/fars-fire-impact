@@ -1,0 +1,49 @@
+{
+  "status": "SELECTED",
+  "reason": "حریق READY داخل محدوده حفاظتی",
+  "fire": {
+    "latitude": 28.68215,
+    "longitude": 52.08998,
+    "acq_date": "2026-01-04",
+    "acq_time": "2155",
+    "satellite": "N",
+    "source": "VIIRS_SNPP_SP",
+    "frp": "1.85"
+  },
+  "inside_protected_areas": true,
+  "inside_hunting_banned": false,
+  "before": {
+    "date": "2026-01-03",
+    "days_from_fire": 1,
+    "tile_count": 2,
+    "tiles": [
+      {
+        "id": "add4d59a-56f0-40d7-be1e-bda72269a14b",
+        "name": "S2C_MSIL2A_20260103T071311_N0511_R106_T39RXM_20260103T104312.SAFE",
+        "acquisition": "2026-01-03T07:13:11.025000Z"
+      },
+      {
+        "id": "f138217e-0e50-4f93-82ea-96aa546a7dc9",
+        "name": "S2C_MSIL2A_20260103T071311_N0511_R106_T39RWM_20260103T104312.SAFE",
+        "acquisition": "2026-01-03T07:13:11.025000Z"
+      }
+    ]
+  },
+  "after": {
+    "date": "2026-01-08",
+    "days_from_fire": 4,
+    "tile_count": 2,
+    "tiles": [
+      {
+        "id": "4b578780-9cdc-40db-b345-2beba314cfdd",
+        "name": "S2B_MSIL2A_20260108T071159_N0511_R106_T39RXM_20260108T094422.SAFE",
+        "acquisition": "2026-01-08T07:11:59.024000Z"
+      },
+      {
+        "id": "69168128-3973-4379-81cf-6f1aa1c2fe9f",
+        "name": "S2B_MSIL2A_20260108T071159_N0511_R106_T39RWM_20260108T094422.SAFE",
+        "acquisition": "2026-01-08T07:11:59.024000Z"
+      }
+    ]
+  }
+}
