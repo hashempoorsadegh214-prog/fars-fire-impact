@@ -1,0 +1,96 @@
+{
+  "updated_at_utc": "2026-08-22 10:57:58",
+  "count": 6,
+  "successful_sources": [
+    "VIIRS_SNPP_NRT",
+    "VIIRS_NOAA20_NRT",
+    "VIIRS_NOAA21_NRT"
+  ],
+  "failed_sources": [],
+  "fires": [
+    {
+      "latitude": 28.68074,
+      "longitude": 52.09113,
+      "acq_date": "2026-08-22",
+      "acq_time": "848",
+      "acquisition_utc": "2026-08-22 08:48:00",
+      "satellite": "N21",
+      "instrument": "VIIRS",
+      "confidence": "l",
+      "frp": "6.78",
+      "brightness": "340.26",
+      "daynight": "D",
+      "source": "VIIRS_NOAA21_NRT"
+    },
+    {
+      "latitude": 29.20583,
+      "longitude": 52.14796,
+      "acq_date": "2026-08-22",
+      "acq_time": "848",
+      "acquisition_utc": "2026-08-22 08:48:00",
+      "satellite": "N21",
+      "instrument": "VIIRS",
+      "confidence": "n",
+      "frp": "8.57",
+      "brightness": "345.64",
+      "daynight": "D",
+      "source": "VIIRS_NOAA21_NRT"
+    },
+    {
+      "latitude": 29.20683,
+      "longitude": 52.14746,
+      "acq_date": "2026-08-22",
+      "acq_time": "848",
+      "acquisition_utc": "2026-08-22 08:48:00",
+      "satellite": "N21",
+      "instrument": "VIIRS",
+      "confidence": "n",
+      "frp": "10.7",
+      "brightness": "349.89",
+      "daynight": "D",
+      "source": "VIIRS_NOAA21_NRT"
+    },
+    {
+      "latitude": 29.207,
+      "longitude": 52.15247,
+      "acq_date": "2026-08-22",
+      "acq_time": "848",
+      "acquisition_utc": "2026-08-22 08:48:00",
+      "satellite": "N21",
+      "instrument": "VIIRS",
+      "confidence": "n",
+      "frp": "8.57",
+      "brightness": "349.43",
+      "daynight": "D",
+      "source": "VIIRS_NOAA21_NRT"
+    },
+    {
+      "latitude": 29.20801,
+      "longitude": 52.15213,
+      "acq_date": "2026-08-22",
+      "acq_time": "848",
+      "acquisition_utc": "2026-08-22 08:48:00",
+      "satellite": "N21",
+      "instrument": "VIIRS",
+      "confidence": "n",
+      "frp": "10.7",
+      "brightness": "353.04",
+      "daynight": "D",
+      "source": "VIIRS_NOAA21_NRT"
+    },
+    {
+      "latitude": 29.25518,
+      "longitude": 53.12029,
+      "acq_date": "2026-08-22",
+      "acq_time": "848",
+      "acquisition_utc": "2026-08-22 08:48:00",
+      "satellite": "N21",
+      "instrument": "VIIRS",
+      "confidence": "n",
+      "frp": "11.1",
+      "brightness": "352.97",
+      "daynight": "D",
+      "source": "VIIRS_NOAA21_NRT"
+    }
+  ]
+}
