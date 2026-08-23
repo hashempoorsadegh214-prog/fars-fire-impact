@@ -1,0 +1,9 @@
+name = "fars-fire-impact-api"
+main = "src/index.js"
+compatibility_date = "2026-08-23"
+
+[vars]
+ALLOWED_ORIGIN = "https://hashempoorsadegh214-prog.github.io"
+
+[observability]
+enabled = true
