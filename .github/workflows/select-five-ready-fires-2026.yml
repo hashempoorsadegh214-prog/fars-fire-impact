@@ -1,0 +1,44 @@
+name: Select Five Ready Fires 2026
+
+on:
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  select-five-fires:
+
+    runs-on: ubuntu-latest
+
+    steps:
+
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Setup Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+
+      - name: Select five fires
+        run: |
+          python select_five_ready_fires_2026.py
+
+      - name: Save selected fires
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+
+          git add selected_five_ready_fires_2026.json
+
+          if git diff --cached --quiet; then
+            echo "No changes."
+            exit 0
+          fi
+
+          git commit -m "Select five ready fires 2026"
+
+          git pull --rebase origin main
+
+          git push origin main
