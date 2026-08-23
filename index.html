@@ -1,11 +1,19 @@
-
+```html
 <!DOCTYPE html>
 <html lang="fa" dir="rtl">
-<head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-  <title>سامانه پایش و ارزیابی اثر حریق‌های استان فارس</title>
+<head>
+
+  <meta charset="UTF-8">
+
+  <meta
+    name="viewport"
+    content="width=device-width, initial-scale=1.0"
+  >
+
+  <title>
+    سامانه پایش و ارزیابی اثر حریق‌های استان فارس
+  </title>
 
   <link
     rel="stylesheet"
@@ -13,14 +21,17 @@
   >
 
   <style>
+
     * {
       box-sizing: border-box;
     }
 
     html,
     body {
+
       margin: 0;
       padding: 0;
+
       width: 100%;
       height: 100%;
 
@@ -35,23 +46,30 @@
       color: #222;
     }
 
+
     body.dark {
+
       background: #111;
       color: #eee;
     }
 
+
     #app {
+
       width: 100%;
       height: 100%;
+
       display: flex;
       flex-direction: column;
     }
+
 
     /* =====================================================
        HEADER
     ====================================================== */
 
     #header {
+
       height: 76px;
       min-height: 76px;
 
@@ -81,51 +99,82 @@
       overflow: hidden;
     }
 
+
     #header::after {
+
       content: "";
+
       position: absolute;
+
       left: 0;
       right: 0;
       top: 0;
+
       height: 2px;
-      background: rgba(255,255,255,0.8);
+
+      background:
+        rgba(255,255,255,0.8);
     }
 
+
     .header-center {
+
       position: absolute;
+
       top: 50%;
       left: 50%;
-      transform: translate(-50%, -50%);
+
+      transform:
+        translate(-50%, -50%);
 
       text-align: center;
+
       white-space: nowrap;
+
       pointer-events: none;
     }
 
+
     .title-main {
+
       font-size: 22px;
+
       font-weight: bold;
+
       line-height: 1.35;
 
       text-shadow:
         0 1px 2px rgba(0,0,0,0.35);
     }
 
+
     .title-sub {
+
       margin-top: 1px;
-      font-family: Arial, sans-serif;
+
+      font-family:
+        Arial,
+        sans-serif;
+
       direction: ltr;
+
       font-size: 11px;
+
       letter-spacing: 1px;
+
       opacity: 0.95;
     }
 
+
     .header-left {
+
       display: flex;
       align-items: center;
     }
 
+
     .fire-icon {
+
       width: 44px;
       height: 44px;
 
@@ -135,7 +184,10 @@
       align-items: center;
       justify-content: center;
 
-      font-family: Arial, sans-serif;
+      font-family:
+        Arial,
+        sans-serif;
+
       font-size: 24px;
 
       background:
@@ -148,16 +200,21 @@
         inset 0 1px 4px rgba(255,255,255,0.25);
     }
 
+
     .header-buttons {
+
       position: relative;
       z-index: 3;
 
       display: flex;
       align-items: center;
+
       gap: 7px;
     }
 
+
     .header-btn {
+
       border:
         1px solid rgba(255,255,255,0.35);
 
@@ -167,6 +224,7 @@
       color: #fff;
 
       border-radius: 8px;
+
       padding: 8px 12px;
 
       cursor: pointer;
@@ -185,7 +243,9 @@
         transform 0.2s ease;
     }
 
+
     .header-btn:hover {
+
       background:
         rgba(255,255,255,0.18);
 
@@ -193,34 +253,47 @@
         translateY(-1px);
     }
 
+
     /* =====================================================
        MAP
     ====================================================== */
 
     #map {
+
       flex: 1;
+
       width: 100%;
+
       min-height: 0;
-      background: #d9d9d9;
+
+      background:
+        #d9d9d9;
     }
 
+
     .dark-map .leaflet-tile-pane {
+
       filter:
         brightness(0.55)
         contrast(1.05)
         saturate(0.75);
     }
 
+
     .dark-map .leaflet-overlay-pane {
+
       filter:
         brightness(0.9)
         contrast(1.05);
     }
 
+
     .dark-map .leaflet-marker-pane {
+
       filter:
         brightness(1.05);
     }
+
 
     /* =====================================================
        LEAFLET
@@ -230,6 +303,7 @@
     .leaflet-container,
     .leaflet-control-layers,
     .leaflet-popup-content {
+
       font-family:
         "B Nazanin",
         "BNazanin",
@@ -238,38 +312,56 @@
         sans-serif;
     }
 
+
     .leaflet-control-layers {
-      border-radius: 10px !important;
+
+      border-radius:
+        10px !important;
 
       box-shadow:
-        0 2px 12px rgba(0,0,0,0.20) !important;
+        0 2px 12px rgba(0,0,0,0.20)
+        !important;
     }
 
+
     .leaflet-control-layers label {
+
       line-height: 1.8;
     }
 
+
     body.dark .leaflet-control-layers {
+
       background: #202020;
+
       color: #fff;
+
       border-color: #444;
     }
+
 
     body.dark .leaflet-control-zoom a {
+
       background: #222;
+
       color: #fff;
+
       border-color: #444;
     }
 
+
     body.dark .leaflet-control-zoom a:hover {
+
       background: #333;
     }
+
 
     /* =====================================================
        FIRE POPUP
     ====================================================== */
 
     .fire-popup {
+
       min-width: 230px;
 
       font-family:
@@ -282,39 +374,65 @@
       line-height: 1.9;
     }
 
+
     .fire-popup-title {
-      color: #d00000;
+
+      color:
+        #d00000;
+
       font-size: 17px;
-      font-weight: bold;
-      margin-bottom: 6px;
+
+      font-weight:
+        bold;
+
+      margin-bottom:
+        6px;
     }
+
 
     .fire-popup-row {
-      border-bottom: 1px solid #e5e5e5;
-      padding: 3px 0;
+
+      border-bottom:
+        1px solid #e5e5e5;
+
+      padding:
+        3px 0;
     }
 
+
     .fire-popup-row:last-child {
+
       border-bottom: 0;
     }
 
+
     body.dark .fire-popup {
-      color: #eee;
+
+      color:
+        #eee;
     }
+
 
     body.dark .fire-popup-row {
-      border-bottom-color: #444;
+
+      border-bottom-color:
+        #444;
     }
+
 
     body.dark .fire-popup-title {
-      color: #ff5555;
+
+      color:
+        #ff5555;
     }
 
+
     /* =====================================================
-       LATEST FIRE BADGE
+       LATEST FIRE
     ====================================================== */
 
     #latestFireBadge {
+
       position: fixed;
 
       bottom: 18px;
@@ -337,47 +455,78 @@
       border-right:
         5px solid #e00000;
 
-      display: none;
+      display:
+        none;
     }
+
 
     #latestFireBadge.active {
-      display: block;
+
+      display:
+        block;
     }
 
+
     body.dark #latestFireBadge {
+
       background:
         rgba(30,30,30,0.97);
 
-      color: #eee;
+      color:
+        #eee;
     }
+
 
     .latest-title {
-      color: #d00000;
-      font-size: 15px;
-      font-weight: bold;
-      margin-bottom: 4px;
+
+      color:
+        #d00000;
+
+      font-size:
+        15px;
+
+      font-weight:
+        bold;
+
+      margin-bottom:
+        4px;
     }
+
 
     body.dark .latest-title {
-      color: #ff5555;
+
+      color:
+        #ff5555;
     }
 
+
     .latest-value {
-      font-size: 13px;
-      line-height: 1.8;
+
+      font-size:
+        13px;
+
+      line-height:
+        1.8;
     }
+
 
     /* =====================================================
        PANELS
     ====================================================== */
 
     .panel {
-      position: fixed;
 
-      top: 88px;
-      left: 18px;
+      position:
+        fixed;
 
-      width: 340px;
+      top:
+        88px;
+
+      left:
+        18px;
+
+      width:
+        340px;
 
       max-width:
         calc(100vw - 36px);
@@ -385,36 +534,50 @@
       max-height:
         calc(100vh - 106px);
 
-      overflow-y: auto;
+      overflow-y:
+        auto;
 
       background:
         rgba(255,255,255,0.98);
 
-      color: #222;
+      color:
+        #222;
 
-      border-radius: 14px;
+      border-radius:
+        14px;
 
       box-shadow:
         0 8px 30px rgba(0,0,0,0.25);
 
-      z-index: 3000;
+      z-index:
+        3000;
 
-      display: none;
+      display:
+        none;
     }
+
 
     .panel.active {
-      display: block;
+
+      display:
+        block;
     }
 
+
     body.dark .panel {
+
       background:
         rgba(30,30,30,0.98);
 
-      color: #eee;
+      color:
+        #eee;
     }
 
+
     .panel-header {
-      padding: 13px 16px;
+
+      padding:
+        13px 16px;
 
       background:
         linear-gradient(
@@ -423,173 +586,177 @@
           #c40000 100%
         );
 
-      color: #fff;
+      color:
+        #fff;
 
       border-radius:
         14px 14px 0 0;
 
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
+      display:
+        flex;
 
-      font-size: 17px;
-      font-weight: bold;
+      align-items:
+        center;
+
+      justify-content:
+        space-between;
+
+      font-size:
+        17px;
+
+      font-weight:
+        bold;
     }
+
 
     .close-panel {
-      border: 0;
-      background: transparent;
-      color: #fff;
-      font-size: 22px;
-      cursor: pointer;
-      font-family: Arial, sans-serif;
-    }
 
-    .panel-body {
-      padding: 16px;
-      line-height: 2;
-      font-size: 14px;
-    }
+      border:
+        0;
 
-    .panel-body h3 {
-      margin-top: 8px;
-      color: #d00000;
-      font-size: 16px;
-    }
+      background:
+        transparent;
 
-    body.dark .panel-body h3 {
-      color: #ff5555;
-    }
+      color:
+        #fff;
 
-    .panel-body p {
-      margin: 8px 0;
-    }
+      font-size:
+        22px;
 
-    .panel-body ul {
-      margin: 5px 0;
-      padding-right: 20px;
-    }
-
-    /* =====================================================
-       REPORT
-    ====================================================== */
-
-    .report-box {
-      background: #fafafa;
-      border: 1px solid #ddd;
-      border-radius: 10px;
-      padding: 12px;
-      margin-bottom: 12px;
-    }
-
-    body.dark .report-box {
-      background: #222;
-      border-color: #444;
-    }
-
-    .report-title {
-      font-weight: bold;
-      margin-bottom: 8px;
-      color: #c00000;
-    }
-
-    body.dark .report-title {
-      color: #ff5555;
-    }
-
-    .report-action {
-      width: 100%;
-
-      padding: 11px;
-
-      border: 0;
-      border-radius: 9px;
-
-      cursor: pointer;
-
-      color: white;
+      cursor:
+        pointer;
 
       font-family:
-        "B Nazanin",
-        "BNazanin",
-        Tahoma,
         Arial,
         sans-serif;
-
-      font-size: 15px;
-      font-weight: bold;
-
-      margin-top: 8px;
-
-      box-shadow:
-        0 3px 8px rgba(0,0,0,0.18);
     }
 
-    .excel-btn {
-      background:
-        linear-gradient(
-          #20a94b,
-          #087d2d
-        );
+
+    .panel-body {
+
+      padding:
+        16px;
+
+      line-height:
+        2;
+
+      font-size:
+        14px;
     }
 
-    .image-btn {
-      background:
-        linear-gradient(
-          #2878d7,
-          #15529e
-        );
+
+    .panel-body h3 {
+
+      margin-top:
+        8px;
+
+      color:
+        #d00000;
+
+      font-size:
+        16px;
     }
 
-    .report-action:hover {
-      opacity: 0.9;
+
+    body.dark .panel-body h3 {
+
+      color:
+        #ff5555;
     }
+
+
+    .panel-body p {
+
+      margin:
+        8px 0;
+    }
+
+
+    .panel-body ul {
+
+      margin:
+        5px 0;
+
+      padding-right:
+        20px;
+    }
+
 
     /* =====================================================
-       CALCULATION PANEL
+       CALCULATION
     ====================================================== */
 
     .calc-box {
-      background: #fafafa;
+
+      background:
+        #fafafa;
 
       border:
         1px solid #ddd;
 
-      border-radius: 10px;
+      border-radius:
+        10px;
 
-      padding: 12px;
+      padding:
+        12px;
 
-      margin-bottom: 12px;
+      margin-bottom:
+        12px;
     }
+
 
     body.dark .calc-box {
-      background: #222;
-      border-color: #444;
+
+      background:
+        #222;
+
+      border-color:
+        #444;
     }
+
 
     .calc-label {
-      display: block;
-      font-weight: bold;
-      margin-bottom: 6px;
-      color: #c00000;
+
+      display:
+        block;
+
+      font-weight:
+        bold;
+
+      margin-bottom:
+        6px;
+
+      color:
+        #c00000;
     }
+
 
     body.dark .calc-label {
-      color: #ff5555;
+
+      color:
+        #ff5555;
     }
 
-    .calc-select,
-    .calc-date {
-      width: 100%;
 
-      padding: 10px;
+    .calc-select {
 
-      border-radius: 8px;
+      width:
+        100%;
 
-      border: 1px solid #bbb;
+      padding:
+        10px;
 
-      background: #fff;
-      color: #222;
+      border-radius:
+        8px;
+
+      border:
+        1px solid #bbb;
+
+      background:
+        #fff;
+
+      color:
+        #222;
 
       font-family:
         "B Nazanin",
@@ -598,36 +765,63 @@
         Arial,
         sans-serif;
 
-      font-size: 14px;
+      font-size:
+        14px;
     }
 
-    body.dark .calc-select,
-    body.dark .calc-date {
-      background: #333;
-      color: #fff;
-      border-color: #555;
+
+    body.dark .calc-select {
+
+      background:
+        #333;
+
+      color:
+        #fff;
+
+      border-color:
+        #555;
     }
+
 
     .calc-hint {
-      font-size: 12px;
-      color: #666;
-      line-height: 1.8;
-      margin-top: 6px;
+
+      font-size:
+        12px;
+
+      color:
+        #666;
+
+      line-height:
+        1.8;
+
+      margin-top:
+        6px;
     }
+
 
     body.dark .calc-hint {
-      color: #bbb;
+
+      color:
+        #bbb;
     }
 
+
     .calc-button {
-      width: 100%;
 
-      border: 0;
-      border-radius: 9px;
+      width:
+        100%;
 
-      padding: 12px;
+      border:
+        0;
 
-      cursor: pointer;
+      border-radius:
+        9px;
+
+      padding:
+        12px;
+
+      cursor:
+        pointer;
 
       background:
         linear-gradient(
@@ -635,7 +829,8 @@
           #d94800
         );
 
-      color: #fff;
+      color:
+        #fff;
 
       font-family:
         "B Nazanin",
@@ -644,212 +839,484 @@
         Arial,
         sans-serif;
 
-      font-weight: bold;
-      font-size: 15px;
+      font-weight:
+        bold;
 
-      margin-top: 6px;
+      font-size:
+        15px;
+
+      margin-top:
+        6px;
     }
+
 
     .calc-button:hover {
-      opacity: 0.92;
+
+      opacity:
+        0.92;
     }
+
 
     .calc-button:disabled {
-      opacity: 0.55;
-      cursor: not-allowed;
+
+      opacity:
+        0.55;
+
+      cursor:
+        not-allowed;
     }
+
 
     #calculationStatus {
-      display: none;
 
-      margin-top: 10px;
+      display:
+        none;
 
-      border-radius: 9px;
+      margin-top:
+        10px;
 
-      padding: 10px;
+      border-radius:
+        9px;
 
-      font-size: 13px;
+      padding:
+        10px;
 
-      line-height: 1.9;
+      font-size:
+        13px;
+
+      line-height:
+        1.9;
     }
+
 
     #calculationStatus.active {
-      display: block;
+
+      display:
+        block;
     }
+
 
     #calculationStatus.info {
-      background: #fff4df;
-      border: 1px solid #f3c77d;
-      color: #8a5600;
+
+      background:
+        #fff4df;
+
+      border:
+        1px solid #f3c77d;
+
+      color:
+        #8a5600;
     }
+
 
     #calculationStatus.success {
-      background: #e9f8ee;
-      border: 1px solid #8fd2a3;
-      color: #12652b;
+
+      background:
+        #e9f8ee;
+
+      border:
+        1px solid #8fd2a3;
+
+      color:
+        #12652b;
     }
+
 
     #calculationStatus.error {
-      background: #ffeaea;
-      border: 1px solid #e7a0a0;
-      color: #8b1f1f;
+
+      background:
+        #ffeaea;
+
+      border:
+        1px solid #e7a0a0;
+
+      color:
+        #8b1f1f;
     }
+
 
     body.dark #calculationStatus.info {
-      background: #3a2d18;
-      color: #ffd88a;
-      border-color: #735b2d;
+
+      background:
+        #3a2d18;
+
+      color:
+        #ffd88a;
+
+      border-color:
+        #735b2d;
     }
+
 
     body.dark #calculationStatus.success {
-      background: #17301f;
-      color: #9ce6b0;
-      border-color: #347848;
+
+      background:
+        #17301f;
+
+      color:
+        #9ce6b0;
+
+      border-color:
+        #347848;
     }
+
 
     body.dark #calculationStatus.error {
-      background: #3b1e1e;
-      color: #ffaaaa;
-      border-color: #6d3b3b;
+
+      background:
+        #3b1e1e;
+
+      color:
+        #ffaaaa;
+
+      border-color:
+        #6d3b3b;
     }
+
 
     .calculation-result {
-      margin-top: 10px;
-      display: none;
+
+      margin-top:
+        10px;
+
+      display:
+        none;
     }
+
 
     .calculation-result.active {
-      display: block;
+
+      display:
+        block;
     }
+
 
     .result-card {
-      border-radius: 10px;
-      background: #f8f8f8;
-      border: 1px solid #ddd;
-      padding: 11px;
-      margin-bottom: 8px;
+
+      border-radius:
+        10px;
+
+      background:
+        #f8f8f8;
+
+      border:
+        1px solid #ddd;
+
+      padding:
+        11px;
+
+      margin-bottom:
+        8px;
     }
+
 
     body.dark .result-card {
-      background: #242424;
-      border-color: #444;
+
+      background:
+        #242424;
+
+      border-color:
+        #444;
     }
+
 
     .result-value {
-      font-size: 21px;
-      font-weight: bold;
-      color: #d00000;
+
+      font-size:
+        21px;
+
+      font-weight:
+        bold;
+
+      color:
+        #d00000;
     }
+
 
     body.dark .result-value {
-      color: #ff6666;
+
+      color:
+        #ff6666;
     }
+
 
     .result-small {
-      font-size: 12px;
-      line-height: 1.8;
+
+      font-size:
+        12px;
+
+      line-height:
+        1.8;
     }
 
+
     /* =====================================================
-       FALSE COLOR LEGEND
+       FALSE COLOR
     ====================================================== */
 
     #falseColorLegend {
-      position: fixed;
 
-      bottom: 18px;
-      left: 18px;
+      position:
+        fixed;
 
-      z-index: 1800;
+      bottom:
+        18px;
+
+      left:
+        18px;
+
+      z-index:
+        1800;
 
       background:
         rgba(255,255,255,0.97);
 
-      border-radius: 10px;
+      border-radius:
+        10px;
 
-      padding: 10px 12px;
+      padding:
+        10px 12px;
 
       box-shadow:
         0 4px 18px rgba(0,0,0,0.20);
 
-      display: none;
+      display:
+        none;
 
-      min-width: 210px;
+      min-width:
+        210px;
     }
+
 
     #falseColorLegend.active {
-      display: block;
+
+      display:
+        block;
     }
 
+
     body.dark #falseColorLegend {
+
       background:
         rgba(30,30,30,0.97);
 
-      color: #fff;
+      color:
+        #fff;
     }
+
 
     .legend-title {
-      font-weight: bold;
-      margin-bottom: 6px;
-      color: #b00000;
+
+      font-weight:
+        bold;
+
+      margin-bottom:
+        6px;
+
+      color:
+        #b00000;
     }
+
 
     .legend-description {
-      font-size: 11px;
-      line-height: 1.8;
+
+      font-size:
+        11px;
+
+      line-height:
+        1.8;
     }
 
+
     /* =====================================================
-       CALCULATION OVERLAY
+       REPORT
+    ====================================================== */
+
+    .report-box {
+
+      background:
+        #fafafa;
+
+      border:
+        1px solid #ddd;
+
+      border-radius:
+        10px;
+
+      padding:
+        12px;
+
+      margin-bottom:
+        12px;
+    }
+
+
+    body.dark .report-box {
+
+      background:
+        #222;
+
+      border-color:
+        #444;
+    }
+
+
+    .report-title {
+
+      font-weight:
+        bold;
+
+      margin-bottom:
+        8px;
+
+      color:
+        #c00000;
+    }
+
+
+    body.dark .report-title {
+
+      color:
+        #ff5555;
+    }
+
+
+    .report-action {
+
+      width:
+        100%;
+
+      padding:
+        11px;
+
+      border:
+        0;
+
+      border-radius:
+        9px;
+
+      cursor:
+        pointer;
+
+      color:
+        white;
+
+      font-family:
+        "B Nazanin",
+        "BNazanin",
+        Tahoma,
+        Arial,
+        sans-serif;
+
+      font-size:
+        15px;
+
+      font-weight:
+        bold;
+
+      margin-top:
+        8px;
+    }
+
+
+    .excel-btn {
+
+      background:
+        linear-gradient(
+          #20a94b,
+          #087d2d
+        );
+    }
+
+
+    .image-btn {
+
+      background:
+        linear-gradient(
+          #2878d7,
+          #15529e
+        );
+    }
+
+
+    /* =====================================================
+       OVERLAY
     ====================================================== */
 
     #calculationOverlay {
-      position: fixed;
 
-      inset: 0;
+      position:
+        fixed;
 
-      z-index: 5000;
+      inset:
+        0;
 
-      display: none;
+      z-index:
+        5000;
 
-      align-items: center;
-      justify-content: center;
+      display:
+        none;
+
+      align-items:
+        center;
+
+      justify-content:
+        center;
 
       background:
         rgba(0,0,0,0.45);
     }
 
+
     #calculationOverlay.active {
-      display: flex;
+
+      display:
+        flex;
     }
 
+
     .calculation-overlay-box {
+
       width:
         min(
           360px,
           calc(100vw - 30px)
         );
 
-      background: #fff;
+      background:
+        #fff;
 
-      border-radius: 14px;
+      border-radius:
+        14px;
 
-      padding: 22px;
+      padding:
+        22px;
 
-      text-align: center;
+      text-align:
+        center;
 
       box-shadow:
         0 10px 40px rgba(0,0,0,0.3);
     }
 
+
     body.dark .calculation-overlay-box {
-      background: #222;
-      color: #fff;
+
+      background:
+        #222;
+
+      color:
+        #fff;
     }
 
+
     .loader {
-      width: 42px;
-      height: 42px;
+
+      width:
+        42px;
+
+      height:
+        42px;
 
       margin:
         0 auto 12px;
@@ -867,12 +1334,16 @@
         spin 0.8s linear infinite;
     }
 
+
     @keyframes spin {
+
       to {
+
         transform:
           rotate(360deg);
       }
     }
+
 
     /* =====================================================
        MOBILE
@@ -881,92 +1352,168 @@
     @media (max-width: 850px) {
 
       #header {
-        height: 68px;
-        min-height: 68px;
-        padding: 0 8px;
+
+        height:
+          68px;
+
+        min-height:
+          68px;
+
+        padding:
+          0 8px;
       }
+
 
       .header-center {
-        max-width: 48vw;
-        white-space: normal;
+
+        max-width:
+          48vw;
+
+        white-space:
+          normal;
       }
+
 
       .title-main {
-        font-size: 16px;
+
+        font-size:
+          16px;
       }
+
 
       .title-sub {
-        font-size: 8px;
+
+        font-size:
+          8px;
       }
+
 
       .fire-icon {
-        width: 37px;
-        height: 37px;
-        font-size: 20px;
+
+        width:
+          37px;
+
+        height:
+          37px;
+
+        font-size:
+          20px;
       }
+
 
       .header-buttons {
-        gap: 4px;
+
+        gap:
+          4px;
       }
+
 
       .header-btn {
-        padding: 6px 7px;
-        font-size: 11px;
+
+        padding:
+          6px 7px;
+
+        font-size:
+          11px;
       }
 
+
       .panel {
-        top: 78px;
-        left: 10px;
+
+        top:
+          78px;
+
+        left:
+          10px;
+
         width:
           calc(100vw - 20px);
       }
 
+
       #latestFireBadge {
-        right: 10px;
-        bottom: 10px;
-        min-width: 200px;
+
+        right:
+          10px;
+
+        bottom:
+          10px;
+
+        min-width:
+          200px;
       }
 
+
       #falseColorLegend {
-        left: 10px;
-        bottom: 10px;
+
+        left:
+          10px;
+
+        bottom:
+          10px;
       }
     }
+
 
     @media (max-width: 560px) {
 
       .header-left {
-        display: none;
+
+        display:
+          none;
       }
+
 
       .header-center {
-        left: 50%;
-        max-width: 62vw;
+
+        left:
+          50%;
+
+        max-width:
+          62vw;
       }
+
 
       .title-main {
-        font-size: 14px;
+
+        font-size:
+          14px;
       }
+
 
       .title-sub {
-        display: none;
+
+        display:
+          none;
       }
+
 
       .header-buttons {
-        margin-right: auto;
+
+        margin-right:
+          auto;
       }
 
+
       .header-btn {
-        font-size: 10px;
-        padding: 6px;
+
+        font-size:
+          10px;
+
+        padding:
+          6px;
       }
     }
+
   </style>
+
 </head>
+
 
 <body>
 
 <div id="app">
+
 
   <!-- =====================================================
        HEADER
@@ -982,6 +1529,7 @@
 
     </div>
 
+
     <div class="header-center">
 
       <div class="title-main">
@@ -994,6 +1542,7 @@
 
     </div>
 
+
     <div class="header-buttons">
 
       <button
@@ -1003,12 +1552,14 @@
         ❓ راهنما
       </button>
 
+
       <button
         class="header-btn"
         onclick="togglePanel('aboutPanel')"
       >
         ℹ معرفی سامانه
       </button>
+
 
       <button
         class="header-btn"
@@ -1018,12 +1569,14 @@
         🌙 حالت شب
       </button>
 
+
       <button
         class="header-btn"
         onclick="openReportPanel()"
       >
         📊 گزارش
       </button>
+
 
       <button
         class="header-btn"
@@ -1036,11 +1589,13 @@
 
   </header>
 
+
   <!-- =====================================================
        MAP
   ====================================================== -->
 
   <div id="map"></div>
+
 
   <!-- =====================================================
        LATEST FIRE
@@ -1052,6 +1607,7 @@
       🔥 آخرین حریق شناسایی‌شده
     </div>
 
+
     <div
       id="latestFireContent"
       class="latest-value"
@@ -1060,6 +1616,7 @@
     </div>
 
   </div>
+
 
   <!-- =====================================================
        FALSE COLOR LEGEND
@@ -1071,13 +1628,18 @@
       🛰️ تصویر False Color
     </div>
 
+
     <div class="legend-description">
-      پوشش گیاهی سالم معمولاً با تن‌های
-      قرمز/صورتی دیده می‌شود و مناطق سوخته
-      نسبت به پوشش سالم تیره‌تر دیده می‌شوند.
+
+      پوشش گیاهی سالم در ترکیب
+      False Color معمولاً با تن‌های قرمز
+      و صورتی روشن دیده می‌شود و سطوح
+      سوخته نسبت به آن تیره‌تر دیده می‌شوند.
+
     </div>
 
   </div>
+
 
   <!-- =====================================================
        GUIDE
@@ -1094,6 +1656,7 @@
         راهنمای سامانه
       </span>
 
+
       <button
         class="close-panel"
         onclick="closePanels()"
@@ -1103,16 +1666,19 @@
 
     </div>
 
+
     <div class="panel-body">
 
       <h3>
         فیلترهای مکانی
       </h3>
 
+
       <p>
         از کنترل لایه‌های روی نقشه می‌توانید
-        محدوده‌های موردنظر را فعال یا غیرفعال کنید.
+        محدوده‌های مختلف را فعال یا غیرفعال کنید.
       </p>
+
 
       <ul>
         <li>مرز استان فارس</li>
@@ -1121,25 +1687,28 @@
         <li>حریق‌های ماهواره‌ای</li>
       </ul>
 
+
       <h3>
         محاسبه اثر حریق
       </h3>
 
-      <p>
-        ابتدا تاریخ حریق را انتخاب کنید و سپس
-        یک منطقه از دو گروه «مناطق چهارگانه»
-        یا «مناطق شکار ممنوع» انتخاب کنید.
-      </p>
 
       <p>
-        پس از محاسبه، نتیجه مساحت سوخته،
-        تصویر False Color و محدوده سوختگی
-        روی نقشه نمایش داده می‌شود.
+        یک تاریخ از آرشیو تاریخی حریق انتخاب کنید
+        و سپس یک منطقه از دو گروه منطقه‌ای انتخاب کنید.
+      </p>
+
+
+      <p>
+        پس از محاسبه، Sentinel-2 قبل و بعد،
+        dNBR، مساحت سوخته و تصویر False Color
+        در اختیار شما قرار می‌گیرد.
       </p>
 
     </div>
 
   </div>
+
 
   <!-- =====================================================
        ABOUT
@@ -1156,6 +1725,7 @@
         معرفی سامانه
       </span>
 
+
       <button
         class="close-panel"
         onclick="closePanels()"
@@ -1165,26 +1735,30 @@
 
     </div>
 
+
     <div class="panel-body">
 
       <h3>
         سامانه پایش و ارزیابی اثر حریق‌های استان فارس
       </h3>
 
+
       <p>
-        این سامانه با هدف پایش ماهواره‌ای حریق‌های
-        استان فارس و ارزیابی اثر آن‌ها بر عرصه‌های
-        طبیعی و حفاظتی طراحی شده است.
+        این سامانه با استفاده از داده‌های ماهواره‌ای
+        برای پایش حریق و برآورد مساحت سوخته
+        در استان فارس طراحی شده است.
       </p>
 
+
       <h3>
-        داده‌ها
+        منابع
       </h3>
 
+
       <ul>
-        <li>داده‌های ماهواره‌ای حریق</li>
+        <li>FIRMS</li>
         <li>Sentinel-2</li>
-        <li>مرز استان فارس</li>
+        <li>Copernicus Data Space</li>
         <li>مناطق چهارگانه</li>
         <li>مناطق شکار ممنوع</li>
       </ul>
@@ -1192,6 +1766,7 @@
     </div>
 
   </div>
+
 
   <!-- =====================================================
        CALCULATION PANEL
@@ -1208,6 +1783,7 @@
         محاسبه اثر حریق
       </span>
 
+
       <button
         class="close-panel"
         onclick="closePanels()"
@@ -1217,7 +1793,9 @@
 
     </div>
 
+
     <div class="panel-body">
+
 
       <div class="calc-box">
 
@@ -1228,20 +1806,28 @@
           تاریخ حریق
         </label>
 
+
         <select
           id="calculationDate"
-          class="calc-date"
+          class="calc-select"
         >
+
           <option value="">
-            در حال دریافت تاریخ‌ها...
+            در حال دریافت تاریخ‌های آرشیو...
           </option>
+
         </select>
 
+
         <div class="calc-hint">
-          تاریخ‌ها از داده حریق موجود در سایت گرفته می‌شوند.
+
+          تاریخ‌ها از آرشیو تاریخی حریق‌های داخل فارس
+          خوانده می‌شوند.
+
         </div>
 
       </div>
+
 
       <div class="calc-box">
 
@@ -1252,16 +1838,20 @@
           مناطق حفاظت‌شده / چهارگانه
         </label>
 
+
         <select
           id="protectedSelect"
           class="calc-select"
         >
+
           <option value="">
             انتخاب منطقه
           </option>
+
         </select>
 
       </div>
+
 
       <div class="calc-box">
 
@@ -1272,20 +1862,28 @@
           مناطق شکار ممنوع
         </label>
 
+
         <select
           id="huntingSelect"
           class="calc-select"
         >
+
           <option value="">
             انتخاب منطقه
           </option>
+
         </select>
 
       </div>
 
+
       <div class="calc-hint">
-        فقط یکی از دو فهرست منطقه‌ای را انتخاب کنید.
+
+        هم‌زمان فقط یکی از دو نوع منطقه
+        قابل انتخاب است.
+
       </div>
+
 
       <button
         id="calculateButton"
@@ -1295,7 +1893,11 @@
         🔥 محاسبه حریق
       </button>
 
-      <div id="calculationStatus"></div>
+
+      <div
+        id="calculationStatus"
+      ></div>
+
 
       <div
         id="calculationResult"
@@ -1317,6 +1919,7 @@
 
         </div>
 
+
         <div class="result-card">
 
           <div>
@@ -1331,6 +1934,7 @@
           </div>
 
         </div>
+
 
         <div class="result-card">
 
@@ -1347,6 +1951,7 @@
 
         </div>
 
+
         <div class="result-card">
 
           <div>
@@ -1362,6 +1967,7 @@
 
         </div>
 
+
         <div
           id="resultDetails"
           class="result-small"
@@ -1372,6 +1978,7 @@
     </div>
 
   </div>
+
 
   <!-- =====================================================
        REPORT
@@ -1388,6 +1995,7 @@
         گزارش حریق
       </span>
 
+
       <button
         class="close-panel"
         onclick="closePanels()"
@@ -1397,6 +2005,7 @@
 
     </div>
 
+
     <div class="panel-body">
 
       <div class="report-box">
@@ -1405,11 +2014,15 @@
           وضعیت حریق
         </div>
 
-        <p id="reportFireCount">
+
+        <p
+          id="reportFireCount"
+        >
           در حال دریافت اطلاعات...
         </p>
 
       </div>
+
 
       <button
         class="report-action excel-btn"
@@ -1417,6 +2030,7 @@
       >
         📊 دریافت گزارش Excel
       </button>
+
 
       <button
         class="report-action image-btn"
@@ -1429,21 +2043,29 @@
 
   </div>
 
+
 </div>
+
 
 <!-- =====================================================
      CALCULATION OVERLAY
 ====================================================== -->
 
-<div id="calculationOverlay">
+<div
+  id="calculationOverlay"
+>
 
-  <div class="calculation-overlay-box">
+  <div
+    class="calculation-overlay-box"
+  >
 
     <div class="loader"></div>
+
 
     <div>
       در حال محاسبه Sentinel-2...
     </div>
+
 
     <div
       style="
@@ -1452,12 +2074,13 @@
         opacity:0.8;
       "
     >
-      فقط تاریخ و محدوده انتخاب‌شده پردازش می‌شود.
+      فقط تاریخ و منطقه انتخاب‌شده پردازش می‌شود.
     </div>
 
   </div>
 
 </div>
+
 
 <!-- =====================================================
      LIBRARIES
@@ -1468,6 +2091,7 @@
 <script src="https://cdn.sheetjs.com/xlsx-0.20.3/package/dist/xlsx.full.min.js"></script>
 
 <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
+
 
 <script>
 
@@ -1484,8 +2108,13 @@
   ====================================================== */
 
   const map =
-    L.map("map").setView(
-      [29.6, 53.0],
+    L.map(
+      "map"
+    ).setView(
+      [
+        29.6,
+        53.0
+      ],
       7
     );
 
@@ -1496,249 +2125,387 @@
       attribution:
         "&copy; OpenStreetMap contributors"
     }
-  ).addTo(map);
+  ).addTo(
+    map
+  );
 
 
   /* =====================================================
      LAYERS
   ====================================================== */
 
-  let farsLayer = null;
-  let protectedLayer = null;
-  let huntingLayer = null;
-  let fireLayer = null;
+  let farsLayer =
+    null;
 
-  let falseColorLayer = null;
-  let burnedLayer = null;
+  let protectedLayer =
+    null;
 
-  let protectedGeoJSON = null;
-  let huntingGeoJSON = null;
+  let huntingLayer =
+    null;
 
-  const overlayLayers = {};
+  let fireLayer =
+    null;
 
-  let layerControl = null;
+  let falseColorLayer =
+    null;
+
+  let burnedMaskLayer =
+    null;
+
+
+  let protectedGeoJSON =
+    null;
+
+  let huntingGeoJSON =
+    null;
+
+
+  const overlayLayers =
+    {};
+
+
+  let layerControl =
+    null;
 
 
   /* =====================================================
      FARS
   ====================================================== */
 
-  fetch("fars.geojson")
-    .then(
-      response => {
+  fetch(
+    "fars.geojson"
+  )
+  .then(
+    response => {
 
-        if (!response.ok) {
-          throw new Error(
-            "fars.geojson unavailable"
-          );
-        }
+      if (
+        !response.ok
+      ) {
 
-        return response.json();
+        throw new Error(
+          "fars.geojson unavailable"
+        );
       }
-    )
-    .then(
-      data => {
 
-        farsLayer =
-          L.geoJSON(
-            data,
-            {
-              style: {
-                color: "#ff6600",
-                weight: 2,
-                fillOpacity: 0.05
-              }
+
+      return response.json();
+    }
+  )
+  .then(
+    data => {
+
+      farsLayer =
+        L.geoJSON(
+          data,
+          {
+
+            style: {
+
+              color:
+                "#ff6600",
+
+              weight:
+                2,
+
+              fillOpacity:
+                0.05
             }
-          ).addTo(map);
 
-
-        overlayLayers[
-          "مرز استان فارس"
-        ] =
-          farsLayer;
-
-
-        map.fitBounds(
-          farsLayer.getBounds()
+          }
+        ).addTo(
+          map
         );
 
 
-        updateLayerControl();
-      }
-    )
-    .catch(
-      error =>
-        console.error(
-          "Fars layer error:",
-          error
-        )
-    );
+      overlayLayers[
+        "مرز استان فارس"
+      ] =
+        farsLayer;
+
+
+      map.fitBounds(
+        farsLayer.getBounds()
+      );
+
+
+      updateLayerControl();
+
+    }
+  )
+  .catch(
+    error => {
+
+      console.error(
+        "Fars error:",
+        error
+      );
+    }
+  );
 
 
   /* =====================================================
      PROTECTED
   ====================================================== */
 
-  fetch("protected_areas.geojson")
-    .then(
-      response => {
+  fetch(
+    "protected_areas.geojson"
+  )
+  .then(
+    response => {
 
-        if (!response.ok) {
-          throw new Error(
-            "protected_areas.geojson unavailable"
-          );
-        }
+      if (
+        !response.ok
+      ) {
 
-        return response.json();
+        throw new Error(
+          "protected_areas.geojson unavailable"
+        );
       }
-    )
-    .then(
-      data => {
-
-        protectedGeoJSON =
-          data;
 
 
-        protectedLayer =
-          L.geoJSON(
-            data,
-            {
-              style: {
-                color: "#008000",
-                weight: 1.5,
-                fillOpacity: 0.15
-              }
-            }
-          ).addTo(map);
+      return response.json();
+    }
+  )
+  .then(
+    data => {
+
+      protectedGeoJSON =
+        data;
 
 
-        overlayLayers[
-          "مناطق چهارگانه محیط‌زیست"
-        ] =
-          protectedLayer;
-
-
-        populateRegionOptions(
+      protectedLayer =
+        L.geoJSON(
           data,
-          "protectedSelect",
-          "منطقه چهارگانه"
+          {
+
+            style: {
+
+              color:
+                "#008000",
+
+              weight:
+                1.5,
+
+              fillOpacity:
+                0.15
+            }
+
+          }
+        ).addTo(
+          map
         );
 
 
-        updateLayerControl();
-      }
-    )
-    .catch(
-      error =>
-        console.error(
-          "Protected layer error:",
-          error
-        )
-    );
+      overlayLayers[
+        "مناطق چهارگانه محیط‌زیست"
+      ] =
+        protectedLayer;
+
+
+      populateRegionOptions(
+        data,
+        "protectedSelect",
+        "منطقه چهارگانه"
+      );
+
+
+      updateLayerControl();
+
+    }
+  )
+  .catch(
+    error => {
+
+      console.error(
+        "Protected error:",
+        error
+      );
+    }
+  );
 
 
   /* =====================================================
      HUNTING
   ====================================================== */
 
-  fetch("hunting_banned.geojson")
-    .then(
-      response => {
+  fetch(
+    "hunting_banned.geojson"
+  )
+  .then(
+    response => {
 
-        if (!response.ok) {
-          throw new Error(
-            "hunting_banned.geojson unavailable"
-          );
-        }
+      if (
+        !response.ok
+      ) {
 
-        return response.json();
+        throw new Error(
+          "hunting_banned.geojson unavailable"
+        );
       }
-    )
-    .then(
-      data => {
-
-        huntingGeoJSON =
-          data;
 
 
-        huntingLayer =
-          L.geoJSON(
-            data,
-            {
-              style: {
-                color: "#800080",
-                weight: 1.5,
-                fillOpacity: 0.15
-              }
-            }
-          ).addTo(map);
+      return response.json();
+    }
+  )
+  .then(
+    data => {
+
+      huntingGeoJSON =
+        data;
 
 
-        overlayLayers[
-          "مناطق شکار ممنوع"
-        ] =
-          huntingLayer;
-
-
-        populateRegionOptions(
+      huntingLayer =
+        L.geoJSON(
           data,
-          "huntingSelect",
-          "منطقه شکار ممنوع"
+          {
+
+            style: {
+
+              color:
+                "#800080",
+
+              weight:
+                1.5,
+
+              fillOpacity:
+                0.15
+            }
+
+          }
+        ).addTo(
+          map
         );
 
 
-        updateLayerControl();
-      }
-    )
-    .catch(
-      error =>
-        console.error(
-          "Hunting layer error:",
-          error
-        )
-    );
+      overlayLayers[
+        "مناطق شکار ممنوع"
+      ] =
+        huntingLayer;
+
+
+      populateRegionOptions(
+        data,
+        "huntingSelect",
+        "منطقه شکار ممنوع"
+      );
+
+
+      updateLayerControl();
+
+    }
+  )
+  .catch(
+    error => {
+
+      console.error(
+        "Hunting error:",
+        error
+      );
+    }
+  );
 
 
   /* =====================================================
-     FIRES
+     LIVE FIRE DATA
   ====================================================== */
 
-  fetch("fires.json")
-    .then(
-      response => {
+  fetch(
+    "fires.json"
+  )
+  .then(
+    response => {
 
-        if (!response.ok) {
-          throw new Error(
-            "fires.json unavailable"
-          );
-        }
+      if (
+        !response.ok
+      ) {
 
-        return response.json();
-      }
-    )
-    .then(
-      data => {
-
-        loadFireData(
-          data
-        );
-
-        loadFireDates(
-          data
+        throw new Error(
+          "fires.json unavailable"
         );
       }
-    )
-    .catch(
-      error =>
-        console.error(
-          "Fire data error:",
-          error
-        )
-    );
+
+
+      return response.json();
+    }
+  )
+  .then(
+    data => {
+
+      loadFireData(
+        data
+      );
+
+    }
+  )
+  .catch(
+    error => {
+
+      console.error(
+        "Live fire error:",
+        error
+      );
+    }
+  );
 
 
   /* =====================================================
-     LOAD FIRE DATA
+     HISTORICAL FIRE ARCHIVE
+  ====================================================== */
+
+  fetch(
+    "fire_archive_2026.json"
+  )
+  .then(
+    response => {
+
+      if (
+        !response.ok
+      ) {
+
+        throw new Error(
+          "fire_archive_2026.json unavailable"
+        );
+      }
+
+
+      return response.json();
+    }
+  )
+  .then(
+    data => {
+
+      loadArchiveFireDates(
+        data
+      );
+
+    }
+  )
+  .catch(
+    error => {
+
+      console.error(
+        "Archive error:",
+        error
+      );
+
+
+      const dateSelect =
+        document.getElementById(
+          "calculationDate"
+        );
+
+
+      dateSelect.innerHTML = `
+        <option value="">
+          آرشیو تاریخی در دسترس نیست
+        </option>
+      `;
+    }
+  );
+
+
+  /* =====================================================
+     LOAD LIVE FIRES
   ====================================================== */
 
   function loadFireData(
@@ -1746,7 +2513,9 @@
   ) {
 
     const fires =
-      Array.isArray(data.fires)
+      Array.isArray(
+        data.fires
+      )
         ? data.fires
         : [];
 
@@ -1754,25 +2523,31 @@
     document.getElementById(
       "reportFireCount"
     ).innerHTML =
-      "تعداد حریق‌های دریافت‌شده: " +
+      "تعداد حریق‌های جاری: " +
       "<strong>" +
       fires.length +
       "</strong> مورد";
 
 
-    if (!fires.length) {
+    if (
+      !fires.length
+    ) {
 
       document.getElementById(
         "latestFireContent"
       ).innerHTML =
         "در حال حاضر حریقی ثبت نشده است.";
 
+
       return;
     }
 
 
     fireLayer =
-      L.layerGroup().addTo(map);
+      L.layerGroup()
+        .addTo(
+          map
+        );
 
 
     overlayLayers[
@@ -1782,7 +2557,10 @@
 
 
     fires.forEach(
-      (fire, index) => {
+      (
+        fire,
+        index
+      ) => {
 
         createFireMarker(
           fire,
@@ -1794,6 +2572,7 @@
 
     updateLayerControl();
 
+
     showLatestFire(
       fires[0]
     );
@@ -1801,18 +2580,12 @@
 
 
   /* =====================================================
-     LOAD DATES
+     LOAD ARCHIVE DATES
   ====================================================== */
 
-  function loadFireDates(
+  function loadArchiveFireDates(
     data
   ) {
-
-    const fires =
-      Array.isArray(data.fires)
-        ? data.fires
-        : [];
-
 
     const dateSelect =
       document.getElementById(
@@ -1820,22 +2593,46 @@
       );
 
 
+    const fires =
+      Array.isArray(
+        data.fires
+      )
+        ? data.fires
+        : [];
+
+
     const dates =
       [
         ...new Set(
+
           fires
             .map(
-              fire =>
-                fire.acq_date
+              item => {
+
+                const fire =
+                  item.fire
+                  ||
+                  item;
+
+
+                return fire.acq_date;
+              }
             )
-            .filter(Boolean)
+            .filter(
+              Boolean
+            )
         )
       ];
 
 
     dates.sort(
-      (a, b) =>
-        b.localeCompare(a)
+      (
+        a,
+        b
+      ) =>
+        b.localeCompare(
+          a
+        )
     );
 
 
@@ -1854,17 +2651,34 @@
             "option"
           );
 
+
         option.value =
           date;
 
+
         option.textContent =
           date;
+
 
         dateSelect.appendChild(
           option
         );
       }
     );
+
+
+    if (
+      dates.length === 0
+    ) {
+
+      dateSelect.innerHTML = `
+        <option value="">
+          تاریخ قابل محاسبه وجود ندارد
+        </option>
+      `;
+
+    }
+
   }
 
 
@@ -1900,10 +2714,15 @@
 
 
     features.forEach(
-      (feature, index) => {
+      (
+        feature,
+        index
+      ) => {
 
         const properties =
-          feature.properties || {};
+          feature.properties
+          ||
+          {};
 
 
         const name =
@@ -1915,7 +2734,15 @@
           ||
           properties.Name
           ||
-          `${fallbackPrefix} ${index + 1}`;
+          (
+            fallbackPrefix
+            +
+            " "
+            +
+            (
+              index + 1
+            )
+          );
 
 
         const option =
@@ -1925,7 +2752,9 @@
 
 
         option.value =
-          String(index);
+          String(
+            index
+          );
 
 
         option.textContent =
@@ -1937,11 +2766,12 @@
         );
       }
     );
+
   }
 
 
   /* =====================================================
-     MUTUAL EXCLUSION
+     REGION MUTUAL EXCLUSION
   ====================================================== */
 
   document
@@ -1952,11 +2782,14 @@
       "change",
       function() {
 
-        if (this.value !== "") {
+        if (
+          this.value !== ""
+        ) {
 
           document.getElementById(
             "huntingSelect"
-          ).value = "";
+          ).value =
+            "";
         }
       }
     );
@@ -1970,35 +2803,22 @@
       "change",
       function() {
 
-        if (this.value !== "") {
+        if (
+          this.value !== ""
+        ) {
 
           document.getElementById(
             "protectedSelect"
-          ).value = "";
+          ).value =
+            "";
         }
       }
     );
 
 
   /* =====================================================
-     PANEL
+     PANEL FUNCTIONS
   ====================================================== */
-
-  function openCalculationPanel() {
-
-    togglePanel(
-      "calculationPanel"
-    );
-  }
-
-
-  function openReportPanel() {
-
-    togglePanel(
-      "reportPanel"
-    );
-  }
-
 
   function closePanels() {
 
@@ -2025,7 +2845,7 @@
       );
 
 
-    const wasActive =
+    const isActive =
       panel.classList.contains(
         "active"
       );
@@ -2034,7 +2854,9 @@
     closePanels();
 
 
-    if (!wasActive) {
+    if (
+      !isActive
+    ) {
 
       panel.classList.add(
         "active"
@@ -2043,8 +2865,40 @@
   }
 
 
+  function openCalculationPanel() {
+
+    togglePanel(
+      "calculationPanel"
+    );
+  }
+
+
+  function openReportPanel() {
+
+    togglePanel(
+      "reportPanel"
+    );
+  }
+
+
+  function openGuidePanel() {
+
+    togglePanel(
+      "guidePanel"
+    );
+  }
+
+
+  function openAboutPanel() {
+
+    togglePanel(
+      "aboutPanel"
+    );
+  }
+
+
   /* =====================================================
-     GET SELECTED FEATURE
+     GET FEATURE
   ====================================================== */
 
   function getSelectedFeature() {
@@ -2133,7 +2987,9 @@
   ) {
 
     const properties =
-      feature?.properties || {};
+      feature?.properties
+      ||
+      {};
 
 
     return (
@@ -2151,7 +3007,7 @@
 
 
   /* =====================================================
-     CALCULATE
+     CALCULATION
   ====================================================== */
 
   async function requestBurnedAreaCalculation() {
@@ -2162,12 +3018,15 @@
       ).value;
 
 
-    if (!date) {
+    if (
+      !date
+    ) {
 
       setCalculationStatus(
         "error",
-        "ابتدا تاریخ را انتخاب کنید."
+        "ابتدا تاریخ حریق را انتخاب کنید."
       );
+
 
       return;
     }
@@ -2177,12 +3036,15 @@
       getSelectedFeature();
 
 
-    if (!selected) {
+    if (
+      !selected
+    ) {
 
       setCalculationStatus(
         "error",
-        "ابتدا یکی از مناطق چهارگانه یا مناطق شکار ممنوع را انتخاب کنید."
+        "ابتدا یکی از مناطق چهارگانه یا شکار ممنوع را انتخاب کنید."
       );
+
 
       return;
     }
@@ -2196,6 +3058,7 @@
         "error",
         "هندسه منطقه پیدا نشد."
       );
+
 
       return;
     }
@@ -2218,7 +3081,7 @@
 
     setCalculationStatus(
       "info",
-      "درخواست محاسبه به موتور پردازش ارسال شد..."
+      "درخواست محاسبه به Copernicus ارسال شد..."
     );
 
 
@@ -2228,6 +3091,7 @@
         await fetch(
           CALCULATION_API_URL,
           {
+
             method:
               "POST",
 
@@ -2240,16 +3104,26 @@
             body:
               JSON.stringify(
                 {
-                  date,
+
+                  date:
+
+                    date,
+
 
                   regionType:
+
                     selected.regionType,
 
+
                   regionName:
+
                     selected.regionName,
 
+
                   geometry:
+
                     selected.geometry
+
                 }
               )
           }
@@ -2260,7 +3134,9 @@
         await response.json();
 
 
-      if (!response.ok) {
+      if (
+        !response.ok
+      ) {
 
         throw new Error(
           result.message
@@ -2278,7 +3154,7 @@
         throw new Error(
           result.message
           ||
-          "محاسبه موفق نبود."
+          "محاسبه انجام نشد."
         );
       }
 
@@ -2304,7 +3180,6 @@
     ) {
 
       console.error(
-        "Calculation error:",
         error
       );
 
@@ -2314,20 +3189,23 @@
         error.message
       );
 
+
     } finally {
 
       button.disabled =
         false;
 
+
       showCalculationOverlay(
         false
       );
     }
+
   }
 
 
   /* =====================================================
-     RESULT
+     SHOW RESULT
   ====================================================== */
 
   function showCalculationResult(
@@ -2335,7 +3213,9 @@
   ) {
 
     const burned =
-      result.burned_area || {};
+      result.burned_area
+      ||
+      {};
 
 
     document.getElementById(
@@ -2374,6 +3254,7 @@
       "resultDetails"
     ).innerHTML =
       `
+
         <strong>منطقه:</strong>
         ${result.region_name || "-"}
         <br>
@@ -2394,8 +3275,9 @@
         ${result.dnbr_threshold ?? "-"}
         <br>
 
-        <strong>پیکسل‌های سوخته:</strong>
+        <strong>پیکسل سوخته:</strong>
         ${result.burned_pixels ?? "-"}
+
       `;
 
 
@@ -2417,7 +3299,9 @@
       value === undefined
       ||
       Number.isNaN(
-        Number(value)
+        Number(
+          value
+        )
       )
     ) {
 
@@ -2426,7 +3310,9 @@
 
 
     return (
-      Number(value).toLocaleString(
+      Number(
+        value
+      ).toLocaleString(
         "fa-IR",
         {
           minimumFractionDigits:
@@ -2481,7 +3367,9 @@
       );
 
 
-    if (show) {
+    if (
+      show
+    ) {
 
       overlay.classList.add(
         "active"
@@ -2497,14 +3385,16 @@
 
 
   /* =====================================================
-     DISPLAY FALSE COLOR + BURNED AREA
+     MAP RESULT
   ====================================================== */
 
   function displayCalculationLayers(
     result
   ) {
 
-    if (falseColorLayer) {
+    if (
+      falseColorLayer
+    ) {
 
       map.removeLayer(
         falseColorLayer
@@ -2515,13 +3405,15 @@
     }
 
 
-    if (burnedLayer) {
+    if (
+      burnedMaskLayer
+    ) {
 
       map.removeLayer(
-        burnedLayer
+        burnedMaskLayer
       );
 
-      burnedLayer =
+      burnedMaskLayer =
         null;
     }
 
@@ -2530,9 +3422,17 @@
       "🛰️ تصویر False Color"
     ];
 
+
     delete overlayLayers[
       "🔥 محدوده سوختگی"
     ];
+
+
+    document.getElementById(
+      "falseColorLegend"
+    ).classList.remove(
+      "active"
+    );
 
 
     if (
@@ -2546,12 +3446,16 @@
           result.false_color_url,
           result.false_color_bounds,
           {
+
             opacity:
               0.78,
+
             interactive:
               false
           }
-        ).addTo(map);
+        ).addTo(
+          map
+        );
 
 
       overlayLayers[
@@ -2560,73 +3464,53 @@
         falseColorLayer;
 
 
-      document
-        .getElementById(
-          "falseColorLegend"
-        )
-        .classList.add(
-          "active"
-        );
+      document.getElementById(
+        "falseColorLegend"
+      ).classList.add(
+        "active"
+      );
 
 
       map.fitBounds(
         result.false_color_bounds,
         {
           padding:
-            [30, 30]
+            [
+              30,
+              30
+            ]
         }
       );
     }
 
 
     if (
-      result.burned_geojson
+      result.burned_mask_url
+      &&
+      result.burned_mask_bounds
     ) {
 
-      burnedLayer =
-        L.geoJSON(
-          result.burned_geojson,
+      burnedMaskLayer =
+        L.imageOverlay(
+          result.burned_mask_url,
+          result.burned_mask_bounds,
           {
-            style: {
 
-              color:
-                "#ff0000",
+            opacity:
+              0.65,
 
-              weight:
-                2,
-
-              fillColor:
-                "#ff3300",
-
-              fillOpacity:
-                0.45
-            }
+            interactive:
+              false
           }
-        ).addTo(map);
+        ).addTo(
+          map
+        );
 
 
       overlayLayers[
         "🔥 محدوده سوختگی"
       ] =
-        burnedLayer;
-
-
-      const bounds =
-        burnedLayer.getBounds();
-
-
-      if (
-        bounds.isValid()
-      ) {
-
-        map.fitBounds(
-          bounds,
-          {
-            padding:
-              [30, 30]
-          }
-        );
-      }
+        burnedMaskLayer;
     }
 
 
@@ -2648,6 +3532,7 @@
         fire.latitude
       );
 
+
     const lon =
       Number(
         fire.longitude
@@ -2655,9 +3540,13 @@
 
 
     if (
-      !Number.isFinite(lat)
+      !Number.isFinite(
+        lat
+      )
       ||
-      !Number.isFinite(lon)
+      !Number.isFinite(
+        lon
+      )
     ) {
 
       return;
@@ -2666,8 +3555,12 @@
 
     const marker =
       L.circleMarker(
-        [lat, lon],
+        [
+          lat,
+          lon
+        ],
         {
+
           radius:
             isLatest
               ? 11
@@ -2730,57 +3623,71 @@
 
 
     return `
+
       <div class="fire-popup">
 
         <div class="fire-popup-title">
           ${title}
         </div>
 
+
         <div class="fire-popup-row">
           <strong>تاریخ:</strong>
           ${fire.acq_date || "-"}
         </div>
+
 
         <div class="fire-popup-row">
           <strong>زمان ایران:</strong>
           ${iranTime}
         </div>
 
+
         <div class="fire-popup-row">
           <strong>ماهواره:</strong>
           ${fire.satellite || "-"}
         </div>
+
 
         <div class="fire-popup-row">
           <strong>روز / شب:</strong>
           ${dayNight}
         </div>
 
+
         <div class="fire-popup-row">
           <strong>اطمینان:</strong>
           ${fire.confidence || "-"}
         </div>
+
 
         <div class="fire-popup-row">
           <strong>FRP:</strong>
           ${fire.frp || "-"}
         </div>
 
+
         <div class="fire-popup-row">
           <strong>عرض:</strong>
           ${Number(
             fire.latitude
-          ).toFixed(5)}
+          ).toFixed(
+            5
+          )}
         </div>
+
 
         <div class="fire-popup-row">
           <strong>طول:</strong>
           ${Number(
             fire.longitude
-          ).toFixed(5)}
+          ).toFixed(
+            5
+          )}
         </div>
 
       </div>
+
     `;
   }
 
@@ -2793,7 +3700,10 @@
     utcString
   ) {
 
-    if (!utcString) {
+    if (
+      !utcString
+    ) {
+
       return "-";
     }
 
@@ -2803,7 +3713,9 @@
         utcString.replace(
           " ",
           "T"
-        ) + "Z"
+        )
+        +
+        "Z"
       );
 
 
@@ -2820,17 +3732,27 @@
     return new Intl.DateTimeFormat(
       "fa-IR",
       {
+
         timeZone:
           "Asia/Tehran",
 
-        year: "numeric",
-        month: "2-digit",
-        day: "2-digit",
+        year:
+          "numeric",
 
-        hour: "2-digit",
-        minute: "2-digit",
+        month:
+          "2-digit",
 
-        hour12: false
+        day:
+          "2-digit",
+
+        hour:
+          "2-digit",
+
+        minute:
+          "2-digit",
+
+        hour12:
+          false
       }
     ).format(
       date
@@ -2870,30 +3792,40 @@
 
     content.innerHTML =
       `
+
         <div>
           <strong>زمان:</strong>
           ${iranTime}
         </div>
+
 
         <div>
           <strong>ماهواره:</strong>
           ${fire.satellite || "-"}
         </div>
 
+
         <div>
           <strong>روز / شب:</strong>
           ${dayNight}
         </div>
 
+
         <div>
           <strong>مختصات:</strong>
           ${Number(
             fire.latitude
-          ).toFixed(4)},
+          ).toFixed(
+            4
+          )},
+
           ${Number(
             fire.longitude
-          ).toFixed(4)}
+          ).toFixed(
+            4
+          )}
         </div>
+
       `;
 
 
@@ -2909,7 +3841,9 @@
 
   function updateLayerControl() {
 
-    if (layerControl) {
+    if (
+      layerControl
+    ) {
 
       map.removeControl(
         layerControl
@@ -2922,9 +3856,12 @@
         null,
         overlayLayers,
         {
-          collapsed: false
+          collapsed:
+            false
         }
-      ).addTo(map);
+      ).addTo(
+        map
+      );
   }
 
 
@@ -2952,7 +3889,9 @@
       );
 
 
-    if (isDark) {
+    if (
+      isDark
+    ) {
 
       button.innerHTML =
         "☀️ حالت روز";
@@ -2991,9 +3930,11 @@
       "dark"
     );
 
+
     document.body.classList.add(
       "dark-map"
     );
+
 
     document.getElementById(
       "darkModeButton"
@@ -3008,23 +3949,19 @@
 
   function exportExcel() {
 
-    const reportData = [
+    const data = [
 
       {
+
         "عنوان":
           "سامانه پایش و ارزیابی اثر حریق‌های استان فارس",
 
-        "تعداد حریق":
+        "تعداد حریق جاری":
           document
             .getElementById(
               "reportFireCount"
             )
-            .innerText
-      },
-
-      {
-        "عنوان":
-          "آخرین محاسبه",
+            .innerText,
 
         "مساحت کل سوخته":
           document
@@ -3040,14 +3977,14 @@
             )
             .innerText,
 
-        "داخل مناطق چهارگانه":
+        "مناطق چهارگانه":
           document
             .getElementById(
               "resultProtectedHa"
             )
             .innerText,
 
-        "داخل شکار ممنوع":
+        "شکار ممنوع":
           document
             .getElementById(
               "resultHuntingHa"
@@ -3060,7 +3997,7 @@
 
     const worksheet =
       XLSX.utils.json_to_sheet(
-        reportData
+        data
       );
 
 
@@ -3092,6 +4029,14 @@
       document.querySelector(
         ".image-btn"
       );
+
+
+    if (
+      !button
+    ) {
+
+      return;
+    }
 
 
     const originalText =
@@ -3130,6 +4075,7 @@
         await html2canvas(
           mapElement,
           {
+
             useCORS:
               true,
 
@@ -3142,7 +4088,9 @@
             scale:
               Math.max(
                 1,
-                window.devicePixelRatio || 1
+                window.devicePixelRatio
+                ||
+                1
               ),
 
             logging:
@@ -3161,7 +4109,11 @@
         "fars_fire_map_" +
         new Date()
           .toISOString()
-          .slice(0, 10) +
+          .slice(
+            0,
+            10
+          )
+        +
         ".png";
 
 
@@ -3173,7 +4125,6 @@
 
       link.click();
 
-
     } catch (
       error
     ) {
@@ -3181,6 +4132,7 @@
       console.error(
         error
       );
+
 
       alert(
         "تهیه تصویر نقشه انجام نشد."
@@ -3191,6 +4143,7 @@
       button.innerHTML =
         originalText;
 
+
       button.disabled =
         false;
     }
@@ -3200,3 +4153,4 @@
 
 </body>
 </html>
+```
