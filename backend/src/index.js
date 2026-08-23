@@ -1,21 +1,15 @@
+```javascript
 const TOKEN_URL =
   "https://identity.dataspace.copernicus.eu/auth/realms/CDSE/protocol/openid-connect/token";
+
+const CATALOG_URL =
+  "https://sh.dataspace.copernicus.eu/catalog/v1/search";
 
 const PROCESS_URL =
   "https://sh.dataspace.copernicus.eu/process/v1";
 
-const STATISTICS_URL =
-  "https://sh.dataspace.copernicus.eu/statistics/v1";
-
 const S2_TYPE =
   "sentinel-2-l2a";
-
-const FARS_BOUNDS = [
-  50.0,
-  27.0,
-  54.5,
-  31.5
-];
 
 const BEFORE_DAYS = 5;
 const AFTER_DAYS = 5;
@@ -32,17 +26,20 @@ const RESOLUTION_M = 20;
 function corsHeaders(origin) {
 
   return {
-    "Access-Control-Allow-Origin": origin,
-    "Access-Control-Allow-Methods": "POST, OPTIONS",
-    "Access-Control-Allow-Headers": "Content-Type",
-    "Access-Control-Max-Age": "86400"
+    "Access-Control-Allow-Origin":
+      origin,
+
+    "Access-Control-Allow-Methods":
+      "POST, OPTIONS",
+
+    "Access-Control-Allow-Headers":
+      "Content-Type",
+
+    "Access-Control-Max-Age":
+      "86400"
   };
 }
 
-
-/* ============================================================
-   JSON RESPONSE
-============================================================ */
 
 function jsonResponse(
   data,
@@ -51,15 +48,19 @@ function jsonResponse(
 ) {
 
   return new Response(
+
     JSON.stringify(data),
+
     {
       status,
 
       headers: {
+
         "Content-Type":
           "application/json; charset=utf-8",
 
         ...corsHeaders(origin)
+
       }
     }
   );
@@ -67,7 +68,7 @@ function jsonResponse(
 
 
 /* ============================================================
-   DATE
+   DATE HELPERS
 ============================================================ */
 
 function parseDate(
@@ -79,9 +80,11 @@ function parseDate(
       text || ""
     );
 
+
   if (!match) {
     return null;
   }
+
 
   const date =
     new Date(
@@ -92,13 +95,16 @@ function parseDate(
       )
     );
 
+
   if (
     Number.isNaN(
       date.getTime()
     )
   ) {
+
     return null;
   }
+
 
   return date;
 }
@@ -119,16 +125,18 @@ function addDays(
   days
 ) {
 
-  const value =
+  const result =
     new Date(
       date.getTime()
     );
 
-  value.setUTCDate(
-    value.getUTCDate() + days
+
+  result.setUTCDate(
+    result.getUTCDate() + days
   );
 
-  return value;
+
+  return result;
 }
 
 
@@ -153,13 +161,21 @@ function validatePoint(
 ) {
 
   return (
+
     Array.isArray(point)
+
     &&
+
     point.length >= 2
+
     &&
+
     isNumber(point[0])
+
     &&
+
     isNumber(point[1])
+
   );
 }
 
@@ -169,13 +185,19 @@ function validateRing(
 ) {
 
   return (
+
     Array.isArray(ring)
+
     &&
+
     ring.length >= 4
+
     &&
+
     ring.every(
       validatePoint
     )
+
   );
 }
 
@@ -188,35 +210,39 @@ function validateGeometry(
     return false;
   }
 
+
   if (
     geometry.type !== "Polygon"
     &&
     geometry.type !== "MultiPolygon"
   ) {
+
     return false;
   }
 
-  const coordinates =
-    geometry.coordinates;
 
   if (
     !Array.isArray(
-      coordinates
+      geometry.coordinates
     )
   ) {
+
     return false;
   }
+
 
   if (
     geometry.type === "Polygon"
   ) {
 
-    return coordinates.every(
+    return geometry.coordinates.every(
       validateRing
     );
+
   }
 
-  return coordinates.every(
+
+  return geometry.coordinates.every(
     polygon =>
       Array.isArray(polygon)
       &&
@@ -237,6 +263,7 @@ function geometryBounds(
 
   let minLon = Infinity;
   let minLat = Infinity;
+
   let maxLon = -Infinity;
   let maxLat = -Infinity;
 
@@ -246,14 +273,11 @@ function geometryBounds(
   ) {
 
     const lon =
-      Number(
-        point[0]
-      );
+      Number(point[0]);
 
     const lat =
-      Number(
-        point[1]
-      );
+      Number(point[1]);
+
 
     minLon =
       Math.min(
@@ -261,17 +285,20 @@ function geometryBounds(
         lon
       );
 
+
     minLat =
       Math.min(
         minLat,
         lat
       );
 
+
     maxLon =
       Math.max(
         maxLon,
         lon
       );
+
 
     maxLat =
       Math.max(
@@ -321,31 +348,6 @@ function geometryBounds(
 
 
 /* ============================================================
-   BOUNDS CHECK
-============================================================ */
-
-function geometryInsideFars(
-  geometry
-) {
-
-  const bbox =
-    geometryBounds(
-      geometry
-    );
-
-  return (
-    bbox[0] >= FARS_BOUNDS[0]
-    &&
-    bbox[1] >= FARS_BOUNDS[1]
-    &&
-    bbox[2] <= FARS_BOUNDS[2]
-    &&
-    bbox[3] <= FARS_BOUNDS[3]
-  );
-}
-
-
-/* ============================================================
    TOKEN
 ============================================================ */
 
@@ -374,23 +376,28 @@ async function getToken(
           "POST",
 
         headers: {
+
           "Content-Type":
             "application/x-www-form-urlencoded"
+
         },
 
         body:
-          new URLSearchParams({
+          new URLSearchParams(
+            {
 
-            grant_type:
-              "client_credentials",
+              grant_type:
+                "client_credentials",
 
-            client_id:
-              env.CDSE_CLIENT_ID,
+              client_id:
+                env.CDSE_CLIENT_ID,
 
-            client_secret:
-              env.CDSE_CLIENT_SECRET
+              client_secret:
+                env.CDSE_CLIENT_SECRET
 
-          })
+            }
+          )
+
       }
     );
 
@@ -398,9 +405,6 @@ async function getToken(
   if (
     !response.ok
   ) {
-
-    const text =
-      await response.text();
 
     throw new Error(
       `خطای احراز هویت Copernicus: HTTP ${response.status}`
@@ -427,10 +431,97 @@ async function getToken(
 
 
 /* ============================================================
-   FIND BEFORE / AFTER
+   CATALOG SEARCH
 ============================================================ */
 
-async function findImageDates(
+async function searchCatalog(
+  token,
+  geometry,
+  date
+) {
+
+  const body = {
+
+    collections: [
+      S2_TYPE
+    ],
+
+    datetime:
+      `${date}T00:00:00Z/` +
+      `${date}T23:59:59Z`,
+
+    intersects:
+      geometry,
+
+    limit:
+      10,
+
+    fields:
+      {
+        include:
+          [
+            "id",
+            "properties.datetime",
+            "properties.eo:cloud_cover",
+            "geometry",
+            "bbox"
+          ]
+      }
+  };
+
+
+  const response =
+    await fetch(
+      CATALOG_URL,
+      {
+
+        method:
+          "POST",
+
+        headers: {
+
+          "Authorization":
+            `Bearer ${token}`,
+
+          "Content-Type":
+            "application/json",
+
+          "Accept":
+            "application/json"
+
+        },
+
+        body:
+          JSON.stringify(
+            body
+          )
+      }
+    );
+
+
+  if (
+    !response.ok
+  ) {
+
+    const text =
+      await response.text();
+
+
+    throw new Error(
+      `Catalog API خطا داد: HTTP ${response.status} ${text}`
+    );
+  }
+
+
+  return response.json();
+}
+
+
+/* ============================================================
+   FIND BEST SCENES
+============================================================ */
+
+async function findBeforeAfterScenes(
   token,
   geometry,
   fireDate
@@ -440,162 +531,9 @@ async function findImageDates(
   let after = null;
 
 
-  /*
-   * برای سبک بودن کار، وجود تصویر را
-   * با Process API روی یک پیکسل مرکزی
-   * تست می‌کنیم.
-   *
-   * Sentinel-2 قبل:
-   * 1 تا 5 روز قبل
-   */
-
-  const bbox =
-    geometryBounds(
-      geometry
-    );
-
-
-  async function hasImage(
-    date
-  ) {
-
-    const body = {
-
-      input: {
-
-        bounds: {
-
-          bbox,
-
-          properties: {
-
-            crs:
-              "http://www.opengis.net/"
-              + "def/crs/OGC/1.3/CRS84"
-
-          }
-
-        },
-
-        data: [
-
-          {
-
-            type:
-              S2_TYPE,
-
-            dataFilter: {
-
-              timeRange: {
-
-                from:
-                  `${date}T00:00:00Z`,
-
-                to:
-                  `${date}T23:59:59Z`
-
-              },
-
-              mosaickingOrder:
-                "leastCC"
-
-            }
-
-          }
-
-        ]
-
-      },
-
-      output: {
-
-        width:
-          2,
-
-        height:
-          2,
-
-        responses: [
-
-          {
-
-            identifier:
-              "default",
-
-            format: {
-
-              type:
-                "image/png"
-
-            }
-
-          }
-
-        ]
-
-      },
-
-      evalscript: `
-//VERSION=3
-
-function setup() {
-
-  return {
-
-    input: [
-      "B04"
-    ],
-
-    output: {
-      bands: 1
-    }
-
-  };
-
-}
-
-
-function evaluatePixel(
-  sample
-) {
-
-  return [
-    sample.B04
-  ];
-
-}
-`
-    };
-
-
-    const response =
-      await fetch(
-        PROCESS_URL,
-        {
-
-          method:
-            "POST",
-
-          headers: {
-
-            "Authorization":
-              `Bearer ${token}`,
-
-            "Content-Type":
-              "application/json"
-          },
-
-          body:
-            JSON.stringify(
-              body
-            )
-        }
-      );
-
-
-    return response.ok;
-  }
-
+  /* ----------------------------------------------------------
+     BEFORE
+  ---------------------------------------------------------- */
 
   for (
     let offset = 1;
@@ -603,7 +541,7 @@ function evaluatePixel(
     offset++
   ) {
 
-    const date =
+    const candidateDate =
       isoDate(
         addDays(
           fireDate,
@@ -612,19 +550,86 @@ function evaluatePixel(
       );
 
 
-    if (
-      await hasImage(
-        date
+    const result =
+      await searchCatalog(
+        token,
+        geometry,
+        candidateDate
+      );
+
+
+    const features =
+      Array.isArray(
+        result.features
       )
+        ? result.features
+        : [];
+
+
+    if (
+      features.length
     ) {
 
-      before =
-        date;
+      features.sort(
+        (
+          a,
+          b
+        ) => {
+
+          const cloudA =
+            Number(
+              a.properties?.[
+                "eo:cloud_cover"
+              ]
+            );
+
+          const cloudB =
+            Number(
+              b.properties?.[
+                "eo:cloud_cover"
+              ]
+            );
+
+
+          return (
+            (
+              Number.isFinite(
+                cloudA
+              )
+                ? cloudA
+                : 999
+            )
+            -
+            (
+              Number.isFinite(
+                cloudB
+              )
+                ? cloudB
+                : 999
+            )
+          );
+        }
+      );
+
+
+      before = {
+
+        date:
+          candidateDate,
+
+        feature:
+          features[0]
+      };
+
 
       break;
     }
   }
 
+
+  /* ----------------------------------------------------------
+     AFTER
+  ---------------------------------------------------------- */
 
   for (
     let offset = 1;
@@ -632,7 +637,7 @@ function evaluatePixel(
     offset++
   ) {
 
-    const date =
+    const candidateDate =
       isoDate(
         addDays(
           fireDate,
@@ -641,14 +646,77 @@ function evaluatePixel(
       );
 
 
-    if (
-      await hasImage(
-        date
+    const result =
+      await searchCatalog(
+        token,
+        geometry,
+        candidateDate
+      );
+
+
+    const features =
+      Array.isArray(
+        result.features
       )
+        ? result.features
+        : [];
+
+
+    if (
+      features.length
     ) {
 
-      after =
-        date;
+      features.sort(
+        (
+          a,
+          b
+        ) => {
+
+          const cloudA =
+            Number(
+              a.properties?.[
+                "eo:cloud_cover"
+              ]
+            );
+
+          const cloudB =
+            Number(
+              b.properties?.[
+                "eo:cloud_cover"
+              ]
+            );
+
+
+          return (
+            (
+              Number.isFinite(
+                cloudA
+              )
+                ? cloudA
+                : 999
+            )
+            -
+            (
+              Number.isFinite(
+                cloudB
+              )
+                ? cloudB
+                : 999
+            )
+          );
+        }
+      );
+
+
+      after = {
+
+        date:
+          candidateDate,
+
+        feature:
+          features[0]
+      };
+
 
       break;
     }
@@ -666,10 +734,7 @@ function evaluatePixel(
    dNBR EVALSCRIPT
 ============================================================ */
 
-function buildDnbrEvalscript(
-  beforeDate,
-  afterDate
-) {
+function buildDnbrEvalscript() {
 
   return `
 //VERSION=3
@@ -687,6 +752,9 @@ function setup() {
       ]
     }],
 
+    mosaicking:
+      "ORBIT",
+
     output: {
 
       bands: 1,
@@ -694,43 +762,10 @@ function setup() {
       sampleType:
         "FLOAT32"
 
-    },
-
-    mosaicking:
-      "ORBIT"
+    }
 
   };
 
-}
-
-
-function preProcessScenes(
-  collections
-) {
-
-  const allowedDates = [
-    "${beforeDate}",
-    "${afterDate}"
-  ];
-
-
-  collections.scenes.orbits =
-    collections.scenes.orbits.filter(
-      function(scene) {
-
-        const date =
-          scene.dateFrom
-            .split("T")[0];
-
-        return allowedDates.includes(
-          date
-        );
-
-      }
-    );
-
-
-  return collections;
 }
 
 
@@ -847,27 +882,25 @@ function evaluatePixel(
     )
 
   ];
-
 }
 `;
 }
 
 
 /* ============================================================
-   STATISTICS
+   CALCULATE dNBR RASTER
 ============================================================ */
 
-async function calculateStatistics(
+async function calculateDnbr(
   token,
   geometry,
   beforeDate,
   afterDate
 ) {
 
-  const evalscript =
-    buildDnbrEvalscript(
-      beforeDate,
-      afterDate
+  const bbox =
+    geometryBounds(
+      geometry
     );
 
 
@@ -877,13 +910,14 @@ async function calculateStatistics(
 
       bounds: {
 
-        geometry,
+        bbox,
 
         properties: {
 
           crs:
             "http://www.opengis.net/"
-            + "def/crs/OGC/1.3/CRS84"
+            +
+            "def/crs/OGC/1.3/CRS84"
 
         }
 
@@ -898,8 +932,18 @@ async function calculateStatistics(
 
           dataFilter: {
 
+            timeRange: {
+
+              from:
+                `${beforeDate}T00:00:00Z`,
+
+              to:
+                `${afterDate}T23:59:59Z`
+
+            },
+
             mosaickingOrder:
-              "leastCC"
+              "leastRecent"
 
           }
 
@@ -909,70 +953,43 @@ async function calculateStatistics(
 
     },
 
+    output: {
 
-    aggregation: {
+      width:
+        800,
 
-      timeRange: {
+      height:
+        800,
 
-        from:
-          `${beforeDate}T00:00:00Z`,
+      responses: [
 
-        to:
-          `${afterDate}T23:59:59Z`
+        {
 
-      },
+          identifier:
+            "default",
 
-      aggregationInterval: {
+          format: {
 
-        of:
-          "P10D"
-
-      },
-
-      lastIntervalBehavior:
-        "SHORTEN",
-
-      evalscript,
-
-      resx:
-        RESOLUTION_M,
-
-      resy:
-        RESOLUTION_M
-
-    },
-
-
-    calculations: {
-
-      default: {
-
-        histograms: {
-
-          default: {
-
-            bins: [
-              -1,
-              BURN_THRESHOLD,
-              1
-            ]
+            type:
+              "image/png"
 
           }
 
-        },
+        }
 
-        statistics: {}
+      ]
 
-      }
+    },
 
-    }
+    evalscript:
+      buildBurnMaskEvalscript()
 
   };
 
 
   const response =
     await fetch(
-      STATISTICS_URL,
+      PROCESS_URL,
       {
 
         method:
@@ -987,7 +1004,7 @@ async function calculateStatistics(
             "application/json",
 
           "Accept":
-            "application/json"
+            "image/png"
 
         },
 
@@ -1007,534 +1024,14 @@ async function calculateStatistics(
     const text =
       await response.text();
 
-    throw new Error(
-      `خطای Statistical API: HTTP ${response.status}`
-    );
-  }
-
-
-  const data =
-    await response.json();
-
-
-  return data;
-}
-
-
-/* ============================================================
-   EXTRACT BURNED PIXELS
-============================================================ */
-
-function extractBurnedPixels(
-  data
-) {
-
-  const item =
-    data?.data?.[0];
-
-  const output =
-    item?.outputs?.default;
-
-  const band =
-    output?.bands?.B0;
-
-  const histogram =
-    band?.histogram;
-
-
-  if (
-    !histogram
-    ||
-    !Array.isArray(
-      histogram.bins
-    )
-  ) {
 
     throw new Error(
-      "Histogram مربوط به dNBR دریافت نشد."
+      `Process API خطا داد: HTTP ${response.status} ${text}`
     );
   }
 
 
-  let burnedPixels = 0;
-
-
-  for (
-    const bin
-    of histogram.bins
-  ) {
-
-    if (
-      Number(
-        bin.lowEdge
-      )
-      >= BURN_THRESHOLD
-    ) {
-
-      burnedPixels +=
-        Number(
-          bin.count || 0
-        );
-    }
-  }
-
-
-  burnedPixels +=
-    Number(
-      histogram.overflowCount || 0
-    );
-
-
-  return burnedPixels;
-}
-
-
-/* ============================================================
-   IMAGE TO DATA URL
-============================================================ */
-
-async function imageToDataURL(
-  response
-) {
-
-  const buffer =
-    await response.arrayBuffer();
-
-
-  const bytes =
-    new Uint8Array(
-      buffer
-    );
-
-
-  const chunkSize =
-    8192;
-
-
-  let binary = "";
-
-
-  for (
-    let i = 0;
-    i < bytes.length;
-    i += chunkSize
-  ) {
-
-    binary +=
-      String.fromCharCode(
-        ...bytes.subarray(
-          i,
-          Math.min(
-            i + chunkSize,
-            bytes.length
-          )
-        )
-      );
-  }
-
-
-  return (
-    "data:image/png;base64,"
-    +
-    btoa(
-      binary
-    )
-  );
-}
-
-
-/* ============================================================
-   FALSE COLOR
-============================================================ */
-
-async function getFalseColor(
-  token,
-  geometry,
-  date
-) {
-
-  const bbox =
-    geometryBounds(
-      geometry
-    );
-
-
-  const body = {
-
-    input: {
-
-      bounds: {
-
-        bbox,
-
-        properties: {
-
-          crs:
-            "http://www.opengis.net/"
-            + "def/crs/OGC/1.3/CRS84"
-
-        }
-
-      },
-
-      data: [
-
-        {
-
-          type:
-            S2_TYPE,
-
-          dataFilter: {
-
-            timeRange: {
-
-              from:
-                `${date}T00:00:00Z`,
-
-              to:
-                `${date}T23:59:59Z`
-
-            },
-
-            mosaickingOrder:
-              "leastCC"
-
-          }
-
-        }
-
-      ]
-
-    },
-
-
-    output: {
-
-      width:
-        800,
-
-      height:
-        800,
-
-      responses: [
-
-        {
-
-          identifier:
-            "default",
-
-          format: {
-
-            type:
-              "image/png"
-
-          }
-
-        }
-
-      ]
-
-    },
-
-
-    evalscript: `
-//VERSION=3
-
-function setup() {
-
-  return {
-
-    input: [{
-      bands: [
-        "B08",
-        "B04",
-        "B03",
-        "SCL",
-        "dataMask"
-      ]
-    }],
-
-    output: {
-
-      bands: 4,
-
-      sampleType:
-        "AUTO"
-
-    }
-
-  };
-
-}
-
-
-function evaluatePixel(
-  sample
-) {
-
-  const badSCL = [
-    3,
-    8,
-    9,
-    10,
-    11
-  ];
-
-
-  if (
-    sample.dataMask === 0
-    ||
-    badSCL.includes(
-      sample.SCL
-    )
-  ) {
-
-    return [
-      0,
-      0,
-      0,
-      0
-    ];
-
-  }
-
-
-  return [
-
-    2.5 * sample.B08,
-
-    2.5 * sample.B04,
-
-    2.5 * sample.B03,
-
-    1
-
-  ];
-
-}
-`
-  };
-
-
-  const response =
-    await fetch(
-      PROCESS_URL,
-      {
-
-        method:
-          "POST",
-
-        headers: {
-
-          "Authorization":
-            `Bearer ${token}`,
-
-          "Content-Type":
-            "application/json",
-
-          "Accept":
-            "image/png"
-
-        },
-
-        body:
-          JSON.stringify(
-            body
-          )
-
-      }
-    );
-
-
-  if (
-    !response.ok
-  ) {
-
-    throw new Error(
-      `خطای False Color: HTTP ${response.status}`
-    );
-  }
-
-
-  return {
-
-    dataUrl:
-      await imageToDataURL(
-        response
-      ),
-
-    bounds:
-      [
-        [
-          bbox[1],
-          bbox[0]
-        ],
-
-        [
-          bbox[3],
-          bbox[2]
-        ]
-      ]
-
-  };
-}
-
-
-/* ============================================================
-   BURNED MASK IMAGE
-============================================================ */
-
-async function getBurnedMask(
-  token,
-  geometry,
-  beforeDate,
-  afterDate
-) {
-
-  const bbox =
-    geometryBounds(
-      geometry
-    );
-
-
-  const body = {
-
-    input: {
-
-      bounds: {
-
-        bbox,
-
-        properties: {
-
-          crs:
-            "http://www.opengis.net/"
-            + "def/crs/OGC/1.3/CRS84"
-
-        }
-
-      },
-
-      data: [
-
-        {
-
-          type:
-            S2_TYPE,
-
-          dataFilter: {
-
-            mosaickingOrder:
-              "leastCC"
-
-          }
-
-        }
-
-      ]
-
-    },
-
-
-    output: {
-
-      width:
-        800,
-
-      height:
-        800,
-
-      responses: [
-
-        {
-
-          identifier:
-            "default",
-
-          format: {
-
-            type:
-              "image/png"
-
-          }
-
-        }
-
-      ]
-
-    },
-
-
-    evalscript:
-      buildBurnMaskEvalscript(
-        beforeDate,
-        afterDate
-      )
-
-  };
-
-
-  const response =
-    await fetch(
-      PROCESS_URL,
-      {
-
-        method:
-          "POST",
-
-        headers: {
-
-          "Authorization":
-            `Bearer ${token}`,
-
-          "Content-Type":
-            "application/json",
-
-          "Accept":
-            "image/png"
-
-        },
-
-        body:
-          JSON.stringify(
-            body
-          )
-
-      }
-    );
-
-
-  if (
-    !response.ok
-  ) {
-
-    throw new Error(
-      `خطای Burn Mask: HTTP ${response.status}`
-    );
-  }
-
-
-  return {
-
-    dataUrl:
-      await imageToDataURL(
-        response
-      ),
-
-    bounds:
-      [
-        [
-          bbox[1],
-          bbox[0]
-        ],
-
-        [
-          bbox[3],
-          bbox[2]
-        ]
-      ]
-
-  };
+  return response;
 }
 
 
@@ -1542,10 +1039,7 @@ async function getBurnedMask(
    BURN MASK EVALSCRIPT
 ============================================================ */
 
-function buildBurnMaskEvalscript(
-  beforeDate,
-  afterDate
-) {
+function buildBurnMaskEvalscript() {
 
   return `
 //VERSION=3
@@ -1563,6 +1057,9 @@ function setup() {
       ]
     }],
 
+    mosaicking:
+      "ORBIT",
+
     output: {
 
       bands: 4,
@@ -1570,43 +1067,10 @@ function setup() {
       sampleType:
         "AUTO"
 
-    },
-
-    mosaicking:
-      "ORBIT"
+    }
 
   };
 
-}
-
-
-function preProcessScenes(
-  collections
-) {
-
-  const allowedDates = [
-    "${beforeDate}",
-    "${afterDate}"
-  ];
-
-
-  collections.scenes.orbits =
-    collections.scenes.orbits.filter(
-      function(scene) {
-
-        const date =
-          scene.dateFrom
-            .split("T")[0];
-
-        return allowedDates.includes(
-          date
-        );
-
-      }
-    );
-
-
-  return collections;
 }
 
 
@@ -1634,13 +1098,19 @@ function validSample(
 
 
   return (
+
     !badSCL.includes(
       sample.SCL
     )
+
     &&
+
     sample.B08 > 0
+
     &&
+
     sample.B12 > 0
+
   );
 }
 
@@ -1664,9 +1134,11 @@ function calcNBR(
 
 
   return (
+
     sample.B08
     -
     sample.B12
+
   )
   /
   denominator;
@@ -1732,7 +1204,6 @@ function evaluatePixel(
       0,
       180
     ];
-
   }
 
 
@@ -1742,9 +1213,300 @@ function evaluatePixel(
     0,
     0
   ];
-
 }
 `;
+}
+
+
+/* ============================================================
+   IMAGE TO DATA URL
+============================================================ */
+
+async function imageToDataURL(
+  response
+) {
+
+  const buffer =
+    await response.arrayBuffer();
+
+
+  const bytes =
+    new Uint8Array(
+      buffer
+    );
+
+
+  let binary = "";
+
+  const chunkSize =
+    8192;
+
+
+  for (
+    let i = 0;
+    i < bytes.length;
+    i += chunkSize
+  ) {
+
+    binary +=
+      String.fromCharCode(
+        ...bytes.subarray(
+          i,
+          Math.min(
+            i + chunkSize,
+            bytes.length
+          )
+        )
+      );
+
+  }
+
+
+  return (
+    "data:image/png;base64,"
+    +
+    btoa(
+      binary
+    )
+  );
+}
+
+
+/* ============================================================
+   FALSE COLOR
+============================================================ */
+
+async function getFalseColor(
+  token,
+  geometry,
+  date
+) {
+
+  const bbox =
+    geometryBounds(
+      geometry
+    );
+
+
+  const body = {
+
+    input: {
+
+      bounds: {
+
+        bbox,
+
+        properties: {
+
+          crs:
+            "http://www.opengis.net/"
+            +
+            "def/crs/OGC/1.3/CRS84"
+
+        }
+
+      },
+
+      data: [
+
+        {
+
+          type:
+            S2_TYPE,
+
+          dataFilter: {
+
+            timeRange: {
+
+              from:
+                `${date}T00:00:00Z`,
+
+              to:
+                `${date}T23:59:59Z`
+
+            },
+
+            mosaickingOrder:
+              "leastCC"
+
+          }
+
+        }
+
+      ]
+
+    },
+
+    output: {
+
+      width:
+        800,
+
+      height:
+        800,
+
+      responses: [
+
+        {
+
+          identifier:
+            "default",
+
+          format: {
+
+            type:
+              "image/png"
+
+          }
+
+        }
+
+      ]
+
+    },
+
+    evalscript: `
+//VERSION=3
+
+function setup() {
+
+  return {
+
+    input: [{
+      bands: [
+        "B08",
+        "B04",
+        "B03",
+        "SCL",
+        "dataMask"
+      ]
+    }],
+
+    output: {
+
+      bands: 4,
+
+      sampleType:
+        "AUTO"
+
+    }
+
+  };
+
+}
+
+
+function evaluatePixel(
+  sample
+) {
+
+  const badSCL = [
+    3,
+    8,
+    9,
+    10,
+    11
+  ];
+
+
+  if (
+    sample.dataMask === 0
+    ||
+    badSCL.includes(
+      sample.SCL
+    )
+  ) {
+
+    return [
+      0,
+      0,
+      0,
+      0
+    ];
+  }
+
+
+  return [
+
+    2.5 * sample.B08,
+
+    2.5 * sample.B04,
+
+    2.5 * sample.B03,
+
+    1
+
+  ];
+}
+`
+  };
+
+
+  const response =
+    await fetch(
+      PROCESS_URL,
+      {
+
+        method:
+          "POST",
+
+        headers: {
+
+          "Authorization":
+            `Bearer ${token}`,
+
+          "Content-Type":
+            "application/json",
+
+          "Accept":
+            "image/png"
+
+        },
+
+        body:
+          JSON.stringify(
+            body
+          )
+
+      }
+    );
+
+
+  if (
+    !response.ok
+  ) {
+
+    const text =
+      await response.text();
+
+
+    throw new Error(
+      `False Color خطا داد: HTTP ${response.status} ${text}`
+    );
+  }
+
+
+  return {
+
+    dataUrl:
+      await imageToDataURL(
+        response
+      ),
+
+    bounds:
+      [
+        [
+          bbox[1],
+          bbox[0]
+        ],
+
+        [
+          bbox[3],
+          bbox[2]
+        ]
+      ]
+
+  };
 }
 
 
@@ -1806,18 +1568,6 @@ async function calculate(
   }
 
 
-  if (
-    !geometryInsideFars(
-      geometry
-    )
-  ) {
-
-    throw new Error(
-      "منطقه خارج از محدوده استان فارس است."
-    );
-  }
-
-
   const fireDate =
     parseDate(
       date
@@ -1830,11 +1580,15 @@ async function calculate(
     );
 
 
+  /* ----------------------------------------------------------
+     پیدا کردن تصویر قبل و بعد با Catalog
+  ---------------------------------------------------------- */
+
   const {
     before,
     after
   } =
-    await findImageDates(
+    await findBeforeAfterScenes(
       token,
       geometry,
       fireDate
@@ -1844,7 +1598,7 @@ async function calculate(
   if (!before) {
 
     throw new Error(
-      "تصویر Sentinel-2 قبل از حریق پیدا نشد."
+      `تصویر Sentinel-2 قبل از حریق در بازه ${BEFORE_DAYS} روزه پیدا نشد.`
     );
   }
 
@@ -1852,58 +1606,67 @@ async function calculate(
   if (!after) {
 
     throw new Error(
-      "تصویر Sentinel-2 بعد از حریق پیدا نشد."
+      `تصویر Sentinel-2 بعد از حریق در بازه ${AFTER_DAYS} روزه پیدا نشد.`
     );
   }
 
 
-  const statistics =
-    await calculateStatistics(
+  /* ----------------------------------------------------------
+     dNBR + Burn Mask
+  ---------------------------------------------------------- */
+
+  const burnResponse =
+    await calculateDnbr(
       token,
       geometry,
-      before,
-      after
+      before.date,
+      after.date
     );
 
 
-  const burnedPixels =
-    extractBurnedPixels(
-      statistics
+  const burnMaskUrl =
+    await imageToDataURL(
+      burnResponse
     );
 
 
-  const pixelAreaHa =
-    (
-      RESOLUTION_M
-      *
-      RESOLUTION_M
-    )
-    /
-    10000;
-
-
-  const burnedAreaHa =
-    burnedPixels
-    *
-    pixelAreaHa;
+  /* ----------------------------------------------------------
+     برآورد تعداد پیکسل سوخته
+     
+     چون تصویر Burn Mask با 800x800 است،
+     تعداد پیکسل از تحلیل تصویر سمت مرورگر
+     به‌صورت مطلق استخراج نمی‌شود.
+     
+     برای آزمون فعلی یک شمارش تقریبی بر اساس
+     اندازه خروجی ارائه نمی‌کنیم.
+     
+     در این مرحله نتیجه اصلی با نسخه
+     دقیق‌تر Raster Statistics تکمیل خواهد شد.
+  ---------------------------------------------------------- */
 
 
   const falseColor =
     await getFalseColor(
       token,
       geometry,
-      after
+      after.date
     );
 
 
-  const burnedMask =
-    await getBurnedMask(
-      token,
-      geometry,
-      before,
-      after
+  const bounds =
+    geometryBounds(
+      geometry
     );
 
+
+  /*
+   * مساحت فعلاً از خود Burn Mask به شکل
+   * دقیق استخراج نشده است.
+   *
+   * برای جلوگیری از گزارش عدد ساختگی،
+   * تا زمان افزودن Statistics API مقدار null
+   * نگه داشته می‌شود.
+   */
 
   return {
 
@@ -1919,47 +1682,41 @@ async function calculate(
       regionName || "",
 
     before_date:
-      before,
+      before.date,
 
     after_date:
-      after,
+      after.date,
 
     dnbr_threshold:
       BURN_THRESHOLD,
 
-    burned_pixels:
-      burnedPixels,
-
-    pixel_area_ha:
-      pixelAreaHa,
-
     burned_area: {
 
       total_ha:
-        Number(
-          burnedAreaHa.toFixed(3)
-        ),
+        null,
 
       inside_fars_ha:
-        Number(
-          burnedAreaHa.toFixed(3)
-        ),
+        null,
 
       inside_protected_areas_ha:
-        regionType === "protected"
-          ? Number(
-              burnedAreaHa.toFixed(3)
-            )
-          : 0,
+        null,
 
       inside_hunting_banned_ha:
-        regionType === "hunting"
-          ? Number(
-              burnedAreaHa.toFixed(3)
-            )
-          : 0
+        null
 
     },
+
+    burned_pixels:
+      null,
+
+    pixel_area_ha:
+      (
+        RESOLUTION_M
+        *
+        RESOLUTION_M
+        /
+        10000
+      ),
 
     false_color_url:
       falseColor.dataUrl,
@@ -1968,10 +1725,19 @@ async function calculate(
       falseColor.bounds,
 
     burned_mask_url:
-      burnedMask.dataUrl,
+      burnMaskUrl,
 
     burned_mask_bounds:
-      burnedMask.bounds
+      [
+        [
+          bounds[1],
+          bounds[0]
+        ],
+        [
+          bounds[3],
+          bounds[2]
+        ]
+      ]
 
   };
 }
@@ -2002,6 +1768,7 @@ export default {
       return new Response(
         null,
         {
+
           status:
             204,
 
@@ -2009,6 +1776,7 @@ export default {
             corsHeaders(
               origin
             )
+
         }
       );
     }
@@ -2027,6 +1795,7 @@ export default {
 
       return jsonResponse(
         {
+
           status:
             "OK",
 
@@ -2035,6 +1804,7 @@ export default {
 
           endpoint:
             "/calculate"
+
         },
 
         200,
@@ -2051,11 +1821,13 @@ export default {
 
       return jsonResponse(
         {
+
           status:
             "ERROR",
 
           message:
             "مسیر درخواست نامعتبر است."
+
         },
 
         404,
@@ -2072,11 +1844,13 @@ export default {
 
       return jsonResponse(
         {
+
           status:
             "ERROR",
 
           message:
             "فقط POST مجاز است."
+
         },
 
         405,
@@ -2105,6 +1879,7 @@ export default {
         origin
       );
 
+
     } catch (
       error
     ) {
@@ -2116,13 +1891,15 @@ export default {
 
       return jsonResponse(
         {
+
           status:
             "ERROR",
 
           message:
             error?.message
             ||
-            "خطای نامشخص در محاسبه."
+            "خطای نامشخص."
+
         },
 
         400,
@@ -2134,3 +1911,4 @@ export default {
   }
 
 };
+```
