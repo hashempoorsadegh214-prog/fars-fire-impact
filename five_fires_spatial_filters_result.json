@@ -1,0 +1,47 @@
+{
+  "status": "SUCCESS",
+  "processed": 5,
+  "failed": [],
+  "results": [
+    {
+      "id": 1,
+      "mask": "burned_area_mask_fire_1.tif",
+      "total_burned_ha": 0.6,
+      "inside_fars_ha": 0.6,
+      "inside_protected_areas_ha": 0.0,
+      "inside_hunting_banned_ha": 0.0
+    },
+    {
+      "id": 2,
+      "mask": "burned_area_mask_fire_2.tif",
+      "total_burned_ha": 0.08,
+      "inside_fars_ha": 0.08,
+      "inside_protected_areas_ha": 0.0,
+      "inside_hunting_banned_ha": 0.0
+    },
+    {
+      "id": 3,
+      "mask": "burned_area_mask_fire_3.tif",
+      "total_burned_ha": 7.76,
+      "inside_fars_ha": 7.76,
+      "inside_protected_areas_ha": 0.0,
+      "inside_hunting_banned_ha": 0.0
+    },
+    {
+      "id": 4,
+      "mask": "burned_area_mask_fire_4.tif",
+      "total_burned_ha": 1.04,
+      "inside_fars_ha": 1.04,
+      "inside_protected_areas_ha": 0.0,
+      "inside_hunting_banned_ha": 0.0
+    },
+    {
+      "id": 5,
+      "mask": "burned_area_mask_fire_5.tif",
+      "total_burned_ha": 0.2,
+      "inside_fars_ha": 0.2,
+      "inside_protected_areas_ha": 0.0,
+      "inside_hunting_banned_ha": 0.0
+    }
+  ]
+}
