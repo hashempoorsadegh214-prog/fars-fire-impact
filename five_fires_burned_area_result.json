@@ -1,0 +1,143 @@
+{
+  "status": "SUCCESS",
+  "count": 5,
+  "processed": 5,
+  "failed": [],
+  "results": [
+    {
+      "id": 1,
+      "fire": {
+        "date": "2026-01-02",
+        "time": "1008",
+        "latitude": 29.94073,
+        "longitude": 50.84156
+      },
+      "sentinel2": {
+        "before_date": "2026-01-01",
+        "after_date": "2026-01-03",
+        "before_tile_count": 1,
+        "after_tile_count": 1
+      },
+      "method": {
+        "index": "NBR",
+        "dNBR_threshold": 0.27,
+        "resolution_m": 20,
+        "aoi_radius_km": 5.0
+      },
+      "burned_area": {
+        "pixels": 15,
+        "pixel_area_ha": 0.04,
+        "hectares": 0.6
+      },
+      "mask": "burned_area_mask_fire_1.tif"
+    },
+    {
+      "id": 2,
+      "fire": {
+        "date": "2026-01-02",
+        "time": "2232",
+        "latitude": 29.98036,
+        "longitude": 50.7231
+      },
+      "sentinel2": {
+        "before_date": "2026-01-01",
+        "after_date": "2026-01-03",
+        "before_tile_count": 1,
+        "after_tile_count": 1
+      },
+      "method": {
+        "index": "NBR",
+        "dNBR_threshold": 0.27,
+        "resolution_m": 20,
+        "aoi_radius_km": 5.0
+      },
+      "burned_area": {
+        "pixels": 2,
+        "pixel_area_ha": 0.04,
+        "hectares": 0.08
+      },
+      "mask": "burned_area_mask_fire_2.tif"
+    },
+    {
+      "id": 3,
+      "fire": {
+        "date": "2026-01-04",
+        "time": "930",
+        "latitude": 29.08328,
+        "longitude": 52.79443
+      },
+      "sentinel2": {
+        "before_date": "2026-01-03",
+        "after_date": "2026-01-05",
+        "before_tile_count": 1,
+        "after_tile_count": 1
+      },
+      "method": {
+        "index": "NBR",
+        "dNBR_threshold": 0.27,
+        "resolution_m": 20,
+        "aoi_radius_km": 5.0
+      },
+      "burned_area": {
+        "pixels": 192,
+        "pixel_area_ha": 0.04,
+        "hectares": 7.68
+      },
+      "mask": "burned_area_mask_fire_3.tif"
+    },
+    {
+      "id": 4,
+      "fire": {
+        "date": "2026-01-04",
+        "time": "930",
+        "latitude": 29.59123,
+        "longitude": 52.24101
+      },
+      "sentinel2": {
+        "before_date": "2026-01-03",
+        "after_date": "2026-01-05",
+        "before_tile_count": 1,
+        "after_tile_count": 1
+      },
+      "method": {
+        "index": "NBR",
+        "dNBR_threshold": 0.27,
+        "resolution_m": 20,
+        "aoi_radius_km": 5.0
+      },
+      "burned_area": {
+        "pixels": 26,
+        "pixel_area_ha": 0.04,
+        "hectares": 1.04
+      },
+      "mask": "burned_area_mask_fire_4.tif"
+    },
+    {
+      "id": 5,
+      "fire": {
+        "date": "2026-01-04",
+        "time": "2154",
+        "latitude": 29.25541,
+        "longitude": 53.12027
+      },
+      "sentinel2": {
+        "before_date": "2026-01-03",
+        "after_date": "2026-01-05",
+        "before_tile_count": 2,
+        "after_tile_count": 4
+      },
+      "method": {
+        "index": "NBR",
+        "dNBR_threshold": 0.27,
+        "resolution_m": 20,
+        "aoi_radius_km": 5.0
+      },
+      "burned_area": {
+        "pixels": 5,
+        "pixel_area_ha": 0.04,
+        "hectares": 0.2
+      },
+      "mask": "burned_area_mask_fire_5.tif"
+    }
+  ]
+}
