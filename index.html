@@ -1,4 +1,4 @@
-```html
+
 <!DOCTYPE html>
 <html lang="fa" dir="rtl">
 <head>
@@ -13,7 +13,6 @@
   >
 
   <style>
-
     * {
       box-sizing: border-box;
     }
@@ -47,7 +46,6 @@
       display: flex;
       flex-direction: column;
     }
-
 
     /* =====================================================
        HEADER
@@ -93,31 +91,20 @@
       background: rgba(255,255,255,0.8);
     }
 
-
-    /* =====================================================
-       HEADER CENTER
-    ====================================================== */
-
     .header-center {
       position: absolute;
-
       top: 50%;
       left: 50%;
-
-      transform:
-        translate(-50%, -50%);
+      transform: translate(-50%, -50%);
 
       text-align: center;
-
       white-space: nowrap;
-
       pointer-events: none;
     }
 
     .title-main {
       font-size: 22px;
       font-weight: bold;
-
       line-height: 1.35;
 
       text-shadow:
@@ -126,22 +113,12 @@
 
     .title-sub {
       margin-top: 1px;
-
       font-family: Arial, sans-serif;
-
       direction: ltr;
-
       font-size: 11px;
-
       letter-spacing: 1px;
-
       opacity: 0.95;
     }
-
-
-    /* =====================================================
-       FIRE ICON
-    ====================================================== */
 
     .header-left {
       display: flex;
@@ -159,7 +136,6 @@
       justify-content: center;
 
       font-family: Arial, sans-serif;
-
       font-size: 24px;
 
       background:
@@ -172,18 +148,12 @@
         inset 0 1px 4px rgba(255,255,255,0.25);
     }
 
-
-    /* =====================================================
-       HEADER BUTTONS
-    ====================================================== */
-
     .header-buttons {
       position: relative;
       z-index: 3;
 
       display: flex;
       align-items: center;
-
       gap: 7px;
     }
 
@@ -197,7 +167,6 @@
       color: #fff;
 
       border-radius: 8px;
-
       padding: 8px 12px;
 
       cursor: pointer;
@@ -224,7 +193,6 @@
         translateY(-1px);
     }
 
-
     /* =====================================================
        MAP
     ====================================================== */
@@ -233,14 +201,8 @@
       flex: 1;
       width: 100%;
       min-height: 0;
-
       background: #d9d9d9;
     }
-
-
-    /* =====================================================
-       DARK MAP
-    ====================================================== */
 
     .dark-map .leaflet-tile-pane {
       filter:
@@ -259,7 +221,6 @@
       filter:
         brightness(1.05);
     }
-
 
     /* =====================================================
        LEAFLET
@@ -303,7 +264,6 @@
     body.dark .leaflet-control-zoom a:hover {
       background: #333;
     }
-
 
     /* =====================================================
        FIRE POPUP
@@ -350,9 +310,8 @@
       color: #ff5555;
     }
 
-
     /* =====================================================
-       LATEST FIRE PANEL
+       LATEST FIRE BADGE
     ====================================================== */
 
     #latestFireBadge {
@@ -408,7 +367,6 @@
       line-height: 1.8;
     }
 
-
     /* =====================================================
        PANELS
     ====================================================== */
@@ -455,11 +413,6 @@
       color: #eee;
     }
 
-
-    /* =====================================================
-       PANEL HEADER
-    ====================================================== */
-
     .panel-header {
       padding: 13px 16px;
 
@@ -485,36 +438,22 @@
 
     .close-panel {
       border: 0;
-
       background: transparent;
-
       color: #fff;
-
       font-size: 22px;
-
       cursor: pointer;
-
       font-family: Arial, sans-serif;
     }
 
-
-    /* =====================================================
-       PANEL BODY
-    ====================================================== */
-
     .panel-body {
       padding: 16px;
-
       line-height: 2;
-
       font-size: 14px;
     }
 
     .panel-body h3 {
       margin-top: 8px;
-
       color: #d00000;
-
       font-size: 16px;
     }
 
@@ -528,10 +467,8 @@
 
     .panel-body ul {
       margin: 5px 0;
-
       padding-right: 20px;
     }
-
 
     /* =====================================================
        REPORT
@@ -539,28 +476,20 @@
 
     .report-box {
       background: #fafafa;
-
-      border:
-        1px solid #ddd;
-
+      border: 1px solid #ddd;
       border-radius: 10px;
-
       padding: 12px;
-
       margin-bottom: 12px;
     }
 
     body.dark .report-box {
       background: #222;
-
       border-color: #444;
     }
 
     .report-title {
       font-weight: bold;
-
       margin-bottom: 8px;
-
       color: #c00000;
     }
 
@@ -568,18 +497,12 @@
       color: #ff5555;
     }
 
-
-    /* =====================================================
-       REPORT BUTTONS
-    ====================================================== */
-
     .report-action {
       width: 100%;
 
       padding: 11px;
 
       border: 0;
-
       border-radius: 9px;
 
       cursor: pointer;
@@ -594,7 +517,6 @@
         sans-serif;
 
       font-size: 15px;
-
       font-weight: bold;
 
       margin-top: 8px;
@@ -623,16 +545,20 @@
       opacity: 0.9;
     }
 
-
     /* =====================================================
        CALCULATION PANEL
     ====================================================== */
 
     .calc-box {
       background: #fafafa;
-      border: 1px solid #ddd;
+
+      border:
+        1px solid #ddd;
+
       border-radius: 10px;
+
       padding: 12px;
+
       margin-bottom: 12px;
     }
 
@@ -655,17 +581,23 @@
     .calc-select,
     .calc-date {
       width: 100%;
+
       padding: 10px;
+
       border-radius: 8px;
+
       border: 1px solid #bbb;
+
       background: #fff;
       color: #222;
+
       font-family:
         "B Nazanin",
         "BNazanin",
         Tahoma,
         Arial,
         sans-serif;
+
       font-size: 14px;
     }
 
@@ -674,10 +606,6 @@
       background: #333;
       color: #fff;
       border-color: #555;
-    }
-
-    .calc-select:disabled {
-      opacity: 0.55;
     }
 
     .calc-hint {
@@ -693,24 +621,32 @@
 
     .calc-button {
       width: 100%;
+
       border: 0;
       border-radius: 9px;
+
       padding: 12px;
+
       cursor: pointer;
+
       background:
         linear-gradient(
           #ff6b00,
           #d94800
         );
+
       color: #fff;
+
       font-family:
         "B Nazanin",
         "BNazanin",
         Tahoma,
         Arial,
         sans-serif;
+
       font-weight: bold;
       font-size: 15px;
+
       margin-top: 6px;
     }
 
@@ -725,10 +661,15 @@
 
     #calculationStatus {
       display: none;
+
       margin-top: 10px;
+
       border-radius: 9px;
+
       padding: 10px;
+
       font-size: 13px;
+
       line-height: 1.9;
     }
 
@@ -809,28 +750,31 @@
       line-height: 1.8;
     }
 
-
     /* =====================================================
        FALSE COLOR LEGEND
     ====================================================== */
 
     #falseColorLegend {
       position: fixed;
+
       bottom: 18px;
       left: 18px;
+
       z-index: 1800;
 
       background:
         rgba(255,255,255,0.97);
 
       border-radius: 10px;
+
       padding: 10px 12px;
 
       box-shadow:
         0 4px 18px rgba(0,0,0,0.20);
 
       display: none;
-      min-width: 190px;
+
+      min-width: 210px;
     }
 
     #falseColorLegend.active {
@@ -838,7 +782,9 @@
     }
 
     body.dark #falseColorLegend {
-      background: rgba(30,30,30,0.97);
+      background:
+        rgba(30,30,30,0.97);
+
       color: #fff;
     }
 
@@ -848,17 +794,10 @@
       color: #b00000;
     }
 
-    .legend-swatch {
-      height: 10px;
-      border-radius: 6px;
-      margin: 4px 0;
-    }
-
     .legend-description {
       font-size: 11px;
       line-height: 1.8;
     }
-
 
     /* =====================================================
        CALCULATION OVERLAY
@@ -866,6 +805,7 @@
 
     #calculationOverlay {
       position: fixed;
+
       inset: 0;
 
       z-index: 5000;
@@ -884,11 +824,20 @@
     }
 
     .calculation-overlay-box {
-      width: min(360px, calc(100vw - 30px));
+      width:
+        min(
+          360px,
+          calc(100vw - 30px)
+        );
+
       background: #fff;
+
       border-radius: 14px;
+
       padding: 22px;
+
       text-align: center;
+
       box-shadow:
         0 10px 40px rgba(0,0,0,0.3);
     }
@@ -901,7 +850,9 @@
     .loader {
       width: 42px;
       height: 42px;
-      margin: 0 auto 12px;
+
+      margin:
+        0 auto 12px;
 
       border:
         4px solid #ddd;
@@ -917,14 +868,11 @@
     }
 
     @keyframes spin {
-
       to {
         transform:
           rotate(360deg);
       }
-
     }
-
 
     /* =====================================================
        MOBILE
@@ -935,7 +883,6 @@
       #header {
         height: 68px;
         min-height: 68px;
-
         padding: 0 8px;
       }
 
@@ -955,7 +902,6 @@
       .fire-icon {
         width: 37px;
         height: 37px;
-
         font-size: 20px;
       }
 
@@ -970,9 +916,7 @@
 
       .panel {
         top: 78px;
-
         left: 10px;
-
         width:
           calc(100vw - 20px);
       }
@@ -987,9 +931,7 @@
         left: 10px;
         bottom: 10px;
       }
-
     }
-
 
     @media (max-width: 560px) {
 
@@ -999,7 +941,6 @@
 
       .header-center {
         left: 50%;
-
         max-width: 62vw;
       }
 
@@ -1017,20 +958,15 @@
 
       .header-btn {
         font-size: 10px;
-
         padding: 6px;
       }
-
     }
-
   </style>
 </head>
-
 
 <body>
 
 <div id="app">
-
 
   <!-- =====================================================
        HEADER
@@ -1046,7 +982,6 @@
 
     </div>
 
-
     <div class="header-center">
 
       <div class="title-main">
@@ -1058,7 +993,6 @@
       </div>
 
     </div>
-
 
     <div class="header-buttons">
 
@@ -1102,21 +1036,17 @@
 
   </header>
 
-
   <!-- =====================================================
        MAP
   ====================================================== -->
 
   <div id="map"></div>
 
-
   <!-- =====================================================
-       LATEST FIRE BADGE
+       LATEST FIRE
   ====================================================== -->
 
-  <div
-    id="latestFireBadge"
-  >
+  <div id="latestFireBadge">
 
     <div class="latest-title">
       🔥 آخرین حریق شناسایی‌شده
@@ -1131,7 +1061,6 @@
 
   </div>
 
-
   <!-- =====================================================
        FALSE COLOR LEGEND
   ====================================================== -->
@@ -1139,32 +1068,16 @@
   <div id="falseColorLegend">
 
     <div class="legend-title">
-      تصویر False Color
+      🛰️ تصویر False Color
     </div>
 
-    <div
-      class="legend-swatch"
-      style="
-        background:
-          linear-gradient(
-            90deg,
-            #001f3f,
-            #0074d9,
-            #7fdbff
-          );
-      "
-    ></div>
-
-    <div
-      class="legend-description"
-    >
-      پوشش گیاهی سالم با تن‌های قرمز
-      مشخص‌تر می‌شود و سطوح سوخته،
-      تیره‌تر دیده می‌شوند.
+    <div class="legend-description">
+      پوشش گیاهی سالم معمولاً با تن‌های
+      قرمز/صورتی دیده می‌شود و مناطق سوخته
+      نسبت به پوشش سالم تیره‌تر دیده می‌شوند.
     </div>
 
   </div>
-
 
   <!-- =====================================================
        GUIDE
@@ -1190,7 +1103,6 @@
 
     </div>
 
-
     <div class="panel-body">
 
       <h3>
@@ -1199,7 +1111,7 @@
 
       <p>
         از کنترل لایه‌های روی نقشه می‌توانید
-        محدوده موردنظر خود را فعال یا غیرفعال کنید.
+        محدوده‌های موردنظر را فعال یا غیرفعال کنید.
       </p>
 
       <ul>
@@ -1214,28 +1126,20 @@
       </h3>
 
       <p>
-        در بخش «محاسبه حریق» ابتدا تاریخ موردنظر
-        و سپس منطقه موردنظر را انتخاب کنید.
+        ابتدا تاریخ حریق را انتخاب کنید و سپس
+        یک منطقه از دو گروه «مناطق چهارگانه»
+        یا «مناطق شکار ممنوع» انتخاب کنید.
       </p>
 
       <p>
-        پس از محاسبه، تصویر False Color و
-        محدوده سوختگی روی نقشه نمایش داده می‌شود.
-      </p>
-
-      <h3>
-        گزارش
-      </h3>
-
-      <p>
-        در بخش گزارش، خروجی Excel و تصویر
-        نمای فعلی نقشه در دسترس خواهد بود.
+        پس از محاسبه، نتیجه مساحت سوخته،
+        تصویر False Color و محدوده سوختگی
+        روی نقشه نمایش داده می‌شود.
       </p>
 
     </div>
 
   </div>
-
 
   <!-- =====================================================
        ABOUT
@@ -1261,7 +1165,6 @@
 
     </div>
 
-
     <div class="panel-body">
 
       <h3>
@@ -1270,36 +1173,25 @@
 
       <p>
         این سامانه با هدف پایش ماهواره‌ای حریق‌های
-        استان فارس و برآورد میزان تأثیر آن‌ها
-        بر عرصه‌های طبیعی طراحی شده است.
+        استان فارس و ارزیابی اثر آن‌ها بر عرصه‌های
+        طبیعی و حفاظتی طراحی شده است.
       </p>
 
       <h3>
-        داده‌ها و محدوده‌ها
+        داده‌ها
       </h3>
 
       <ul>
         <li>داده‌های ماهواره‌ای حریق</li>
+        <li>Sentinel-2</li>
         <li>مرز استان فارس</li>
-        <li>مناطق چهارگانه محیط‌زیست</li>
+        <li>مناطق چهارگانه</li>
         <li>مناطق شکار ممنوع</li>
-        <li>تصاویر Sentinel-2</li>
       </ul>
-
-      <h3>
-        هدف نهایی
-      </h3>
-
-      <p>
-        ارائه محل حریق، محدوده سوخته،
-        مساحت حریق به هکتار و میزان تأثیر
-        حریق در محدوده‌های حفاظتی استان فارس.
-      </p>
 
     </div>
 
   </div>
-
 
   <!-- =====================================================
        CALCULATION PANEL
@@ -1325,7 +1217,6 @@
 
     </div>
 
-
     <div class="panel-body">
 
       <div class="calc-box">
@@ -1347,12 +1238,10 @@
         </select>
 
         <div class="calc-hint">
-          تاریخ‌هایی که در آرشیو حریق
-          ثبت شده‌اند در این فهرست قرار می‌گیرند.
+          تاریخ‌ها از داده حریق موجود در سایت گرفته می‌شوند.
         </div>
 
       </div>
-
 
       <div class="calc-box">
 
@@ -1367,15 +1256,12 @@
           id="protectedSelect"
           class="calc-select"
         >
-
           <option value="">
             انتخاب منطقه
           </option>
-
         </select>
 
       </div>
-
 
       <div class="calc-box">
 
@@ -1390,15 +1276,16 @@
           id="huntingSelect"
           class="calc-select"
         >
-
           <option value="">
             انتخاب منطقه
           </option>
-
         </select>
 
       </div>
 
+      <div class="calc-hint">
+        فقط یکی از دو فهرست منطقه‌ای را انتخاب کنید.
+      </div>
 
       <button
         id="calculateButton"
@@ -1408,11 +1295,7 @@
         🔥 محاسبه حریق
       </button>
 
-
-      <div
-        id="calculationStatus"
-      ></div>
-
+      <div id="calculationStatus"></div>
 
       <div
         id="calculationResult"
@@ -1434,11 +1317,10 @@
 
         </div>
 
-
         <div class="result-card">
 
           <div>
-            سوختگی داخل فارس
+            داخل فارس
           </div>
 
           <div
@@ -1449,7 +1331,6 @@
           </div>
 
         </div>
-
 
         <div class="result-card">
 
@@ -1466,7 +1347,6 @@
 
         </div>
 
-
         <div class="result-card">
 
           <div>
@@ -1482,7 +1362,6 @@
 
         </div>
 
-
         <div
           id="resultDetails"
           class="result-small"
@@ -1493,7 +1372,6 @@
     </div>
 
   </div>
-
 
   <!-- =====================================================
        REPORT
@@ -1519,7 +1397,6 @@
 
     </div>
 
-
     <div class="panel-body">
 
       <div class="report-box">
@@ -1534,35 +1411,12 @@
 
       </div>
 
-
-      <div class="report-box">
-
-        <div class="report-title">
-          محدوده‌های قابل بررسی
-        </div>
-
-        <p>
-          استان فارس
-        </p>
-
-        <p>
-          مناطق چهارگانه محیط‌زیست
-        </p>
-
-        <p>
-          مناطق شکار ممنوع
-        </p>
-
-      </div>
-
-
       <button
         class="report-action excel-btn"
         onclick="exportExcel()"
       >
         📊 دریافت گزارش Excel
       </button>
-
 
       <button
         class="report-action image-btn"
@@ -1577,23 +1431,18 @@
 
 </div>
 
-
 <!-- =====================================================
      CALCULATION OVERLAY
 ====================================================== -->
 
-<div
-  id="calculationOverlay"
->
+<div id="calculationOverlay">
 
-  <div
-    class="calculation-overlay-box"
-  >
+  <div class="calculation-overlay-box">
 
     <div class="loader"></div>
 
     <div>
-      در حال محاسبه تصویر Sentinel-2...
+      در حال محاسبه Sentinel-2...
     </div>
 
     <div
@@ -1603,13 +1452,12 @@
         opacity:0.8;
       "
     >
-      فقط محدوده و تاریخ انتخاب‌شده پردازش می‌شود.
+      فقط تاریخ و محدوده انتخاب‌شده پردازش می‌شود.
     </div>
 
   </div>
 
 </div>
-
 
 <!-- =====================================================
      LIBRARIES
@@ -1621,29 +1469,14 @@
 
 <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
 
-
 <script>
 
   /* =====================================================
-     CONFIGURATION
+     BACKEND
   ====================================================== */
 
-  /*
-   * این URL باید بعداً به endpoint امن محاسبه وصل شود.
-   *
-   * نمونه:
-   * https://YOUR-BACKEND.example.com/calculate
-   *
-   * در backend باید:
-   * 1) تاریخ را بگیرد.
-   * 2) منطقه انتخاب‌شده را بگیرد.
-   * 3) Sentinel-2 قبل/بعد را پیدا کند.
-   * 4) NBR/dNBR را محاسبه کند.
-   * 5) نتیجه و URL تصویر را برگرداند.
-   */
-
   const CALCULATION_API_URL =
-    "";
+    "https://fars-fire-impact.hashempoor-sadegh214.workers.dev/calculate";
 
 
   /* =====================================================
@@ -1657,31 +1490,33 @@
     );
 
 
-  const lightTiles =
-    L.tileLayer(
-      "https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png",
-      {
-        attribution:
-          "&copy; OpenStreetMap contributors"
-      }
-    ).addTo(map);
+  L.tileLayer(
+    "https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png",
+    {
+      attribution:
+        "&copy; OpenStreetMap contributors"
+    }
+  ).addTo(map);
 
 
   /* =====================================================
      LAYERS
   ====================================================== */
 
-  let farsLayer;
-  let protectedLayer;
-  let huntingLayer;
-  let fireLayer;
+  let farsLayer = null;
+  let protectedLayer = null;
+  let huntingLayer = null;
+  let fireLayer = null;
 
-  let falseColorLayer;
-  let burnedLayer;
+  let falseColorLayer = null;
+  let burnedLayer = null;
+
+  let protectedGeoJSON = null;
+  let huntingGeoJSON = null;
 
   const overlayLayers = {};
 
-  let layerControl;
+  let layerControl = null;
 
 
   /* =====================================================
@@ -1690,7 +1525,16 @@
 
   fetch("fars.geojson")
     .then(
-      response => response.json()
+      response => {
+
+        if (!response.ok) {
+          throw new Error(
+            "fars.geojson unavailable"
+          );
+        }
+
+        return response.json();
+      }
     )
     .then(
       data => {
@@ -1720,31 +1564,40 @@
 
 
         updateLayerControl();
-
       }
     )
     .catch(
-      error => {
-
+      error =>
         console.error(
-          "خطا در بارگذاری fars.geojson:",
+          "Fars layer error:",
           error
-        );
-
-      }
+        )
     );
 
 
   /* =====================================================
-     PROTECTED AREAS
+     PROTECTED
   ====================================================== */
 
   fetch("protected_areas.geojson")
     .then(
-      response => response.json()
+      response => {
+
+        if (!response.ok) {
+          throw new Error(
+            "protected_areas.geojson unavailable"
+          );
+        }
+
+        return response.json();
+      }
     )
     .then(
       data => {
+
+        protectedGeoJSON =
+          data;
+
 
         protectedLayer =
           L.geoJSON(
@@ -1765,37 +1618,48 @@
           protectedLayer;
 
 
-        updateLayerControl();
-
-
-        loadProtectedOptions(
-          data
+        populateRegionOptions(
+          data,
+          "protectedSelect",
+          "منطقه چهارگانه"
         );
 
+
+        updateLayerControl();
       }
     )
     .catch(
-      error => {
-
+      error =>
         console.error(
-          "خطا در protected_areas.geojson:",
+          "Protected layer error:",
           error
-        );
-
-      }
+        )
     );
 
 
   /* =====================================================
-     HUNTING BANNED
+     HUNTING
   ====================================================== */
 
   fetch("hunting_banned.geojson")
     .then(
-      response => response.json()
+      response => {
+
+        if (!response.ok) {
+          throw new Error(
+            "hunting_banned.geojson unavailable"
+          );
+        }
+
+        return response.json();
+      }
     )
     .then(
       data => {
+
+        huntingGeoJSON =
+          data;
+
 
         huntingLayer =
           L.geoJSON(
@@ -1816,29 +1680,27 @@
           huntingLayer;
 
 
-        updateLayerControl();
-
-
-        loadHuntingOptions(
-          data
+        populateRegionOptions(
+          data,
+          "huntingSelect",
+          "منطقه شکار ممنوع"
         );
 
+
+        updateLayerControl();
       }
     )
     .catch(
-      error => {
-
+      error =>
         console.error(
-          "خطا در hunting_banned.geojson:",
+          "Hunting layer error:",
           error
-        );
-
-      }
+        )
     );
 
 
   /* =====================================================
-     FIRE DATA
+     FIRES
   ====================================================== */
 
   fetch("fires.json")
@@ -1846,15 +1708,12 @@
       response => {
 
         if (!response.ok) {
-
           throw new Error(
-            "fires.json در دسترس نیست."
+            "fires.json unavailable"
           );
-
         }
 
         return response.json();
-
       }
     )
     .then(
@@ -1867,18 +1726,14 @@
         loadFireDates(
           data
         );
-
       }
     )
     .catch(
-      error => {
-
+      error =>
         console.error(
-          "خطا در دریافت fires.json:",
+          "Fire data error:",
           error
-        );
-
-      }
+        )
     );
 
 
@@ -1933,23 +1788,20 @@
           fire,
           index === 0
         );
-
       }
     );
 
 
     updateLayerControl();
 
-
     showLatestFire(
       fires[0]
     );
-
   }
 
 
   /* =====================================================
-     LOAD FIRE DATES
+     LOAD DATES
   ====================================================== */
 
   function loadFireDates(
@@ -1987,12 +1839,11 @@
     );
 
 
-    dateSelect.innerHTML =
-      `
+    dateSelect.innerHTML = `
       <option value="">
         انتخاب تاریخ
       </option>
-      `;
+    `;
 
 
     dates.forEach(
@@ -2012,15 +1863,13 @@
         dateSelect.appendChild(
           option
         );
-
       }
     );
-
   }
 
 
   /* =====================================================
-     GENERIC GEOJSON OPTIONS
+     REGION OPTIONS
   ====================================================== */
 
   function populateRegionOptions(
@@ -2035,12 +1884,11 @@
       );
 
 
-    select.innerHTML =
-      `
+    select.innerHTML = `
       <option value="">
         انتخاب منطقه
       </option>
-      `;
+    `;
 
 
     const features =
@@ -2067,15 +1915,7 @@
           ||
           properties.Name
           ||
-          (
-            fallbackPrefix
-            +
-            " "
-            +
-            (
-              index + 1
-            )
-          );
+          `${fallbackPrefix} ${index + 1}`;
 
 
         const option =
@@ -2095,41 +1935,13 @@
         select.appendChild(
           option
         );
-
       }
     );
-
-  }
-
-
-  function loadProtectedOptions(
-    data
-  ) {
-
-    populateRegionOptions(
-      data,
-      "protectedSelect",
-      "منطقه چهارگانه"
-    );
-
-  }
-
-
-  function loadHuntingOptions(
-    data
-  ) {
-
-    populateRegionOptions(
-      data,
-      "huntingSelect",
-      "منطقه شکار ممنوع"
-    );
-
   }
 
 
   /* =====================================================
-     REGION SELECTION
+     MUTUAL EXCLUSION
   ====================================================== */
 
   document
@@ -2140,14 +1952,12 @@
       "change",
       function() {
 
-        if (this.value) {
+        if (this.value !== "") {
 
           document.getElementById(
             "huntingSelect"
           ).value = "";
-
         }
-
       }
     );
 
@@ -2160,20 +1970,18 @@
       "change",
       function() {
 
-        if (this.value) {
+        if (this.value !== "") {
 
           document.getElementById(
             "protectedSelect"
           ).value = "";
-
         }
-
       }
     );
 
 
   /* =====================================================
-     OPEN CALCULATION PANEL
+     PANEL
   ====================================================== */
 
   function openCalculationPanel() {
@@ -2181,21 +1989,65 @@
     togglePanel(
       "calculationPanel"
     );
+  }
 
+
+  function openReportPanel() {
+
+    togglePanel(
+      "reportPanel"
+    );
+  }
+
+
+  function closePanels() {
+
+    document
+      .querySelectorAll(
+        ".panel"
+      )
+      .forEach(
+        panel =>
+          panel.classList.remove(
+            "active"
+          )
+      );
+  }
+
+
+  function togglePanel(
+    panelId
+  ) {
+
+    const panel =
+      document.getElementById(
+        panelId
+      );
+
+
+    const wasActive =
+      panel.classList.contains(
+        "active"
+      );
+
+
+    closePanels();
+
+
+    if (!wasActive) {
+
+      panel.classList.add(
+        "active"
+      );
+    }
   }
 
 
   /* =====================================================
-     CALCULATION REQUEST
+     GET SELECTED FEATURE
   ====================================================== */
 
-  async function requestBurnedAreaCalculation() {
-
-    const date =
-      document.getElementById(
-        "calculationDate"
-      ).value;
-
+  function getSelectedFeature() {
 
     const protectedIndex =
       document.getElementById(
@@ -2209,23 +2061,123 @@
       ).value;
 
 
-    if (!date) {
+    if (
+      protectedIndex !== ""
+      &&
+      protectedGeoJSON
+    ) {
 
-      setCalculationStatus(
-        "error",
-        "ابتدا تاریخ حریق را انتخاب کنید."
-      );
+      const feature =
+        protectedGeoJSON.features[
+          Number(
+            protectedIndex
+          )
+        ];
 
-      return;
 
+      return {
+
+        regionType:
+          "protected",
+
+        regionName:
+          getFeatureName(
+            feature,
+            "منطقه چهارگانه"
+          ),
+
+        geometry:
+          feature?.geometry
+      };
     }
 
 
     if (
-      protectedIndex === ""
+      huntingIndex !== ""
       &&
-      huntingIndex === ""
+      huntingGeoJSON
     ) {
+
+      const feature =
+        huntingGeoJSON.features[
+          Number(
+            huntingIndex
+          )
+        ];
+
+
+      return {
+
+        regionType:
+          "hunting",
+
+        regionName:
+          getFeatureName(
+            feature,
+            "منطقه شکار ممنوع"
+          ),
+
+        geometry:
+          feature?.geometry
+      };
+    }
+
+
+    return null;
+  }
+
+
+  function getFeatureName(
+    feature,
+    fallback
+  ) {
+
+    const properties =
+      feature?.properties || {};
+
+
+    return (
+      properties.shapeName
+      ||
+      properties.name
+      ||
+      properties.NAME
+      ||
+      properties.Name
+      ||
+      fallback
+    );
+  }
+
+
+  /* =====================================================
+     CALCULATE
+  ====================================================== */
+
+  async function requestBurnedAreaCalculation() {
+
+    const date =
+      document.getElementById(
+        "calculationDate"
+      ).value;
+
+
+    if (!date) {
+
+      setCalculationStatus(
+        "error",
+        "ابتدا تاریخ را انتخاب کنید."
+      );
+
+      return;
+    }
+
+
+    const selected =
+      getSelectedFeature();
+
+
+    if (!selected) {
 
       setCalculationStatus(
         "error",
@@ -2233,32 +2185,20 @@
       );
 
       return;
-
     }
 
 
-    if (!CALCULATION_API_URL) {
+    if (
+      !selected.geometry
+    ) {
 
       setCalculationStatus(
-        "info",
-        "رابط کاربری آماده است، اما اتصال امن به موتور محاسبه هنوز تنظیم نشده است."
+        "error",
+        "هندسه منطقه پیدا نشد."
       );
 
       return;
-
     }
-
-
-    const regionType =
-      protectedIndex !== ""
-        ? "protected"
-        : "hunting";
-
-
-    const regionIndex =
-      protectedIndex !== ""
-        ? protectedIndex
-        : huntingIndex;
 
 
     const button =
@@ -2278,7 +2218,7 @@
 
     setCalculationStatus(
       "info",
-      "درخواست محاسبه ارسال شد..."
+      "درخواست محاسبه به موتور پردازش ارسال شد..."
     );
 
 
@@ -2300,32 +2240,47 @@
             body:
               JSON.stringify(
                 {
-                  date:
-                    date,
+                  date,
 
-                  region_type:
-                    regionType,
+                  regionType:
+                    selected.regionType,
 
-                  region_index:
-                    regionIndex
+                  regionName:
+                    selected.regionName,
+
+                  geometry:
+                    selected.geometry
                 }
               )
           }
         );
 
 
+      const result =
+        await response.json();
+
+
       if (!response.ok) {
 
         throw new Error(
-          "HTTP " +
-          response.status
+          result.message
+          ||
+          "خطای Backend"
         );
-
       }
 
 
-      const result =
-        await response.json();
+      if (
+        result.status !==
+        "SUCCESS"
+      ) {
+
+        throw new Error(
+          result.message
+          ||
+          "محاسبه موفق نبود."
+        );
+      }
 
 
       showCalculationResult(
@@ -2333,7 +2288,7 @@
       );
 
 
-      await displayCalculationLayers(
+      displayCalculationLayers(
         result
       );
 
@@ -2344,16 +2299,19 @@
       );
 
 
-    } catch (error) {
+    } catch (
+      error
+    ) {
 
       console.error(
+        "Calculation error:",
         error
       );
 
 
       setCalculationStatus(
         "error",
-        "محاسبه انجام نشد. اتصال موتور محاسبه را بررسی کنید."
+        error.message
       );
 
     } finally {
@@ -2364,9 +2322,7 @@
       showCalculationOverlay(
         false
       );
-
     }
-
   }
 
 
@@ -2418,14 +2374,28 @@
       "resultDetails"
     ).innerHTML =
       `
-      تصویر قبل:
-      ${result.before_date || "-"}
-      <br>
-      تصویر بعد:
-      ${result.after_date || "-"}
-      <br>
-      آستانه dNBR:
-      ${result.dnbr_threshold ?? "-"}
+        <strong>منطقه:</strong>
+        ${result.region_name || "-"}
+        <br>
+
+        <strong>تاریخ:</strong>
+        ${result.date || "-"}
+        <br>
+
+        <strong>تصویر قبل:</strong>
+        ${result.before_date || "-"}
+        <br>
+
+        <strong>تصویر بعد:</strong>
+        ${result.after_date || "-"}
+        <br>
+
+        <strong>آستانه dNBR:</strong>
+        ${result.dnbr_threshold ?? "-"}
+        <br>
+
+        <strong>پیکسل‌های سوخته:</strong>
+        ${result.burned_pixels ?? "-"}
       `;
 
 
@@ -2434,7 +2404,6 @@
     ).classList.add(
       "active"
     );
-
   }
 
 
@@ -2453,31 +2422,28 @@
     ) {
 
       return "-";
-
     }
 
 
     return (
-      Number(value)
-        .toLocaleString(
-          "fa-IR",
-          {
-            minimumFractionDigits:
-              3,
+      Number(value).toLocaleString(
+        "fa-IR",
+        {
+          minimumFractionDigits:
+            3,
 
-            maximumFractionDigits:
-              3
-          }
-        )
+          maximumFractionDigits:
+            3
+        }
+      )
       +
       " هکتار"
     );
-
   }
 
 
   /* =====================================================
-     CALCULATION STATUS
+     STATUS
   ====================================================== */
 
   function setCalculationStatus(
@@ -2498,12 +2464,11 @@
 
     element.textContent =
       message;
-
   }
 
 
   /* =====================================================
-     CALCULATION OVERLAY
+     OVERLAY
   ====================================================== */
 
   function showCalculationOverlay(
@@ -2527,17 +2492,15 @@
       overlay.classList.remove(
         "active"
       );
-
     }
-
   }
 
 
   /* =====================================================
-     DISPLAY CALCULATION LAYERS
+     DISPLAY FALSE COLOR + BURNED AREA
   ====================================================== */
 
-  async function displayCalculationLayers(
+  function displayCalculationLayers(
     result
   ) {
 
@@ -2547,10 +2510,8 @@
         falseColorLayer
       );
 
-      delete overlayLayers[
-        "🛰️ تصویر False Color"
-      ];
-
+      falseColorLayer =
+        null;
     }
 
 
@@ -2560,24 +2521,24 @@
         burnedLayer
       );
 
-      delete overlayLayers[
-        "🔥 محدوده سوختگی"
-      ];
-
+      burnedLayer =
+        null;
     }
 
 
-    /*
-     * backend باید یکی از این دو مورد
-     * را در پاسخ برگرداند:
-     *
-     * false_color_url
-     * burned_geojson
-     */
+    delete overlayLayers[
+      "🛰️ تصویر False Color"
+    ];
+
+    delete overlayLayers[
+      "🔥 محدوده سوختگی"
+    ];
 
 
     if (
       result.false_color_url
+      &&
+      result.false_color_bounds
     ) {
 
       falseColorLayer =
@@ -2585,7 +2546,10 @@
           result.false_color_url,
           result.false_color_bounds,
           {
-            opacity: 0.72
+            opacity:
+              0.78,
+            interactive:
+              false
           }
         ).addTo(map);
 
@@ -2595,6 +2559,23 @@
       ] =
         falseColorLayer;
 
+
+      document
+        .getElementById(
+          "falseColorLegend"
+        )
+        .classList.add(
+          "active"
+        );
+
+
+      map.fitBounds(
+        result.false_color_bounds,
+        {
+          padding:
+            [30, 30]
+        }
+      );
     }
 
 
@@ -2607,10 +2588,18 @@
           result.burned_geojson,
           {
             style: {
-              color: "#ff0000",
-              weight: 2,
-              fillColor: "#ff3300",
-              fillOpacity: 0.45
+
+              color:
+                "#ff0000",
+
+              weight:
+                2,
+
+              fillColor:
+                "#ff3300",
+
+              fillOpacity:
+                0.45
             }
           }
         ).addTo(map);
@@ -2626,38 +2615,27 @@
         burnedLayer.getBounds();
 
 
-      if (bounds.isValid()) {
+      if (
+        bounds.isValid()
+      ) {
 
         map.fitBounds(
           bounds,
           {
             padding:
-              [25, 25]
+              [30, 30]
           }
         );
-
       }
-
     }
 
 
     updateLayerControl();
-
-
-    document.getElementById(
-      "falseColorLegend"
-    ).classList.toggle(
-      "active",
-      Boolean(
-        result.false_color_url
-      )
-    );
-
   }
 
 
   /* =====================================================
-     FIRE POPUP
+     FIRE MARKERS
   ====================================================== */
 
   function createFireMarker(
@@ -2677,53 +2655,39 @@
 
 
     if (
-      !Number.isFinite(lat) ||
+      !Number.isFinite(lat)
+      ||
       !Number.isFinite(lon)
     ) {
+
       return;
     }
 
 
-    let marker;
+    const marker =
+      L.circleMarker(
+        [lat, lon],
+        {
+          radius:
+            isLatest
+              ? 11
+              : 7,
 
+          color:
+            "#8b0000",
 
-    if (isLatest) {
+          weight:
+            isLatest
+              ? 3
+              : 2,
 
-      marker =
-        L.circleMarker(
-          [lat, lon],
-          {
-            radius: 11,
+          fillColor:
+            "#ff4500",
 
-            color: "#8b0000",
-
-            weight: 3,
-
-            fillColor: "#ff0000",
-
-            fillOpacity: 0.90
-          }
-        );
-
-    } else {
-
-      marker =
-        L.circleMarker(
-          [lat, lon],
-          {
-            radius: 7,
-
-            color: "#8b0000",
-
-            weight: 2,
-
-            fillColor: "#ff4500",
-
-            fillOpacity: 0.85
-          }
-        );
-
-    }
+          fillOpacity:
+            0.85
+        }
+      );
 
 
     marker.bindPopup(
@@ -2737,13 +2701,8 @@
     marker.addTo(
       fireLayer
     );
-
   }
 
-
-  /* =====================================================
-     FIRE POPUP
-  ====================================================== */
 
   function createFirePopup(
     fire,
@@ -2808,23 +2767,26 @@
         </div>
 
         <div class="fire-popup-row">
-          <strong>عرض جغرافیایی:</strong>
-          ${Number(fire.latitude).toFixed(5)}
+          <strong>عرض:</strong>
+          ${Number(
+            fire.latitude
+          ).toFixed(5)}
         </div>
 
         <div class="fire-popup-row">
-          <strong>طول جغرافیایی:</strong>
-          ${Number(fire.longitude).toFixed(5)}
+          <strong>طول:</strong>
+          ${Number(
+            fire.longitude
+          ).toFixed(5)}
         </div>
 
       </div>
     `;
-
   }
 
 
   /* =====================================================
-     CONVERT UTC TO IRAN TIME
+     IRAN TIME
   ====================================================== */
 
   function convertToIranTime(
@@ -2850,6 +2812,7 @@
         date.getTime()
       )
     ) {
+
       return utcString;
     }
 
@@ -2872,13 +2835,8 @@
     ).format(
       date
     );
-
   }
 
-
-  /* =====================================================
-     SHOW LATEST FIRE
-  ====================================================== */
 
   function showLatestFire(
     fire
@@ -2910,34 +2868,38 @@
           : "نامشخص";
 
 
-    content.innerHTML = `
-      <div>
-        <strong>زمان:</strong>
-        ${iranTime}
-      </div>
+    content.innerHTML =
+      `
+        <div>
+          <strong>زمان:</strong>
+          ${iranTime}
+        </div>
 
-      <div>
-        <strong>ماهواره:</strong>
-        ${fire.satellite || "-"}
-      </div>
+        <div>
+          <strong>ماهواره:</strong>
+          ${fire.satellite || "-"}
+        </div>
 
-      <div>
-        <strong>روز / شب:</strong>
-        ${dayNight}
-      </div>
+        <div>
+          <strong>روز / شب:</strong>
+          ${dayNight}
+        </div>
 
-      <div>
-        <strong>مختصات:</strong>
-        ${Number(fire.latitude).toFixed(4)},
-        ${Number(fire.longitude).toFixed(4)}
-      </div>
-    `;
+        <div>
+          <strong>مختصات:</strong>
+          ${Number(
+            fire.latitude
+          ).toFixed(4)},
+          ${Number(
+            fire.longitude
+          ).toFixed(4)}
+        </div>
+      `;
 
 
     badge.classList.add(
       "active"
     );
-
   }
 
 
@@ -2952,7 +2914,6 @@
       map.removeControl(
         layerControl
       );
-
     }
 
 
@@ -2964,67 +2925,6 @@
           collapsed: false
         }
       ).addTo(map);
-
-  }
-
-
-  /* =====================================================
-     PANELS
-  ====================================================== */
-
-  function closePanels() {
-
-    document
-      .querySelectorAll(".panel")
-      .forEach(
-        panel => {
-
-          panel.classList.remove(
-            "active"
-          );
-
-        }
-      );
-
-  }
-
-
-  function togglePanel(
-    panelId
-  ) {
-
-    const panel =
-      document.getElementById(
-        panelId
-      );
-
-
-    const isActive =
-      panel.classList.contains(
-        "active"
-      );
-
-
-    closePanels();
-
-
-    if (!isActive) {
-
-      panel.classList.add(
-        "active"
-      );
-
-    }
-
-  }
-
-
-  function openReportPanel() {
-
-    togglePanel(
-      "reportPanel"
-    );
-
   }
 
 
@@ -3073,15 +2973,9 @@
         "farsFireDarkMode",
         "0"
       );
-
     }
-
   }
 
-
-  /* =====================================================
-     RESTORE DARK MODE
-  ====================================================== */
 
   const savedDarkMode =
     localStorage.getItem(
@@ -3097,37 +2991,22 @@
       "dark"
     );
 
-
     document.body.classList.add(
       "dark-map"
     );
-
 
     document.getElementById(
       "darkModeButton"
     ).innerHTML =
       "☀️ حالت روز";
-
   }
 
 
   /* =====================================================
-     EXCEL EXPORT
+     EXCEL
   ====================================================== */
 
   function exportExcel() {
-
-    const countElement =
-      document.getElementById(
-        "reportFireCount"
-      );
-
-
-    const fireCount =
-      countElement
-        ? countElement.innerText
-        : "";
-
 
     const reportData = [
 
@@ -3135,53 +3014,45 @@
         "عنوان":
           "سامانه پایش و ارزیابی اثر حریق‌های استان فارس",
 
-        "محدوده":
-          "استان فارس",
-
         "تعداد حریق":
-          fireCount,
-
-        "مساحت حریق (هکتار)":
-          "",
-
-        "وضعیت":
-          "محاسبه مساحت در مرحله بعد"
+          document
+            .getElementById(
+              "reportFireCount"
+            )
+            .innerText
       },
-
 
       {
         "عنوان":
-          "مناطق چهارگانه محیط‌زیست",
+          "آخرین محاسبه",
 
-        "محدوده":
-          "مناطق چهارگانه",
+        "مساحت کل سوخته":
+          document
+            .getElementById(
+              "resultTotalHa"
+            )
+            .innerText,
 
-        "تعداد حریق":
-          "",
+        "داخل فارس":
+          document
+            .getElementById(
+              "resultFarsHa"
+            )
+            .innerText,
 
-        "مساحت حریق (هکتار)":
-          "",
+        "داخل مناطق چهارگانه":
+          document
+            .getElementById(
+              "resultProtectedHa"
+            )
+            .innerText,
 
-        "وضعیت":
-          "محاسبه در مرحله بعد"
-      },
-
-
-      {
-        "عنوان":
-          "مناطق شکار ممنوع",
-
-        "محدوده":
-          "مناطق شکار ممنوع",
-
-        "تعداد حریق":
-          "",
-
-        "مساحت حریق (هکتار)":
-          "",
-
-        "وضعیت":
-          "محاسبه در مرحله بعد"
+        "داخل شکار ممنوع":
+          document
+            .getElementById(
+              "resultHuntingHa"
+            )
+            .innerText
       }
 
     ];
@@ -3208,12 +3079,11 @@
       workbook,
       "fars_fire_impact_report.xlsx"
     );
-
   }
 
 
   /* =====================================================
-     MAP IMAGE EXPORT
+     MAP IMAGE
   ====================================================== */
 
   async function exportMapImage() {
@@ -3232,7 +3102,8 @@
       "⏳ در حال تهیه تصویر...";
 
 
-    button.disabled = true;
+    button.disabled =
+      true;
 
 
     try {
@@ -3259,16 +3130,14 @@
         await html2canvas(
           mapElement,
           {
-            useCORS: true,
+            useCORS:
+              true,
 
-            allowTaint: false,
+            allowTaint:
+              false,
 
             backgroundColor:
-              document.body.classList.contains(
-                "dark"
-              )
-                ? "#202020"
-                : "#d9d9d9",
+              "#d9d9d9",
 
             scale:
               Math.max(
@@ -3276,7 +3145,8 @@
                 window.devicePixelRatio || 1
               ),
 
-            logging: false
+            logging:
+              false
           }
         );
 
@@ -3304,13 +3174,13 @@
       link.click();
 
 
-    } catch (error) {
+    } catch (
+      error
+    ) {
 
       console.error(
-        "خطا در تهیه تصویر نقشه:",
         error
       );
-
 
       alert(
         "تهیه تصویر نقشه انجام نشد."
@@ -3323,13 +3193,10 @@
 
       button.disabled =
         false;
-
     }
-
   }
 
 </script>
 
 </body>
 </html>
-```
