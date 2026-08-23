@@ -1,0 +1,210 @@
+{
+  "status": "SUCCESS",
+  "selection_rule": {
+    "requested": 5,
+    "minimum_distance_km": 5.0
+  },
+  "count": 5,
+  "fires": [
+    {
+      "id": 1,
+      "fire": {
+        "latitude": 29.94073,
+        "longitude": 50.84156,
+        "acq_date": "2026-01-02",
+        "acq_time": "1008",
+        "satellite": "N",
+        "source": "VIIRS_SNPP_SP",
+        "frp": "2.79"
+      },
+      "before": {
+        "date": "2026-01-01",
+        "days_from_fire": 1,
+        "tile_count": 1,
+        "tiles": [
+          {
+            "id": "35748f8c-068b-419c-b232-b052da19d463",
+            "name": "S2B_MSIL2A_20260101T072219_N0511_R006_T39RVP_20260101T091726.SAFE",
+            "acquisition": "2026-01-01T07:22:19.024000Z"
+          }
+        ]
+      },
+      "after": {
+        "date": "2026-01-03",
+        "days_from_fire": 1,
+        "tile_count": 1,
+        "tiles": [
+          {
+            "id": "6fee488e-cd1b-4190-a688-c29e29335e19",
+            "name": "S2C_MSIL2A_20260103T071311_N0511_R106_T39RVP_20260103T104312.SAFE",
+            "acquisition": "2026-01-03T07:13:11.025000Z"
+          }
+        ]
+      }
+    },
+    {
+      "id": 2,
+      "fire": {
+        "latitude": 29.98036,
+        "longitude": 50.7231,
+        "acq_date": "2026-01-02",
+        "acq_time": "2232",
+        "satellite": "N",
+        "source": "VIIRS_SNPP_SP",
+        "frp": "0.72"
+      },
+      "before": {
+        "date": "2026-01-01",
+        "days_from_fire": 1,
+        "tile_count": 1,
+        "tiles": [
+          {
+            "id": "35748f8c-068b-419c-b232-b052da19d463",
+            "name": "S2B_MSIL2A_20260101T072219_N0511_R006_T39RVP_20260101T091726.SAFE",
+            "acquisition": "2026-01-01T07:22:19.024000Z"
+          }
+        ]
+      },
+      "after": {
+        "date": "2026-01-03",
+        "days_from_fire": 1,
+        "tile_count": 1,
+        "tiles": [
+          {
+            "id": "6fee488e-cd1b-4190-a688-c29e29335e19",
+            "name": "S2C_MSIL2A_20260103T071311_N0511_R106_T39RVP_20260103T104312.SAFE",
+            "acquisition": "2026-01-03T07:13:11.025000Z"
+          }
+        ]
+      }
+    },
+    {
+      "id": 3,
+      "fire": {
+        "latitude": 29.08328,
+        "longitude": 52.79443,
+        "acq_date": "2026-01-04",
+        "acq_time": "930",
+        "satellite": "N",
+        "source": "VIIRS_SNPP_SP",
+        "frp": "2.13"
+      },
+      "before": {
+        "date": "2026-01-03",
+        "days_from_fire": 1,
+        "tile_count": 1,
+        "tiles": [
+          {
+            "id": "8982cfad-ab95-47c1-9426-0ae3d148a01b",
+            "name": "S2C_MSIL2A_20260103T071311_N0511_R106_T39RXN_20260103T104312.SAFE",
+            "acquisition": "2026-01-03T07:13:11.025000Z"
+          }
+        ]
+      },
+      "after": {
+        "date": "2026-01-05",
+        "days_from_fire": 1,
+        "tile_count": 1,
+        "tiles": [
+          {
+            "id": "0e8acb36-d45d-4a09-81b2-59dc0ce570ac",
+            "name": "S2A_MSIL2A_20260105T072121_N0511_R106_T39RXN_20260105T085411.SAFE",
+            "acquisition": "2026-01-05T07:21:21.024000Z"
+          }
+        ]
+      }
+    },
+    {
+      "id": 4,
+      "fire": {
+        "latitude": 29.59123,
+        "longitude": 52.24101,
+        "acq_date": "2026-01-04",
+        "acq_time": "930",
+        "satellite": "N",
+        "source": "VIIRS_SNPP_SP",
+        "frp": "3.16"
+      },
+      "before": {
+        "date": "2026-01-03",
+        "days_from_fire": 1,
+        "tile_count": 1,
+        "tiles": [
+          {
+            "id": "8982cfad-ab95-47c1-9426-0ae3d148a01b",
+            "name": "S2C_MSIL2A_20260103T071311_N0511_R106_T39RXN_20260103T104312.SAFE",
+            "acquisition": "2026-01-03T07:13:11.025000Z"
+          }
+        ]
+      },
+      "after": {
+        "date": "2026-01-05",
+        "days_from_fire": 1,
+        "tile_count": 1,
+        "tiles": [
+          {
+            "id": "0e8acb36-d45d-4a09-81b2-59dc0ce570ac",
+            "name": "S2A_MSIL2A_20260105T072121_N0511_R106_T39RXN_20260105T085411.SAFE",
+            "acquisition": "2026-01-05T07:21:21.024000Z"
+          }
+        ]
+      }
+    },
+    {
+      "id": 5,
+      "fire": {
+        "latitude": 29.25541,
+        "longitude": 53.12027,
+        "acq_date": "2026-01-04",
+        "acq_time": "2154",
+        "satellite": "N",
+        "source": "VIIRS_SNPP_SP",
+        "frp": "4.71"
+      },
+      "before": {
+        "date": "2026-01-03",
+        "days_from_fire": 1,
+        "tile_count": 2,
+        "tiles": [
+          {
+            "id": "8982cfad-ab95-47c1-9426-0ae3d148a01b",
+            "name": "S2C_MSIL2A_20260103T071311_N0511_R106_T39RXN_20260103T104312.SAFE",
+            "acquisition": "2026-01-03T07:13:11.025000Z"
+          },
+          {
+            "id": "e0bc6c8b-39cc-4b9e-b17b-a32b6ce5bb4e",
+            "name": "S2C_MSIL2A_20260103T071311_N0511_R106_T39RYN_20260103T104312.SAFE",
+            "acquisition": "2026-01-03T07:13:11.025000Z"
+          }
+        ]
+      },
+      "after": {
+        "date": "2026-01-05",
+        "days_from_fire": 1,
+        "tile_count": 4,
+        "tiles": [
+          {
+            "id": "3b47b9dc-f995-40f7-87ca-3bbbca5eb2f1",
+            "name": "S2B_MSIL2A_20260105T070159_N0511_R063_T39RYN_20260105T092001.SAFE",
+            "acquisition": "2026-01-05T07:01:59.024000Z"
+          },
+          {
+            "id": "aeb2cc13-92fc-42fb-b930-86002a5ce812",
+            "name": "S2B_MSIL2A_20260105T070159_N0511_R063_T39RXN_20260105T092001.SAFE",
+            "acquisition": "2026-01-05T07:01:59.024000Z"
+          },
+          {
+            "id": "0e8acb36-d45d-4a09-81b2-59dc0ce570ac",
+            "name": "S2A_MSIL2A_20260105T072121_N0511_R106_T39RXN_20260105T085411.SAFE",
+            "acquisition": "2026-01-05T07:21:21.024000Z"
+          },
+          {
+            "id": "4efa8ac3-6c06-4e59-b978-6245a618a8ce",
+            "name": "S2A_MSIL2A_20260105T072121_N0511_R106_T39RYN_20260105T085411.SAFE",
+            "acquisition": "2026-01-05T07:21:21.024000Z"
+          }
+        ]
+      }
+    }
+  ]
+}
