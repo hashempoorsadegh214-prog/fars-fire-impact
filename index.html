@@ -1,3 +1,4 @@
+```html
 <!DOCTYPE html>
 <html lang="fa" dir="rtl">
 <head>
@@ -624,6 +625,308 @@
 
 
     /* =====================================================
+       CALCULATION PANEL
+    ====================================================== */
+
+    .calc-box {
+      background: #fafafa;
+      border: 1px solid #ddd;
+      border-radius: 10px;
+      padding: 12px;
+      margin-bottom: 12px;
+    }
+
+    body.dark .calc-box {
+      background: #222;
+      border-color: #444;
+    }
+
+    .calc-label {
+      display: block;
+      font-weight: bold;
+      margin-bottom: 6px;
+      color: #c00000;
+    }
+
+    body.dark .calc-label {
+      color: #ff5555;
+    }
+
+    .calc-select,
+    .calc-date {
+      width: 100%;
+      padding: 10px;
+      border-radius: 8px;
+      border: 1px solid #bbb;
+      background: #fff;
+      color: #222;
+      font-family:
+        "B Nazanin",
+        "BNazanin",
+        Tahoma,
+        Arial,
+        sans-serif;
+      font-size: 14px;
+    }
+
+    body.dark .calc-select,
+    body.dark .calc-date {
+      background: #333;
+      color: #fff;
+      border-color: #555;
+    }
+
+    .calc-select:disabled {
+      opacity: 0.55;
+    }
+
+    .calc-hint {
+      font-size: 12px;
+      color: #666;
+      line-height: 1.8;
+      margin-top: 6px;
+    }
+
+    body.dark .calc-hint {
+      color: #bbb;
+    }
+
+    .calc-button {
+      width: 100%;
+      border: 0;
+      border-radius: 9px;
+      padding: 12px;
+      cursor: pointer;
+      background:
+        linear-gradient(
+          #ff6b00,
+          #d94800
+        );
+      color: #fff;
+      font-family:
+        "B Nazanin",
+        "BNazanin",
+        Tahoma,
+        Arial,
+        sans-serif;
+      font-weight: bold;
+      font-size: 15px;
+      margin-top: 6px;
+    }
+
+    .calc-button:hover {
+      opacity: 0.92;
+    }
+
+    .calc-button:disabled {
+      opacity: 0.55;
+      cursor: not-allowed;
+    }
+
+    #calculationStatus {
+      display: none;
+      margin-top: 10px;
+      border-radius: 9px;
+      padding: 10px;
+      font-size: 13px;
+      line-height: 1.9;
+    }
+
+    #calculationStatus.active {
+      display: block;
+    }
+
+    #calculationStatus.info {
+      background: #fff4df;
+      border: 1px solid #f3c77d;
+      color: #8a5600;
+    }
+
+    #calculationStatus.success {
+      background: #e9f8ee;
+      border: 1px solid #8fd2a3;
+      color: #12652b;
+    }
+
+    #calculationStatus.error {
+      background: #ffeaea;
+      border: 1px solid #e7a0a0;
+      color: #8b1f1f;
+    }
+
+    body.dark #calculationStatus.info {
+      background: #3a2d18;
+      color: #ffd88a;
+      border-color: #735b2d;
+    }
+
+    body.dark #calculationStatus.success {
+      background: #17301f;
+      color: #9ce6b0;
+      border-color: #347848;
+    }
+
+    body.dark #calculationStatus.error {
+      background: #3b1e1e;
+      color: #ffaaaa;
+      border-color: #6d3b3b;
+    }
+
+    .calculation-result {
+      margin-top: 10px;
+      display: none;
+    }
+
+    .calculation-result.active {
+      display: block;
+    }
+
+    .result-card {
+      border-radius: 10px;
+      background: #f8f8f8;
+      border: 1px solid #ddd;
+      padding: 11px;
+      margin-bottom: 8px;
+    }
+
+    body.dark .result-card {
+      background: #242424;
+      border-color: #444;
+    }
+
+    .result-value {
+      font-size: 21px;
+      font-weight: bold;
+      color: #d00000;
+    }
+
+    body.dark .result-value {
+      color: #ff6666;
+    }
+
+    .result-small {
+      font-size: 12px;
+      line-height: 1.8;
+    }
+
+
+    /* =====================================================
+       FALSE COLOR LEGEND
+    ====================================================== */
+
+    #falseColorLegend {
+      position: fixed;
+      bottom: 18px;
+      left: 18px;
+      z-index: 1800;
+
+      background:
+        rgba(255,255,255,0.97);
+
+      border-radius: 10px;
+      padding: 10px 12px;
+
+      box-shadow:
+        0 4px 18px rgba(0,0,0,0.20);
+
+      display: none;
+      min-width: 190px;
+    }
+
+    #falseColorLegend.active {
+      display: block;
+    }
+
+    body.dark #falseColorLegend {
+      background: rgba(30,30,30,0.97);
+      color: #fff;
+    }
+
+    .legend-title {
+      font-weight: bold;
+      margin-bottom: 6px;
+      color: #b00000;
+    }
+
+    .legend-swatch {
+      height: 10px;
+      border-radius: 6px;
+      margin: 4px 0;
+    }
+
+    .legend-description {
+      font-size: 11px;
+      line-height: 1.8;
+    }
+
+
+    /* =====================================================
+       CALCULATION OVERLAY
+    ====================================================== */
+
+    #calculationOverlay {
+      position: fixed;
+      inset: 0;
+
+      z-index: 5000;
+
+      display: none;
+
+      align-items: center;
+      justify-content: center;
+
+      background:
+        rgba(0,0,0,0.45);
+    }
+
+    #calculationOverlay.active {
+      display: flex;
+    }
+
+    .calculation-overlay-box {
+      width: min(360px, calc(100vw - 30px));
+      background: #fff;
+      border-radius: 14px;
+      padding: 22px;
+      text-align: center;
+      box-shadow:
+        0 10px 40px rgba(0,0,0,0.3);
+    }
+
+    body.dark .calculation-overlay-box {
+      background: #222;
+      color: #fff;
+    }
+
+    .loader {
+      width: 42px;
+      height: 42px;
+      margin: 0 auto 12px;
+
+      border:
+        4px solid #ddd;
+
+      border-top-color:
+        #e00000;
+
+      border-radius:
+        50%;
+
+      animation:
+        spin 0.8s linear infinite;
+    }
+
+    @keyframes spin {
+
+      to {
+        transform:
+          rotate(360deg);
+      }
+
+    }
+
+
+    /* =====================================================
        MOBILE
     ====================================================== */
 
@@ -679,6 +982,12 @@
         bottom: 10px;
         min-width: 200px;
       }
+
+      #falseColorLegend {
+        left: 10px;
+        bottom: 10px;
+      }
+
     }
 
 
@@ -782,6 +1091,13 @@
         📊 گزارش
       </button>
 
+      <button
+        class="header-btn"
+        onclick="openCalculationPanel()"
+      >
+        🔥 محاسبه حریق
+      </button>
+
     </div>
 
   </header>
@@ -811,6 +1127,40 @@
       class="latest-value"
     >
       در حال دریافت اطلاعات...
+    </div>
+
+  </div>
+
+
+  <!-- =====================================================
+       FALSE COLOR LEGEND
+  ====================================================== -->
+
+  <div id="falseColorLegend">
+
+    <div class="legend-title">
+      تصویر False Color
+    </div>
+
+    <div
+      class="legend-swatch"
+      style="
+        background:
+          linear-gradient(
+            90deg,
+            #001f3f,
+            #0074d9,
+            #7fdbff
+          );
+      "
+    ></div>
+
+    <div
+      class="legend-description"
+    >
+      پوشش گیاهی سالم با تن‌های قرمز
+      مشخص‌تر می‌شود و سطوح سوخته،
+      تیره‌تر دیده می‌شوند.
     </div>
 
   </div>
@@ -860,16 +1210,17 @@
       </ul>
 
       <h3>
-        حریق‌ها
+        محاسبه اثر حریق
       </h3>
 
       <p>
-        نقاط حریق دریافت‌شده از داده‌های ماهواره‌ای
-        روی نقشه نمایش داده می‌شوند.
+        در بخش «محاسبه حریق» ابتدا تاریخ موردنظر
+        و سپس منطقه موردنظر را انتخاب کنید.
       </p>
 
       <p>
-        آخرین حریق با علامت بزرگ‌تر مشخص می‌شود.
+        پس از محاسبه، تصویر False Color و
+        محدوده سوختگی روی نقشه نمایش داده می‌شود.
       </p>
 
       <h3>
@@ -932,6 +1283,7 @@
         <li>مرز استان فارس</li>
         <li>مناطق چهارگانه محیط‌زیست</li>
         <li>مناطق شکار ممنوع</li>
+        <li>تصاویر Sentinel-2</li>
       </ul>
 
       <h3>
@@ -943,6 +1295,200 @@
         مساحت حریق به هکتار و میزان تأثیر
         حریق در محدوده‌های حفاظتی استان فارس.
       </p>
+
+    </div>
+
+  </div>
+
+
+  <!-- =====================================================
+       CALCULATION PANEL
+  ====================================================== -->
+
+  <div
+    id="calculationPanel"
+    class="panel"
+  >
+
+    <div class="panel-header">
+
+      <span>
+        محاسبه اثر حریق
+      </span>
+
+      <button
+        class="close-panel"
+        onclick="closePanels()"
+      >
+        ×
+      </button>
+
+    </div>
+
+
+    <div class="panel-body">
+
+      <div class="calc-box">
+
+        <label
+          class="calc-label"
+          for="calculationDate"
+        >
+          تاریخ حریق
+        </label>
+
+        <select
+          id="calculationDate"
+          class="calc-date"
+        >
+          <option value="">
+            در حال دریافت تاریخ‌ها...
+          </option>
+        </select>
+
+        <div class="calc-hint">
+          تاریخ‌هایی که در آرشیو حریق
+          ثبت شده‌اند در این فهرست قرار می‌گیرند.
+        </div>
+
+      </div>
+
+
+      <div class="calc-box">
+
+        <label
+          class="calc-label"
+          for="protectedSelect"
+        >
+          مناطق حفاظت‌شده / چهارگانه
+        </label>
+
+        <select
+          id="protectedSelect"
+          class="calc-select"
+        >
+
+          <option value="">
+            انتخاب منطقه
+          </option>
+
+        </select>
+
+      </div>
+
+
+      <div class="calc-box">
+
+        <label
+          class="calc-label"
+          for="huntingSelect"
+        >
+          مناطق شکار ممنوع
+        </label>
+
+        <select
+          id="huntingSelect"
+          class="calc-select"
+        >
+
+          <option value="">
+            انتخاب منطقه
+          </option>
+
+        </select>
+
+      </div>
+
+
+      <button
+        id="calculateButton"
+        class="calc-button"
+        onclick="requestBurnedAreaCalculation()"
+      >
+        🔥 محاسبه حریق
+      </button>
+
+
+      <div
+        id="calculationStatus"
+      ></div>
+
+
+      <div
+        id="calculationResult"
+        class="calculation-result"
+      >
+
+        <div class="result-card">
+
+          <div>
+            مساحت کل سوخته
+          </div>
+
+          <div
+            id="resultTotalHa"
+            class="result-value"
+          >
+            -
+          </div>
+
+        </div>
+
+
+        <div class="result-card">
+
+          <div>
+            سوختگی داخل فارس
+          </div>
+
+          <div
+            id="resultFarsHa"
+            class="result-value"
+          >
+            -
+          </div>
+
+        </div>
+
+
+        <div class="result-card">
+
+          <div>
+            داخل مناطق چهارگانه
+          </div>
+
+          <div
+            id="resultProtectedHa"
+            class="result-value"
+          >
+            -
+          </div>
+
+        </div>
+
+
+        <div class="result-card">
+
+          <div>
+            داخل مناطق شکار ممنوع
+          </div>
+
+          <div
+            id="resultHuntingHa"
+            class="result-value"
+          >
+            -
+          </div>
+
+        </div>
+
+
+        <div
+          id="resultDetails"
+          class="result-small"
+        ></div>
+
+      </div>
 
     </div>
 
@@ -1033,6 +1579,39 @@
 
 
 <!-- =====================================================
+     CALCULATION OVERLAY
+====================================================== -->
+
+<div
+  id="calculationOverlay"
+>
+
+  <div
+    class="calculation-overlay-box"
+  >
+
+    <div class="loader"></div>
+
+    <div>
+      در حال محاسبه تصویر Sentinel-2...
+    </div>
+
+    <div
+      style="
+        margin-top:8px;
+        font-size:12px;
+        opacity:0.8;
+      "
+    >
+      فقط محدوده و تاریخ انتخاب‌شده پردازش می‌شود.
+    </div>
+
+  </div>
+
+</div>
+
+
+<!-- =====================================================
      LIBRARIES
 ====================================================== -->
 
@@ -1044,6 +1623,28 @@
 
 
 <script>
+
+  /* =====================================================
+     CONFIGURATION
+  ====================================================== */
+
+  /*
+   * این URL باید بعداً به endpoint امن محاسبه وصل شود.
+   *
+   * نمونه:
+   * https://YOUR-BACKEND.example.com/calculate
+   *
+   * در backend باید:
+   * 1) تاریخ را بگیرد.
+   * 2) منطقه انتخاب‌شده را بگیرد.
+   * 3) Sentinel-2 قبل/بعد را پیدا کند.
+   * 4) NBR/dNBR را محاسبه کند.
+   * 5) نتیجه و URL تصویر را برگرداند.
+   */
+
+  const CALCULATION_API_URL =
+    "";
+
 
   /* =====================================================
      MAP
@@ -1071,12 +1672,12 @@
   ====================================================== */
 
   let farsLayer;
-
   let protectedLayer;
-
   let huntingLayer;
-
   let fireLayer;
+
+  let falseColorLayer;
+  let burnedLayer;
 
   const overlayLayers = {};
 
@@ -1135,7 +1736,7 @@
 
 
   /* =====================================================
-     PROTECTED
+     PROTECTED AREAS
   ====================================================== */
 
   fetch("protected_areas.geojson")
@@ -1166,13 +1767,18 @@
 
         updateLayerControl();
 
+
+        loadProtectedOptions(
+          data
+        );
+
       }
     )
     .catch(
       error => {
 
         console.error(
-          "خطا در بارگذاری protected_areas.geojson:",
+          "خطا در protected_areas.geojson:",
           error
         );
 
@@ -1212,13 +1818,18 @@
 
         updateLayerControl();
 
+
+        loadHuntingOptions(
+          data
+        );
+
       }
     )
     .catch(
       error => {
 
         console.error(
-          "خطا در بارگذاری hunting_banned.geojson:",
+          "خطا در hunting_banned.geojson:",
           error
         );
 
@@ -1253,6 +1864,10 @@
           data
         );
 
+        loadFireDates(
+          data
+        );
+
       }
     )
     .catch(
@@ -1262,11 +1877,6 @@
           "خطا در دریافت fires.json:",
           error
         );
-
-        document.getElementById(
-          "latestFireContent"
-        ).innerHTML =
-          "داده حریق در دسترس نیست.";
 
       }
     );
@@ -1316,11 +1926,6 @@
       fireLayer;
 
 
-    /*
-     * داده‌ها در update_fires.py
-     * بر اساس جدیدترین زمان مرتب شده‌اند.
-     */
-
     fires.forEach(
       (fire, index) => {
 
@@ -1344,7 +1949,715 @@
 
 
   /* =====================================================
-     CREATE FIRE MARKER
+     LOAD FIRE DATES
+  ====================================================== */
+
+  function loadFireDates(
+    data
+  ) {
+
+    const fires =
+      Array.isArray(data.fires)
+        ? data.fires
+        : [];
+
+
+    const dateSelect =
+      document.getElementById(
+        "calculationDate"
+      );
+
+
+    const dates =
+      [
+        ...new Set(
+          fires
+            .map(
+              fire =>
+                fire.acq_date
+            )
+            .filter(Boolean)
+        )
+      ];
+
+
+    dates.sort(
+      (a, b) =>
+        b.localeCompare(a)
+    );
+
+
+    dateSelect.innerHTML =
+      `
+      <option value="">
+        انتخاب تاریخ
+      </option>
+      `;
+
+
+    dates.forEach(
+      date => {
+
+        const option =
+          document.createElement(
+            "option"
+          );
+
+        option.value =
+          date;
+
+        option.textContent =
+          date;
+
+        dateSelect.appendChild(
+          option
+        );
+
+      }
+    );
+
+  }
+
+
+  /* =====================================================
+     GENERIC GEOJSON OPTIONS
+  ====================================================== */
+
+  function populateRegionOptions(
+    geojson,
+    selectId,
+    fallbackPrefix
+  ) {
+
+    const select =
+      document.getElementById(
+        selectId
+      );
+
+
+    select.innerHTML =
+      `
+      <option value="">
+        انتخاب منطقه
+      </option>
+      `;
+
+
+    const features =
+      Array.isArray(
+        geojson.features
+      )
+        ? geojson.features
+        : [];
+
+
+    features.forEach(
+      (feature, index) => {
+
+        const properties =
+          feature.properties || {};
+
+
+        const name =
+          properties.shapeName
+          ||
+          properties.name
+          ||
+          properties.NAME
+          ||
+          properties.Name
+          ||
+          (
+            fallbackPrefix
+            +
+            " "
+            +
+            (
+              index + 1
+            )
+          );
+
+
+        const option =
+          document.createElement(
+            "option"
+          );
+
+
+        option.value =
+          String(index);
+
+
+        option.textContent =
+          name;
+
+
+        select.appendChild(
+          option
+        );
+
+      }
+    );
+
+  }
+
+
+  function loadProtectedOptions(
+    data
+  ) {
+
+    populateRegionOptions(
+      data,
+      "protectedSelect",
+      "منطقه چهارگانه"
+    );
+
+  }
+
+
+  function loadHuntingOptions(
+    data
+  ) {
+
+    populateRegionOptions(
+      data,
+      "huntingSelect",
+      "منطقه شکار ممنوع"
+    );
+
+  }
+
+
+  /* =====================================================
+     REGION SELECTION
+  ====================================================== */
+
+  document
+    .getElementById(
+      "protectedSelect"
+    )
+    .addEventListener(
+      "change",
+      function() {
+
+        if (this.value) {
+
+          document.getElementById(
+            "huntingSelect"
+          ).value = "";
+
+        }
+
+      }
+    );
+
+
+  document
+    .getElementById(
+      "huntingSelect"
+    )
+    .addEventListener(
+      "change",
+      function() {
+
+        if (this.value) {
+
+          document.getElementById(
+            "protectedSelect"
+          ).value = "";
+
+        }
+
+      }
+    );
+
+
+  /* =====================================================
+     OPEN CALCULATION PANEL
+  ====================================================== */
+
+  function openCalculationPanel() {
+
+    togglePanel(
+      "calculationPanel"
+    );
+
+  }
+
+
+  /* =====================================================
+     CALCULATION REQUEST
+  ====================================================== */
+
+  async function requestBurnedAreaCalculation() {
+
+    const date =
+      document.getElementById(
+        "calculationDate"
+      ).value;
+
+
+    const protectedIndex =
+      document.getElementById(
+        "protectedSelect"
+      ).value;
+
+
+    const huntingIndex =
+      document.getElementById(
+        "huntingSelect"
+      ).value;
+
+
+    if (!date) {
+
+      setCalculationStatus(
+        "error",
+        "ابتدا تاریخ حریق را انتخاب کنید."
+      );
+
+      return;
+
+    }
+
+
+    if (
+      protectedIndex === ""
+      &&
+      huntingIndex === ""
+    ) {
+
+      setCalculationStatus(
+        "error",
+        "ابتدا یکی از مناطق چهارگانه یا مناطق شکار ممنوع را انتخاب کنید."
+      );
+
+      return;
+
+    }
+
+
+    if (!CALCULATION_API_URL) {
+
+      setCalculationStatus(
+        "info",
+        "رابط کاربری آماده است، اما اتصال امن به موتور محاسبه هنوز تنظیم نشده است."
+      );
+
+      return;
+
+    }
+
+
+    const regionType =
+      protectedIndex !== ""
+        ? "protected"
+        : "hunting";
+
+
+    const regionIndex =
+      protectedIndex !== ""
+        ? protectedIndex
+        : huntingIndex;
+
+
+    const button =
+      document.getElementById(
+        "calculateButton"
+      );
+
+
+    button.disabled =
+      true;
+
+
+    showCalculationOverlay(
+      true
+    );
+
+
+    setCalculationStatus(
+      "info",
+      "درخواست محاسبه ارسال شد..."
+    );
+
+
+    try {
+
+      const response =
+        await fetch(
+          CALCULATION_API_URL,
+          {
+            method:
+              "POST",
+
+            headers:
+              {
+                "Content-Type":
+                  "application/json"
+              },
+
+            body:
+              JSON.stringify(
+                {
+                  date:
+                    date,
+
+                  region_type:
+                    regionType,
+
+                  region_index:
+                    regionIndex
+                }
+              )
+          }
+        );
+
+
+      if (!response.ok) {
+
+        throw new Error(
+          "HTTP " +
+          response.status
+        );
+
+      }
+
+
+      const result =
+        await response.json();
+
+
+      showCalculationResult(
+        result
+      );
+
+
+      await displayCalculationLayers(
+        result
+      );
+
+
+      setCalculationStatus(
+        "success",
+        "محاسبه با موفقیت انجام شد."
+      );
+
+
+    } catch (error) {
+
+      console.error(
+        error
+      );
+
+
+      setCalculationStatus(
+        "error",
+        "محاسبه انجام نشد. اتصال موتور محاسبه را بررسی کنید."
+      );
+
+    } finally {
+
+      button.disabled =
+        false;
+
+      showCalculationOverlay(
+        false
+      );
+
+    }
+
+  }
+
+
+  /* =====================================================
+     RESULT
+  ====================================================== */
+
+  function showCalculationResult(
+    result
+  ) {
+
+    const burned =
+      result.burned_area || {};
+
+
+    document.getElementById(
+      "resultTotalHa"
+    ).textContent =
+      formatHa(
+        burned.total_ha
+      );
+
+
+    document.getElementById(
+      "resultFarsHa"
+    ).textContent =
+      formatHa(
+        burned.inside_fars_ha
+      );
+
+
+    document.getElementById(
+      "resultProtectedHa"
+    ).textContent =
+      formatHa(
+        burned.inside_protected_areas_ha
+      );
+
+
+    document.getElementById(
+      "resultHuntingHa"
+    ).textContent =
+      formatHa(
+        burned.inside_hunting_banned_ha
+      );
+
+
+    document.getElementById(
+      "resultDetails"
+    ).innerHTML =
+      `
+      تصویر قبل:
+      ${result.before_date || "-"}
+      <br>
+      تصویر بعد:
+      ${result.after_date || "-"}
+      <br>
+      آستانه dNBR:
+      ${result.dnbr_threshold ?? "-"}
+      `;
+
+
+    document.getElementById(
+      "calculationResult"
+    ).classList.add(
+      "active"
+    );
+
+  }
+
+
+  function formatHa(
+    value
+  ) {
+
+    if (
+      value === null
+      ||
+      value === undefined
+      ||
+      Number.isNaN(
+        Number(value)
+      )
+    ) {
+
+      return "-";
+
+    }
+
+
+    return (
+      Number(value)
+        .toLocaleString(
+          "fa-IR",
+          {
+            minimumFractionDigits:
+              3,
+
+            maximumFractionDigits:
+              3
+          }
+        )
+      +
+      " هکتار"
+    );
+
+  }
+
+
+  /* =====================================================
+     CALCULATION STATUS
+  ====================================================== */
+
+  function setCalculationStatus(
+    type,
+    message
+  ) {
+
+    const element =
+      document.getElementById(
+        "calculationStatus"
+      );
+
+
+    element.className =
+      "active " +
+      type;
+
+
+    element.textContent =
+      message;
+
+  }
+
+
+  /* =====================================================
+     CALCULATION OVERLAY
+  ====================================================== */
+
+  function showCalculationOverlay(
+    show
+  ) {
+
+    const overlay =
+      document.getElementById(
+        "calculationOverlay"
+      );
+
+
+    if (show) {
+
+      overlay.classList.add(
+        "active"
+      );
+
+    } else {
+
+      overlay.classList.remove(
+        "active"
+      );
+
+    }
+
+  }
+
+
+  /* =====================================================
+     DISPLAY CALCULATION LAYERS
+  ====================================================== */
+
+  async function displayCalculationLayers(
+    result
+  ) {
+
+    if (falseColorLayer) {
+
+      map.removeLayer(
+        falseColorLayer
+      );
+
+      delete overlayLayers[
+        "🛰️ تصویر False Color"
+      ];
+
+    }
+
+
+    if (burnedLayer) {
+
+      map.removeLayer(
+        burnedLayer
+      );
+
+      delete overlayLayers[
+        "🔥 محدوده سوختگی"
+      ];
+
+    }
+
+
+    /*
+     * backend باید یکی از این دو مورد
+     * را در پاسخ برگرداند:
+     *
+     * false_color_url
+     * burned_geojson
+     */
+
+
+    if (
+      result.false_color_url
+    ) {
+
+      falseColorLayer =
+        L.imageOverlay(
+          result.false_color_url,
+          result.false_color_bounds,
+          {
+            opacity: 0.72
+          }
+        ).addTo(map);
+
+
+      overlayLayers[
+        "🛰️ تصویر False Color"
+      ] =
+        falseColorLayer;
+
+    }
+
+
+    if (
+      result.burned_geojson
+    ) {
+
+      burnedLayer =
+        L.geoJSON(
+          result.burned_geojson,
+          {
+            style: {
+              color: "#ff0000",
+              weight: 2,
+              fillColor: "#ff3300",
+              fillOpacity: 0.45
+            }
+          }
+        ).addTo(map);
+
+
+      overlayLayers[
+        "🔥 محدوده سوختگی"
+      ] =
+        burnedLayer;
+
+
+      const bounds =
+        burnedLayer.getBounds();
+
+
+      if (bounds.isValid()) {
+
+        map.fitBounds(
+          bounds,
+          {
+            padding:
+              [25, 25]
+          }
+        );
+
+      }
+
+    }
+
+
+    updateLayerControl();
+
+
+    document.getElementById(
+      "falseColorLegend"
+    ).classList.toggle(
+      "active",
+      Boolean(
+        result.false_color_url
+      )
+    );
+
+  }
+
+
+  /* =====================================================
+     FIRE POPUP
   ====================================================== */
 
   function createFireMarker(
@@ -2019,3 +3332,4 @@
 
 </body>
 </html>
+```
