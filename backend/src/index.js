@@ -1,17 +1,11 @@
 const TOKEN_URL =
   "https://identity.dataspace.copernicus.eu/auth/realms/CDSE/protocol/openid-connect/token";
 
-const SH_BASE =
-  "https://sh.dataspace.copernicus.eu";
+const PROCESS_URL =
+  "https://sh.dataspace.copernicus.eu/process/v1";
 
 const STATISTICS_URL =
-  `${SH_BASE}/statistics/v1`;
-
-const PROCESS_URL =
-  `${SH_BASE}/process/v1`;
-
-const CATALOG_URL =
-  `${SH_BASE}/catalog/v1/search`;
+  "https://sh.dataspace.copernicus.eu/statistics/v1";
 
 const S2_TYPE =
   "sentinel-2-l2a";
@@ -22,8 +16,6 @@ const FARS_BOUNDS = [
   54.5,
   31.5
 ];
-
-const MAX_REGION_AREA_KM2 = 50000;
 
 const BEFORE_DAYS = 5;
 const AFTER_DAYS = 5;
@@ -62,6 +54,7 @@ function jsonResponse(
     JSON.stringify(data),
     {
       status,
+
       headers: {
         "Content-Type":
           "application/json; charset=utf-8",
@@ -74,7 +67,7 @@ function jsonResponse(
 
 
 /* ============================================================
-   DATE HELPERS
+   DATE
 ============================================================ */
 
 function parseDate(
@@ -99,11 +92,15 @@ function parseDate(
       )
     );
 
-  return Number.isNaN(
-    date.getTime()
-  )
-    ? null
-    : date;
+  if (
+    Number.isNaN(
+      date.getTime()
+    )
+  ) {
+    return null;
+  }
+
+  return date;
 }
 
 
@@ -122,16 +119,16 @@ function addDays(
   days
 ) {
 
-  const result =
+  const value =
     new Date(
       date.getTime()
     );
 
-  result.setUTCDate(
-    result.getUTCDate() + days
+  value.setUTCDate(
+    value.getUTCDate() + days
   );
 
-  return result;
+  return value;
 }
 
 
@@ -139,7 +136,9 @@ function addDays(
    GEOMETRY VALIDATION
 ============================================================ */
 
-function isNumber(value) {
+function isNumber(
+  value
+) {
 
   return (
     typeof value === "number"
@@ -153,16 +152,11 @@ function validatePoint(
   point
 ) {
 
-  if (
-    !Array.isArray(point)
-    ||
-    point.length < 2
-  ) {
-
-    return false;
-  }
-
   return (
+    Array.isArray(point)
+    &&
+    point.length >= 2
+    &&
     isNumber(point[0])
     &&
     isNumber(point[1])
@@ -174,17 +168,14 @@ function validateRing(
   ring
 ) {
 
-  if (
-    !Array.isArray(ring)
-    ||
-    ring.length < 4
-  ) {
-
-    return false;
-  }
-
-  return ring.every(
-    validatePoint
+  return (
+    Array.isArray(ring)
+    &&
+    ring.length >= 4
+    &&
+    ring.every(
+      validatePoint
+    )
   );
 }
 
@@ -202,16 +193,17 @@ function validateGeometry(
     &&
     geometry.type !== "MultiPolygon"
   ) {
-
     return false;
   }
 
+  const coordinates =
+    geometry.coordinates;
+
   if (
     !Array.isArray(
-      geometry.coordinates
+      coordinates
     )
   ) {
-
     return false;
   }
 
@@ -219,12 +211,12 @@ function validateGeometry(
     geometry.type === "Polygon"
   ) {
 
-    return geometry.coordinates.every(
+    return coordinates.every(
       validateRing
     );
   }
 
-  return geometry.coordinates.every(
+  return coordinates.every(
     polygon =>
       Array.isArray(polygon)
       &&
@@ -236,7 +228,7 @@ function validateGeometry(
 
 
 /* ============================================================
-   GEOMETRY BBOX
+   GEOMETRY BOUNDS
 ============================================================ */
 
 function geometryBounds(
@@ -253,8 +245,15 @@ function geometryBounds(
     point
   ) {
 
-    const lon = point[0];
-    const lat = point[1];
+    const lon =
+      Number(
+        point[0]
+      );
+
+    const lat =
+      Number(
+        point[1]
+      );
 
     minLon =
       Math.min(
@@ -286,15 +285,9 @@ function geometryBounds(
     ring
   ) {
 
-    for (
-      const point
-      of ring
-    ) {
-
-      visitPoint(
-        point
-      );
-    }
+    ring.forEach(
+      visitPoint
+    );
   }
 
 
@@ -303,33 +296,18 @@ function geometryBounds(
     "Polygon"
   ) {
 
-    for (
-      const ring
-      of geometry.coordinates
-    ) {
-
-      visitRing(
-        ring
-      );
-    }
+    geometry.coordinates.forEach(
+      visitRing
+    );
 
   } else {
 
-    for (
-      const polygon
-      of geometry.coordinates
-    ) {
-
-      for (
-        const ring
-        of polygon
-      ) {
-
-        visitRing(
-          ring
-        );
-      }
-    }
+    geometry.coordinates.forEach(
+      polygon =>
+        polygon.forEach(
+          visitRing
+        )
+    );
   }
 
 
@@ -343,56 +321,10 @@ function geometryBounds(
 
 
 /* ============================================================
-   AREA APPROXIMATION
+   BOUNDS CHECK
 ============================================================ */
 
-function approximateAreaKm2(
-  geometry
-) {
-
-  const bbox =
-    geometryBounds(
-      geometry
-    );
-
-  const minLon = bbox[0];
-  const minLat = bbox[1];
-  const maxLon = bbox[2];
-  const maxLat = bbox[3];
-
-  const lat =
-    (
-      minLat
-      +
-      maxLat
-    ) / 2;
-
-  const latKm =
-    (maxLat - minLat)
-    * 111.32;
-
-  const lonKm =
-    (maxLon - minLon)
-    *
-    111.32
-    *
-    Math.cos(
-      lat * Math.PI / 180
-    );
-
-  return (
-    Math.abs(
-      latKm * lonKm
-    )
-  );
-}
-
-
-/* ============================================================
-   CHECK FARS BOUNDS
-============================================================ */
-
-function geometryInsideFarsBox(
+function geometryInsideFars(
   geometry
 ) {
 
@@ -402,7 +334,6 @@ function geometryInsideFarsBox(
     );
 
   return (
-
     bbox[0] >= FARS_BOUNDS[0]
     &&
     bbox[1] >= FARS_BOUNDS[1]
@@ -410,13 +341,12 @@ function geometryInsideFarsBox(
     bbox[2] <= FARS_BOUNDS[2]
     &&
     bbox[3] <= FARS_BOUNDS[3]
-
   );
 }
 
 
 /* ============================================================
-   GET COPERNICUS TOKEN
+   TOKEN
 ============================================================ */
 
 async function getToken(
@@ -430,7 +360,7 @@ async function getToken(
   ) {
 
     throw new Error(
-      "CDSE credentials are not configured."
+      "Secretهای Copernicus تنظیم نشده‌اند."
     );
   }
 
@@ -439,7 +369,9 @@ async function getToken(
     await fetch(
       TOKEN_URL,
       {
-        method: "POST",
+
+        method:
+          "POST",
 
         headers: {
           "Content-Type":
@@ -447,29 +379,31 @@ async function getToken(
         },
 
         body:
-          new URLSearchParams(
-            {
-              grant_type:
-                "client_credentials",
+          new URLSearchParams({
 
-              client_id:
-                env.CDSE_CLIENT_ID,
+            grant_type:
+              "client_credentials",
 
-              client_secret:
-                env.CDSE_CLIENT_SECRET
-            }
-          )
+            client_id:
+              env.CDSE_CLIENT_ID,
+
+            client_secret:
+              env.CDSE_CLIENT_SECRET
+
+          })
       }
     );
 
 
-  if (!response.ok) {
+  if (
+    !response.ok
+  ) {
 
     const text =
       await response.text();
 
     throw new Error(
-      `Copernicus token error ${response.status}: ${text}`
+      `خطای احراز هویت Copernicus: HTTP ${response.status}`
     );
   }
 
@@ -483,7 +417,7 @@ async function getToken(
   ) {
 
     throw new Error(
-      "Copernicus access token missing."
+      "Access Token دریافت نشد."
     );
   }
 
@@ -493,77 +427,10 @@ async function getToken(
 
 
 /* ============================================================
-   CATALOG SEARCH
-============================================================ */
-
-async function searchScenes(
-  token,
-  geometry,
-  startDate,
-  endDate
-) {
-
-  const body = {
-
-    datetime:
-      `${startDate}T00:00:00Z/` +
-      `${endDate}T23:59:59Z`,
-
-    collections: [
-      "sentinel-2-l2a"
-    ],
-
-    intersects:
-      geometry,
-
-    limit:
-      20
-
-  };
-
-
-  const response =
-    await fetch(
-      CATALOG_URL,
-      {
-        method: "POST",
-
-        headers: {
-          "Authorization":
-            `Bearer ${token}`,
-
-          "Content-Type":
-            "application/json"
-        },
-
-        body:
-          JSON.stringify(
-            body
-          )
-      }
-    );
-
-
-  if (!response.ok) {
-
-    const text =
-      await response.text();
-
-    throw new Error(
-      `Catalog error ${response.status}: ${text}`
-    );
-  }
-
-
-  return response.json();
-}
-
-
-/* ============================================================
    FIND BEFORE / AFTER
 ============================================================ */
 
-async function findBeforeAfter(
+async function findImageDates(
   token,
   geometry,
   fireDate
@@ -571,6 +438,163 @@ async function findBeforeAfter(
 
   let before = null;
   let after = null;
+
+
+  /*
+   * برای سبک بودن کار، وجود تصویر را
+   * با Process API روی یک پیکسل مرکزی
+   * تست می‌کنیم.
+   *
+   * Sentinel-2 قبل:
+   * 1 تا 5 روز قبل
+   */
+
+  const bbox =
+    geometryBounds(
+      geometry
+    );
+
+
+  async function hasImage(
+    date
+  ) {
+
+    const body = {
+
+      input: {
+
+        bounds: {
+
+          bbox,
+
+          properties: {
+
+            crs:
+              "http://www.opengis.net/"
+              + "def/crs/OGC/1.3/CRS84"
+
+          }
+
+        },
+
+        data: [
+
+          {
+
+            type:
+              S2_TYPE,
+
+            dataFilter: {
+
+              timeRange: {
+
+                from:
+                  `${date}T00:00:00Z`,
+
+                to:
+                  `${date}T23:59:59Z`
+
+              },
+
+              mosaickingOrder:
+                "leastCC"
+
+            }
+
+          }
+
+        ]
+
+      },
+
+      output: {
+
+        width:
+          2,
+
+        height:
+          2,
+
+        responses: [
+
+          {
+
+            identifier:
+              "default",
+
+            format: {
+
+              type:
+                "image/png"
+
+            }
+
+          }
+
+        ]
+
+      },
+
+      evalscript: `
+//VERSION=3
+
+function setup() {
+
+  return {
+
+    input: [
+      "B04"
+    ],
+
+    output: {
+      bands: 1
+    }
+
+  };
+
+}
+
+
+function evaluatePixel(
+  sample
+) {
+
+  return [
+    sample.B04
+  ];
+
+}
+`
+    };
+
+
+    const response =
+      await fetch(
+        PROCESS_URL,
+        {
+
+          method:
+            "POST",
+
+          headers: {
+
+            "Authorization":
+              `Bearer ${token}`,
+
+            "Content-Type":
+              "application/json"
+          },
+
+          body:
+            JSON.stringify(
+              body
+            )
+        }
+      );
+
+
+    return response.ok;
+  }
 
 
   for (
@@ -588,32 +612,14 @@ async function findBeforeAfter(
       );
 
 
-    const result =
-      await searchScenes(
-        token,
-        geometry,
-        date,
-        date
-      );
-
-
-    const features =
-      Array.isArray(
-        result.features
-      )
-        ? result.features
-        : [];
-
-
     if (
-      features.length
+      await hasImage(
+        date
+      )
     ) {
 
-      before = {
-        date,
-        feature:
-          features[0]
-      };
+      before =
+        date;
 
       break;
     }
@@ -635,32 +641,14 @@ async function findBeforeAfter(
       );
 
 
-    const result =
-      await searchScenes(
-        token,
-        geometry,
-        date,
-        date
-      );
-
-
-    const features =
-      Array.isArray(
-        result.features
-      )
-        ? result.features
-        : [];
-
-
     if (
-      features.length
+      await hasImage(
+        date
+      )
     ) {
 
-      after = {
-        date,
-        feature:
-          features[0]
-      };
+      after =
+        date;
 
       break;
     }
@@ -692,27 +680,24 @@ function setup() {
 
     input: [{
       bands: [
-        "B8A",
+        "B08",
         "B12",
         "SCL",
         "dataMask"
       ]
     }],
 
-    mosaicking: "ORBIT",
+    output: {
 
-    output: [
-      {
-        id: "dnbr",
-        bands: 1,
-        sampleType: "FLOAT32"
-      },
-      {
-        id: "dataMask",
-        bands: 1,
-        sampleType: "UINT8"
-      }
-    ]
+      bands: 1,
+
+      sampleType:
+        "FLOAT32"
+
+    },
+
+    mosaicking:
+      "ORBIT"
 
   };
 
@@ -731,10 +716,10 @@ function preProcessScenes(
 
   collections.scenes.orbits =
     collections.scenes.orbits.filter(
-      function(orbit) {
+      function(scene) {
 
         const date =
-          orbit.dateFrom
+          scene.dateFrom
             .split("T")[0];
 
         return allowedDates.includes(
@@ -746,7 +731,6 @@ function preProcessScenes(
 
 
   return collections;
-
 }
 
 
@@ -761,18 +745,15 @@ function validSample(
   ) {
 
     return false;
-
   }
 
 
   const badSCL = [
-
     3,
     8,
     9,
     10,
     11
-
   ];
 
 
@@ -783,16 +764,14 @@ function validSample(
   ) {
 
     return false;
-
   }
 
 
   return (
-    sample.B8A > 0
+    sample.B08 > 0
     &&
     sample.B12 > 0
   );
-
 }
 
 
@@ -801,7 +780,7 @@ function calcNBR(
 ) {
 
   const denominator =
-    sample.B8A
+    sample.B08
     +
     sample.B12;
 
@@ -811,18 +790,16 @@ function calcNBR(
   ) {
 
     return -9999;
-
   }
 
 
   return (
-    sample.B8A
+    sample.B08
     -
     sample.B12
   )
   /
   denominator;
-
 }
 
 
@@ -834,18 +811,9 @@ function evaluatePixel(
     samples.length < 2
   ) {
 
-    return {
-
-      dnbr: [
-        -9999
-      ],
-
-      dataMask: [
-        0
-      ]
-
-    };
-
+    return [
+      -9999
+    ];
   }
 
 
@@ -862,45 +830,23 @@ function evaluatePixel(
     !validSample(after)
   ) {
 
-    return {
-
-      dnbr: [
-        -9999
-      ],
-
-      dataMask: [
-        0
-      ]
-
-    };
-
+    return [
+      -9999
+    ];
   }
 
 
-  const nbrBefore =
+  return [
+
     calcNBR(
       before
-    );
-
-  const nbrAfter =
+    )
+    -
     calcNBR(
       after
-    );
+    )
 
-
-  return {
-
-    dnbr: [
-      nbrBefore
-      -
-      nbrAfter
-    ],
-
-    dataMask: [
-      1
-    ]
-
-  };
+  ];
 
 }
 `;
@@ -908,10 +854,10 @@ function evaluatePixel(
 
 
 /* ============================================================
-   STATISTICAL REQUEST
+   STATISTICS
 ============================================================ */
 
-async function calculateDnbrStatistics(
+async function calculateStatistics(
   token,
   geometry,
   beforeDate,
@@ -925,7 +871,7 @@ async function calculateDnbrStatistics(
     );
 
 
-  const statsBody = {
+  const body = {
 
     input: {
 
@@ -936,7 +882,8 @@ async function calculateDnbrStatistics(
         properties: {
 
           crs:
-            "http://www.opengis.net/def/crs/EPSG/0/4326"
+            "http://www.opengis.net/"
+            + "def/crs/OGC/1.3/CRS84"
 
         }
 
@@ -977,9 +924,13 @@ async function calculateDnbrStatistics(
 
       aggregationInterval: {
 
-        of: "P10D"
+        of:
+          "P10D"
 
       },
+
+      lastIntervalBehavior:
+        "SHORTEN",
 
       evalscript,
 
@@ -994,28 +945,23 @@ async function calculateDnbrStatistics(
 
     calculations: {
 
-      dnbr: {
+      default: {
 
         histograms: {
 
           default: {
 
             bins: [
-              -1.0,
-              0.0,
+              -1,
               BURN_THRESHOLD,
-              1.0
+              1
             ]
 
           }
 
         },
 
-        statistics: {
-
-          default: {}
-
-        }
+        statistics: {}
 
       }
 
@@ -1029,7 +975,8 @@ async function calculateDnbrStatistics(
       STATISTICS_URL,
       {
 
-        method: "POST",
+        method:
+          "POST",
 
         headers: {
 
@@ -1046,41 +993,47 @@ async function calculateDnbrStatistics(
 
         body:
           JSON.stringify(
-            statsBody
+            body
           )
 
       }
     );
 
 
-  if (!response.ok) {
+  if (
+    !response.ok
+  ) {
 
     const text =
       await response.text();
 
     throw new Error(
-      `Statistics error ${response.status}: ${text}`
+      `خطای Statistical API: HTTP ${response.status}`
     );
   }
 
 
-  return response.json();
+  const data =
+    await response.json();
+
+
+  return data;
 }
 
 
 /* ============================================================
-   PARSE BURNED AREA
+   EXTRACT BURNED PIXELS
 ============================================================ */
 
-function parseBurnedArea(
-  statistics
+function extractBurnedPixels(
+  data
 ) {
 
-  const first =
-    statistics?.data?.[0];
+  const item =
+    data?.data?.[0];
 
   const output =
-    first?.outputs?.dnbr;
+    item?.outputs?.default;
 
   const band =
     output?.bands?.B0;
@@ -1088,10 +1041,17 @@ function parseBurnedArea(
   const histogram =
     band?.histogram;
 
-  if (!histogram) {
+
+  if (
+    !histogram
+    ||
+    !Array.isArray(
+      histogram.bins
+    )
+  ) {
 
     throw new Error(
-      "dNBR histogram was not returned."
+      "Histogram مربوط به dNBR دریافت نشد."
     );
   }
 
@@ -1101,7 +1061,7 @@ function parseBurnedArea(
 
   for (
     const bin
-    of histogram.bins || []
+    of histogram.bins
   ) {
 
     if (
@@ -1115,57 +1075,76 @@ function parseBurnedArea(
         Number(
           bin.count || 0
         );
-
     }
-
   }
 
 
-  if (
+  burnedPixels +=
     Number(
-      histogram.overflowCount
-    )
-    > 0
-  ) {
-
-    burnedPixels +=
-      Number(
-        histogram.overflowCount
-      );
-
-  }
+      histogram.overflowCount || 0
+    );
 
 
-  const pixelAreaHa =
-    (
-      RESOLUTION_M
-      *
-      RESOLUTION_M
-    )
-    /
-    10000;
-
-
-  return {
-
-    burnedPixels,
-
-    pixelAreaHa,
-
-    burnedAreaHa:
-      burnedPixels
-      *
-      pixelAreaHa,
-
-    statistics
-
-  };
-
+  return burnedPixels;
 }
 
 
 /* ============================================================
-   FALSE COLOR PROCESS API
+   IMAGE TO DATA URL
+============================================================ */
+
+async function imageToDataURL(
+  response
+) {
+
+  const buffer =
+    await response.arrayBuffer();
+
+
+  const bytes =
+    new Uint8Array(
+      buffer
+    );
+
+
+  const chunkSize =
+    8192;
+
+
+  let binary = "";
+
+
+  for (
+    let i = 0;
+    i < bytes.length;
+    i += chunkSize
+  ) {
+
+    binary +=
+      String.fromCharCode(
+        ...bytes.subarray(
+          i,
+          Math.min(
+            i + chunkSize,
+            bytes.length
+          )
+        )
+      );
+  }
+
+
+  return (
+    "data:image/png;base64,"
+    +
+    btoa(
+      binary
+    )
+  );
+}
+
+
+/* ============================================================
+   FALSE COLOR
 ============================================================ */
 
 async function getFalseColor(
@@ -1174,86 +1153,25 @@ async function getFalseColor(
   date
 ) {
 
-  const evalscript = `
-//VERSION=3
-
-function setup() {
-
-  return {
-
-    input: [{
-      bands: [
-        "B08",
-        "B04",
-        "B03",
-        "SCL"
-      ]
-    }],
-
-    output: {
-      bands: 3,
-      sampleType: "AUTO"
-    }
-
-  };
-
-}
+  const bbox =
+    geometryBounds(
+      geometry
+    );
 
 
-function evaluatePixel(
-  sample
-) {
-
-  const badSCL = [
-    3,
-    8,
-    9,
-    10,
-    11
-  ];
-
-
-  if (
-    badSCL.includes(
-      sample.SCL
-    )
-  ) {
-
-    return [
-      0,
-      0,
-      0
-    ];
-
-  }
-
-
-  return [
-
-    2.5 * sample.B08,
-
-    2.5 * sample.B04,
-
-    2.5 * sample.B03
-
-  ];
-
-}
-`;
-
-
-  const requestBody = {
+  const body = {
 
     input: {
 
       bounds: {
 
-        geometry,
+        bbox,
 
         properties: {
 
           crs:
-            "http://www.opengis.net/def/crs/EPSG/0/4326"
+            "http://www.opengis.net/"
+            + "def/crs/OGC/1.3/CRS84"
 
         }
 
@@ -1319,8 +1237,82 @@ function evaluatePixel(
     },
 
 
-    evalscript
+    evalscript: `
+//VERSION=3
 
+function setup() {
+
+  return {
+
+    input: [{
+      bands: [
+        "B08",
+        "B04",
+        "B03",
+        "SCL",
+        "dataMask"
+      ]
+    }],
+
+    output: {
+
+      bands: 4,
+
+      sampleType:
+        "AUTO"
+
+    }
+
+  };
+
+}
+
+
+function evaluatePixel(
+  sample
+) {
+
+  const badSCL = [
+    3,
+    8,
+    9,
+    10,
+    11
+  ];
+
+
+  if (
+    sample.dataMask === 0
+    ||
+    badSCL.includes(
+      sample.SCL
+    )
+  ) {
+
+    return [
+      0,
+      0,
+      0,
+      0
+    ];
+
+  }
+
+
+  return [
+
+    2.5 * sample.B08,
+
+    2.5 * sample.B04,
+
+    2.5 * sample.B03,
+
+    1
+
+  ];
+
+}
+`
   };
 
 
@@ -1329,7 +1321,8 @@ function evaluatePixel(
       PROCESS_URL,
       {
 
-        method: "POST",
+        method:
+          "POST",
 
         headers: {
 
@@ -1346,66 +1339,57 @@ function evaluatePixel(
 
         body:
           JSON.stringify(
-            requestBody
+            body
           )
 
       }
     );
 
 
-  if (!response.ok) {
-
-    const text =
-      await response.text();
-
-    throw new Error(
-      `False Color error ${response.status}: ${text}`
-    );
-  }
-
-
-  const buffer =
-    await response.arrayBuffer();
-
-
-  const bytes =
-    new Uint8Array(
-      buffer
-    );
-
-
-  let binary = "";
-
-
-  const chunkSize =
-    8192;
-
-
-  for (
-    let i = 0;
-    i < bytes.length;
-    i += chunkSize
+  if (
+    !response.ok
   ) {
 
-    binary +=
-      String.fromCharCode(
-        ...bytes.subarray(
-          i,
-          Math.min(
-            i + chunkSize,
-            bytes.length
-          )
-        )
-      );
-
+    throw new Error(
+      `خطای False Color: HTTP ${response.status}`
+    );
   }
 
 
-  const base64 =
-    btoa(
-      binary
-    );
+  return {
 
+    dataUrl:
+      await imageToDataURL(
+        response
+      ),
+
+    bounds:
+      [
+        [
+          bbox[1],
+          bbox[0]
+        ],
+
+        [
+          bbox[3],
+          bbox[2]
+        ]
+      ]
+
+  };
+}
+
+
+/* ============================================================
+   BURNED MASK IMAGE
+============================================================ */
+
+async function getBurnedMask(
+  token,
+  geometry,
+  beforeDate,
+  afterDate
+) {
 
   const bbox =
     geometryBounds(
@@ -1413,24 +1397,354 @@ function evaluatePixel(
     );
 
 
-  return {
+  const body = {
 
-    dataUrl:
-      `data:image/png;base64,${base64}`,
+    input: {
 
-    bounds: [
-      [
-        bbox[1],
-        bbox[0]
-      ],
-      [
-        bbox[3],
-        bbox[2]
+      bounds: {
+
+        bbox,
+
+        properties: {
+
+          crs:
+            "http://www.opengis.net/"
+            + "def/crs/OGC/1.3/CRS84"
+
+        }
+
+      },
+
+      data: [
+
+        {
+
+          type:
+            S2_TYPE,
+
+          dataFilter: {
+
+            mosaickingOrder:
+              "leastCC"
+
+          }
+
+        }
+
       ]
-    ]
+
+    },
+
+
+    output: {
+
+      width:
+        800,
+
+      height:
+        800,
+
+      responses: [
+
+        {
+
+          identifier:
+            "default",
+
+          format: {
+
+            type:
+              "image/png"
+
+          }
+
+        }
+
+      ]
+
+    },
+
+
+    evalscript:
+      buildBurnMaskEvalscript(
+        beforeDate,
+        afterDate
+      )
 
   };
 
+
+  const response =
+    await fetch(
+      PROCESS_URL,
+      {
+
+        method:
+          "POST",
+
+        headers: {
+
+          "Authorization":
+            `Bearer ${token}`,
+
+          "Content-Type":
+            "application/json",
+
+          "Accept":
+            "image/png"
+
+        },
+
+        body:
+          JSON.stringify(
+            body
+          )
+
+      }
+    );
+
+
+  if (
+    !response.ok
+  ) {
+
+    throw new Error(
+      `خطای Burn Mask: HTTP ${response.status}`
+    );
+  }
+
+
+  return {
+
+    dataUrl:
+      await imageToDataURL(
+        response
+      ),
+
+    bounds:
+      [
+        [
+          bbox[1],
+          bbox[0]
+        ],
+
+        [
+          bbox[3],
+          bbox[2]
+        ]
+      ]
+
+  };
+}
+
+
+/* ============================================================
+   BURN MASK EVALSCRIPT
+============================================================ */
+
+function buildBurnMaskEvalscript(
+  beforeDate,
+  afterDate
+) {
+
+  return `
+//VERSION=3
+
+function setup() {
+
+  return {
+
+    input: [{
+      bands: [
+        "B08",
+        "B12",
+        "SCL",
+        "dataMask"
+      ]
+    }],
+
+    output: {
+
+      bands: 4,
+
+      sampleType:
+        "AUTO"
+
+    },
+
+    mosaicking:
+      "ORBIT"
+
+  };
+
+}
+
+
+function preProcessScenes(
+  collections
+) {
+
+  const allowedDates = [
+    "${beforeDate}",
+    "${afterDate}"
+  ];
+
+
+  collections.scenes.orbits =
+    collections.scenes.orbits.filter(
+      function(scene) {
+
+        const date =
+          scene.dateFrom
+            .split("T")[0];
+
+        return allowedDates.includes(
+          date
+        );
+
+      }
+    );
+
+
+  return collections;
+}
+
+
+function validSample(
+  sample
+) {
+
+  if (
+    !sample
+    ||
+    sample.dataMask === 0
+  ) {
+
+    return false;
+  }
+
+
+  const badSCL = [
+    3,
+    8,
+    9,
+    10,
+    11
+  ];
+
+
+  return (
+    !badSCL.includes(
+      sample.SCL
+    )
+    &&
+    sample.B08 > 0
+    &&
+    sample.B12 > 0
+  );
+}
+
+
+function calcNBR(
+  sample
+) {
+
+  const denominator =
+    sample.B08
+    +
+    sample.B12;
+
+
+  if (
+    denominator === 0
+  ) {
+
+    return -9999;
+  }
+
+
+  return (
+    sample.B08
+    -
+    sample.B12
+  )
+  /
+  denominator;
+}
+
+
+function evaluatePixel(
+  samples
+) {
+
+  if (
+    samples.length < 2
+  ) {
+
+    return [
+      0,
+      0,
+      0,
+      0
+    ];
+  }
+
+
+  const before =
+    samples[0];
+
+  const after =
+    samples[1];
+
+
+  if (
+    !validSample(before)
+    ||
+    !validSample(after)
+  ) {
+
+    return [
+      0,
+      0,
+      0,
+      0
+    ];
+  }
+
+
+  const dnbr =
+    calcNBR(
+      before
+    )
+    -
+    calcNBR(
+      after
+    );
+
+
+  if (
+    dnbr >= ${BURN_THRESHOLD}
+  ) {
+
+    return [
+      255,
+      0,
+      0,
+      180
+    ];
+
+  }
+
+
+  return [
+    0,
+    0,
+    0,
+    0
+  ];
+
+}
+`;
 }
 
 
@@ -1439,24 +1753,28 @@ function evaluatePixel(
 ============================================================ */
 
 async function calculate(
-  requestData,
+  body,
   env
 ) {
 
-  const {
+  const date =
+    body.date;
 
-    date,
+  const regionType =
+    body.regionType;
 
-    regionType,
+  const regionName =
+    body.regionName;
 
-    regionName,
-
-    geometry
-
-  } = requestData;
+  const geometry =
+    body.geometry;
 
 
-  if (!parseDate(date)) {
+  if (
+    !parseDate(
+      date
+    )
+  ) {
 
     throw new Error(
       "تاریخ نامعتبر است."
@@ -1489,30 +1807,13 @@ async function calculate(
 
 
   if (
-    !geometryInsideFarsBox(
+    !geometryInsideFars(
       geometry
     )
   ) {
 
     throw new Error(
-      "منطقه انتخاب‌شده خارج از محدوده فارس است."
-    );
-  }
-
-
-  const areaKm2 =
-    approximateAreaKm2(
-      geometry
-    );
-
-
-  if (
-    areaKm2 >
-    MAX_REGION_AREA_KM2
-  ) {
-
-    throw new Error(
-      "محدوده انتخاب‌شده بیش از حد بزرگ است."
+      "منطقه خارج از محدوده استان فارس است."
     );
   }
 
@@ -1530,13 +1831,10 @@ async function calculate(
 
 
   const {
-
     before,
-
     after
-
   } =
-    await findBeforeAfter(
+    await findImageDates(
       token,
       geometry,
       fireDate
@@ -1546,7 +1844,7 @@ async function calculate(
   if (!before) {
 
     throw new Error(
-      "تصویر Sentinel-2 قبل از تاریخ انتخاب‌شده پیدا نشد."
+      "تصویر Sentinel-2 قبل از حریق پیدا نشد."
     );
   }
 
@@ -1554,31 +1852,56 @@ async function calculate(
   if (!after) {
 
     throw new Error(
-      "تصویر Sentinel-2 بعد از تاریخ انتخاب‌شده پیدا نشد."
+      "تصویر Sentinel-2 بعد از حریق پیدا نشد."
     );
   }
 
 
   const statistics =
-    await calculateDnbrStatistics(
+    await calculateStatistics(
       token,
       geometry,
-      before.date,
-      after.date
+      before,
+      after
     );
 
 
-  const burned =
-    parseBurnedArea(
+  const burnedPixels =
+    extractBurnedPixels(
       statistics
     );
+
+
+  const pixelAreaHa =
+    (
+      RESOLUTION_M
+      *
+      RESOLUTION_M
+    )
+    /
+    10000;
+
+
+  const burnedAreaHa =
+    burnedPixels
+    *
+    pixelAreaHa;
 
 
   const falseColor =
     await getFalseColor(
       token,
       geometry,
-      after.date
+      after
+    );
+
+
+  const burnedMask =
+    await getBurnedMask(
+      token,
+      geometry,
+      before,
+      after
     );
 
 
@@ -1596,56 +1919,61 @@ async function calculate(
       regionName || "",
 
     before_date:
-      before.date,
+      before,
 
     after_date:
-      after.date,
+      after,
 
     dnbr_threshold:
       BURN_THRESHOLD,
+
+    burned_pixels:
+      burnedPixels,
+
+    pixel_area_ha:
+      pixelAreaHa,
 
     burned_area: {
 
       total_ha:
         Number(
-          burned.burnedAreaHa.toFixed(3)
+          burnedAreaHa.toFixed(3)
         ),
 
       inside_fars_ha:
         Number(
-          burned.burnedAreaHa.toFixed(3)
+          burnedAreaHa.toFixed(3)
         ),
 
       inside_protected_areas_ha:
         regionType === "protected"
           ? Number(
-              burned.burnedAreaHa.toFixed(3)
+              burnedAreaHa.toFixed(3)
             )
           : 0,
 
       inside_hunting_banned_ha:
         regionType === "hunting"
           ? Number(
-              burned.burnedAreaHa.toFixed(3)
+              burnedAreaHa.toFixed(3)
             )
           : 0
 
     },
 
-    burned_pixels:
-      burned.burnedPixels,
-
-    pixel_area_ha:
-      burned.pixelAreaHa,
-
     false_color_url:
       falseColor.dataUrl,
 
     false_color_bounds:
-      falseColor.bounds
+      falseColor.bounds,
+
+    burned_mask_url:
+      burnedMask.dataUrl,
+
+    burned_mask_bounds:
+      burnedMask.bounds
 
   };
-
 }
 
 
@@ -1674,7 +2002,8 @@ export default {
       return new Response(
         null,
         {
-          status: 204,
+          status:
+            204,
 
           headers:
             corsHeaders(
@@ -1682,7 +2011,6 @@ export default {
             )
         }
       );
-
     }
 
 
@@ -1693,8 +2021,8 @@ export default {
 
 
     if (
-      url.pathname !==
-      "/calculate"
+      url.pathname ===
+      "/"
     ) {
 
       return jsonResponse(
@@ -1702,15 +2030,38 @@ export default {
           status:
             "OK",
 
-          message:
-            "FARS FIRE IMPACT API"
+          service:
+            "FARS FIRE IMPACT",
+
+          endpoint:
+            "/calculate"
         },
 
         200,
 
         origin
       );
+    }
 
+
+    if (
+      url.pathname !==
+      "/calculate"
+    ) {
+
+      return jsonResponse(
+        {
+          status:
+            "ERROR",
+
+          message:
+            "مسیر درخواست نامعتبر است."
+        },
+
+        404,
+
+        origin
+      );
     }
 
 
@@ -1732,7 +2083,6 @@ export default {
 
         origin
       );
-
     }
 
 
@@ -1755,7 +2105,6 @@ export default {
         origin
       );
 
-
     } catch (
       error
     ) {
@@ -1773,14 +2122,13 @@ export default {
           message:
             error?.message
             ||
-            "خطای نامشخص"
+            "خطای نامشخص در محاسبه."
         },
 
         400,
 
         origin
       );
-
     }
 
   }
