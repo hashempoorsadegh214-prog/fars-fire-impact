@@ -1,6 +1,6 @@
 {
-  "updated_at_utc": "2026-08-24 11:20:25",
-  "count": 4,
+  "updated_at_utc": "2026-08-24 11:51:39",
+  "count": 9,
   "successful_sources": [
     "VIIRS_SNPP_NRT",
     "VIIRS_NOAA20_NRT",
@@ -8,6 +8,48 @@
   ],
   "failed_sources": [],
   "fires": [
+    {
+      "latitude": 30.16749,
+      "longitude": 51.47601,
+      "acq_date": "2026-08-24",
+      "acq_time": "949",
+      "acquisition_utc": "2026-08-24 09:49:00",
+      "satellite": "N21",
+      "instrument": "VIIRS",
+      "confidence": "l",
+      "frp": "11.83",
+      "brightness": "347.49",
+      "daynight": "D",
+      "source": "VIIRS_NOAA21_NRT"
+    },
+    {
+      "latitude": 30.16806,
+      "longitude": 51.48052,
+      "acq_date": "2026-08-24",
+      "acq_time": "949",
+      "acquisition_utc": "2026-08-24 09:49:00",
+      "satellite": "N21",
+      "instrument": "VIIRS",
+      "confidence": "l",
+      "frp": "11.83",
+      "brightness": "354.1",
+      "daynight": "D",
+      "source": "VIIRS_NOAA21_NRT"
+    },
+    {
+      "latitude": 30.17153,
+      "longitude": 51.4798,
+      "acq_date": "2026-08-24",
+      "acq_time": "949",
+      "acquisition_utc": "2026-08-24 09:49:00",
+      "satellite": "N21",
+      "instrument": "VIIRS",
+      "confidence": "l",
+      "frp": "18.83",
+      "brightness": "350.65",
+      "daynight": "D",
+      "source": "VIIRS_NOAA21_NRT"
+    },
     {
       "latitude": 30.16656,
       "longitude": 51.47999,
@@ -63,6 +105,34 @@
       "brightness": "367",
       "daynight": "D",
       "source": "VIIRS_NOAA20_NRT"
+    },
+    {
+      "latitude": 28.6799,
+      "longitude": 52.0943,
+      "acq_date": "2026-08-24",
+      "acq_time": "845",
+      "acquisition_utc": "2026-08-24 08:45:00",
+      "satellite": "N",
+      "instrument": "VIIRS",
+      "confidence": "l",
+      "frp": "7.74",
+      "brightness": "337.88",
+      "daynight": "D",
+      "source": "VIIRS_SNPP_NRT"
+    },
+    {
+      "latitude": 29.25667,
+      "longitude": 53.11911,
+      "acq_date": "2026-08-24",
+      "acq_time": "845",
+      "acquisition_utc": "2026-08-24 08:45:00",
+      "satellite": "N",
+      "instrument": "VIIRS",
+      "confidence": "l",
+      "frp": "12.15",
+      "brightness": "346.39",
+      "daynight": "D",
+      "source": "VIIRS_SNPP_NRT"
     }
   ]
 }
