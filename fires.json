@@ -1,11 +1,82 @@
 {
-  "updated_at_utc": "2026-08-31 06:13:43",
-  "count": 0,
+  "updated_at_utc": "2026-08-31 13:54:01",
+  "count": 5,
   "successful_sources": [
     "VIIRS_SNPP_NRT",
     "VIIRS_NOAA20_NRT",
     "VIIRS_NOAA21_NRT"
   ],
   "failed_sources": [],
-  "fires": []
+  "fires": [
+    {
+      "latitude": 29.25609,
+      "longitude": 53.12397,
+      "acq_date": "2026-08-31",
+      "acq_time": "1013",
+      "acquisition_utc": "2026-08-31 10:13:00",
+      "satellite": "N20",
+      "instrument": "VIIRS",
+      "confidence": "n",
+      "frp": "6.3",
+      "brightness": "347.41",
+      "daynight": "D",
+      "source": "VIIRS_NOAA20_NRT"
+    },
+    {
+      "latitude": 29.56171,
+      "longitude": 52.68831,
+      "acq_date": "2026-08-31",
+      "acq_time": "1013",
+      "acquisition_utc": "2026-08-31 10:13:00",
+      "satellite": "N20",
+      "instrument": "VIIRS",
+      "confidence": "l",
+      "frp": "13.38",
+      "brightness": "342.28",
+      "daynight": "D",
+      "source": "VIIRS_NOAA20_NRT"
+    },
+    {
+      "latitude": 30.11671,
+      "longitude": 51.87962,
+      "acq_date": "2026-08-31",
+      "acq_time": "956",
+      "acquisition_utc": "2026-08-31 09:56:00",
+      "satellite": "N",
+      "instrument": "VIIRS",
+      "confidence": "n",
+      "frp": "11.89",
+      "brightness": "349.75",
+      "daynight": "D",
+      "source": "VIIRS_SNPP_NRT"
+    },
+    {
+      "latitude": 29.2513,
+      "longitude": 53.12053,
+      "acq_date": "2026-08-31",
+      "acq_time": "835",
+      "acquisition_utc": "2026-08-31 08:35:00",
+      "satellite": "N20",
+      "instrument": "VIIRS",
+      "confidence": "l",
+      "frp": "8.83",
+      "brightness": "340.97",
+      "daynight": "D",
+      "source": "VIIRS_NOAA20_NRT"
+    },
+    {
+      "latitude": 29.25543,
+      "longitude": 53.12541,
+      "acq_date": "2026-08-31",
+      "acq_time": "835",
+      "acquisition_utc": "2026-08-31 08:35:00",
+      "satellite": "N20",
+      "instrument": "VIIRS",
+      "confidence": "n",
+      "frp": "15.74",
+      "brightness": "352.72",
+      "daynight": "D",
+      "source": "VIIRS_NOAA20_NRT"
+    }
+  ]
 }
