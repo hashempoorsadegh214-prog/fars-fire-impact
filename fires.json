@@ -1,6 +1,6 @@
 {
-  "updated_at_utc": "2026-09-28 12:35:39",
-  "count": 13,
+  "updated_at_utc": "2026-09-28 19:49:51",
+  "count": 14,
   "successful_sources": [
     "VIIRS_SNPP_NRT",
     "VIIRS_NOAA20_NRT",
@@ -133,6 +133,20 @@
       "brightness": "337.65",
       "daynight": "D",
       "source": "VIIRS_NOAA20_NRT"
+    },
+    {
+      "latitude": 29.36866,
+      "longitude": 52.60985,
+      "acq_date": "2026-09-28",
+      "acq_time": "930",
+      "acquisition_utc": "2026-09-28 09:30:00",
+      "satellite": "N",
+      "instrument": "VIIRS",
+      "confidence": "l",
+      "frp": "5.13",
+      "brightness": "337.07",
+      "daynight": "D",
+      "source": "VIIRS_SNPP_NRT"
     },
     {
       "latitude": 28.34751,
