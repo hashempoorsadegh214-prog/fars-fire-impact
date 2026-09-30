@@ -1,6 +1,6 @@
 {
-  "updated_at_utc": "2026-09-30 12:06:25",
-  "count": 6,
+  "updated_at_utc": "2026-09-30 17:59:03",
+  "count": 7,
   "successful_sources": [
     "VIIRS_SNPP_NRT",
     "VIIRS_NOAA20_NRT",
@@ -8,6 +8,20 @@
   ],
   "failed_sources": [],
   "fires": [
+    {
+      "latitude": 27.50842,
+      "longitude": 52.97296,
+      "acq_date": "2026-09-30",
+      "acq_time": "1034",
+      "acquisition_utc": "2026-09-30 10:34:00",
+      "satellite": "N",
+      "instrument": "VIIRS",
+      "confidence": "n",
+      "frp": "2.33",
+      "brightness": "343.32",
+      "daynight": "D",
+      "source": "VIIRS_SNPP_NRT"
+    },
     {
       "latitude": 29.09916,
       "longitude": 52.04292,
