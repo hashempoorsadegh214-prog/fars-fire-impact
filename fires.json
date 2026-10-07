@@ -1,11 +1,40 @@
 {
-  "updated_at_utc": "2026-10-07 04:43:48",
-  "count": 0,
+  "updated_at_utc": "2026-10-07 11:21:59",
+  "count": 2,
   "successful_sources": [
     "VIIRS_SNPP_NRT",
     "VIIRS_NOAA20_NRT",
     "VIIRS_NOAA21_NRT"
   ],
   "failed_sources": [],
-  "fires": []
+  "fires": [
+    {
+      "latitude": 28.88627,
+      "longitude": 53.7653,
+      "acq_date": "2026-10-07",
+      "acq_time": "841",
+      "acquisition_utc": "2026-10-07 08:41:00",
+      "satellite": "N20",
+      "instrument": "VIIRS",
+      "confidence": "n",
+      "frp": "3.77",
+      "brightness": "339.06",
+      "daynight": "D",
+      "source": "VIIRS_NOAA20_NRT"
+    },
+    {
+      "latitude": 27.47831,
+      "longitude": 52.9742,
+      "acq_date": "2026-10-07",
+      "acq_time": "839",
+      "acquisition_utc": "2026-10-07 08:39:00",
+      "satellite": "N20",
+      "instrument": "VIIRS",
+      "confidence": "l",
+      "frp": "4.26",
+      "brightness": "337.69",
+      "daynight": "D",
+      "source": "VIIRS_NOAA20_NRT"
+    }
+  ]
 }
