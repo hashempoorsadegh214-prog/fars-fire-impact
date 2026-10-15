@@ -1,110 +1,11 @@
 {
-  "updated_at_utc": "2026-10-14 21:56:56",
-  "count": 7,
+  "updated_at_utc": "2026-10-15 00:17:15",
+  "count": 0,
   "successful_sources": [
     "VIIRS_SNPP_NRT",
     "VIIRS_NOAA20_NRT",
     "VIIRS_NOAA21_NRT"
   ],
   "failed_sources": [],
-  "fires": [
-    {
-      "latitude": 28.98005,
-      "longitude": 52.39483,
-      "acq_date": "2026-10-14",
-      "acq_time": "949",
-      "acquisition_utc": "2026-10-14 09:49:00",
-      "satellite": "N20",
-      "instrument": "VIIRS",
-      "confidence": "n",
-      "frp": "3.46",
-      "brightness": "340.03",
-      "daynight": "D",
-      "source": "VIIRS_NOAA20_NRT"
-    },
-    {
-      "latitude": 29.19125,
-      "longitude": 52.84292,
-      "acq_date": "2026-10-14",
-      "acq_time": "949",
-      "acquisition_utc": "2026-10-14 09:49:00",
-      "satellite": "N20",
-      "instrument": "VIIRS",
-      "confidence": "l",
-      "frp": "4.6",
-      "brightness": "341.5",
-      "daynight": "D",
-      "source": "VIIRS_NOAA20_NRT"
-    },
-    {
-      "latitude": 29.36617,
-      "longitude": 52.61147,
-      "acq_date": "2026-10-14",
-      "acq_time": "949",
-      "acquisition_utc": "2026-10-14 09:49:00",
-      "satellite": "N20",
-      "instrument": "VIIRS",
-      "confidence": "n",
-      "frp": "2.66",
-      "brightness": "338.26",
-      "daynight": "D",
-      "source": "VIIRS_NOAA20_NRT"
-    },
-    {
-      "latitude": 30.20272,
-      "longitude": 52.47181,
-      "acq_date": "2026-10-14",
-      "acq_time": "949",
-      "acquisition_utc": "2026-10-14 09:49:00",
-      "satellite": "N20",
-      "instrument": "VIIRS",
-      "confidence": "l",
-      "frp": "5.88",
-      "brightness": "336.2",
-      "daynight": "D",
-      "source": "VIIRS_NOAA20_NRT"
-    },
-    {
-      "latitude": 30.14448,
-      "longitude": 52.63502,
-      "acq_date": "2026-10-14",
-      "acq_time": "932",
-      "acquisition_utc": "2026-10-14 09:32:00",
-      "satellite": "N",
-      "instrument": "VIIRS",
-      "confidence": "n",
-      "frp": "1.98",
-      "brightness": "332.63",
-      "daynight": "D",
-      "source": "VIIRS_SNPP_NRT"
-    },
-    {
-      "latitude": 28.98366,
-      "longitude": 52.39231,
-      "acq_date": "2026-10-14",
-      "acq_time": "930",
-      "acquisition_utc": "2026-10-14 09:30:00",
-      "satellite": "N",
-      "instrument": "VIIRS",
-      "confidence": "l",
-      "frp": "5.17",
-      "brightness": "335.92",
-      "daynight": "D",
-      "source": "VIIRS_SNPP_NRT"
-    },
-    {
-      "latitude": 30.26674,
-      "longitude": 51.49542,
-      "acq_date": "2026-10-14",
-      "acq_time": "854",
-      "acquisition_utc": "2026-10-14 08:54:00",
-      "satellite": "N21",
-      "instrument": "VIIRS",
-      "confidence": "n",
-      "frp": "2.54",
-      "brightness": "333.5",
-      "daynight": "D",
-      "source": "VIIRS_NOAA21_NRT"
-    }
-  ]
+  "fires": []
 }
